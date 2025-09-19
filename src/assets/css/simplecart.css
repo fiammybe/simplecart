@@ -1,0 +1,9 @@
+/* SimpleCart custom tweaks on top of Bulma */
+.sc-card-price { margin-bottom: .75rem; }
+.sc-total { margin-top: 1rem; }
+
+/* Optional: tighten table spacing on mobile */
+@media (max-width: 600px) {
+  .table td, .table th { padding: .5rem .5rem; }
+}
+

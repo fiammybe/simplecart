@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
+
+<section id="simplecart-checkout" class="section">
+  <div class="container">
+    <h1 class="title is-4">{{ t('checkout') }}</h1>
+
+    <div v-if="cartItems.length">
+      <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th>{{ t('name') }}</th>
+            <th class="has-text-right">{{ t('total') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in cartItems" :key="item.product_id">
+            <td>{{ item.name }} × {{ item.quantity }}</td>
+            <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
+
+      <form @submit.prevent="placeOrder">
+        <div class="field">
+          <label class="label">{{ t('name') }}</label>
+          <div class="control"><input class="input" v-model="customer.name" required></div>
+        </div>
+        <div class="field">
+          <label class="label">{{ t('email') }}</label>
+          <div class="control"><input class="input" type="email" v-model="customer.email" required></div>
+        </div>
+        <div class="field">
+          <label class="label">{{ t('phone') }}</label>
+          <div class="control"><input class="input" v-model="customer.phone"></div>
+        </div>
+        <div class="field">
+          <label class="label">{{ t('address') }}</label>
+          <div class="control"><textarea class="textarea" v-model="customer.address"></textarea></div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button :disabled="submitting" class="button is-primary">{{ t('place_order') }}</button>
+          </div>
+        </div>
+      </form>
+
+      <div v-if="message" class="notification is-info">{{ message }}</div>
+    </div>
+    <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
+<script>
+window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
+  mount: '#simplecart-checkout',
+  ajaxUrl: '<{$simplecart_ajax_url}>',
+  i18n: {
+    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
+    total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',
+    name: '<{$smarty.const._MD_SIMPLECART_NAME|escape}>',
+    email: '<{$smarty.const._MD_SIMPLECART_EMAIL|escape}>',
+    phone: '<{$smarty.const._MD_SIMPLECART_PHONE|escape}>',
+    address: '<{$smarty.const._MD_SIMPLECART_ADDRESS|escape}>',
+    place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER|escape}>',
+    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>'
+  }
+});
+</script>
