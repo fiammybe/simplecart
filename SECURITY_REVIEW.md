@@ -18,7 +18,7 @@ if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
 Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrers, logs, or browser history, enabling CSRF replay if a token is captured.  
 Severity: **Medium**.  
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
-Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`), store them in POST bodies instead of URLs, and invalidate on first use (`check(true, null, '...')`). Convert the status change action to POST with CSRF-protected forms.
+Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`), store them in POST bodies instead of URLs, and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
 Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
@@ -56,7 +56,7 @@ Fix: Vendor these assets locally, or include SRI hashes with fixed versions (`in
 ## Final Summary
 - **Overall risk:** Medium. No immediate RCE/SQLi found, but CSRF hardening, business-logic validation, and supply-chain controls are needed.
 - **Refactoring priorities:**  
-  1) Short-lived POST-based CSRF tokens for admin state changes and order API.  
-  2) Server-side validation of cart contents (at least one valid item, bounded quantities, non-zero totals) plus rate limiting.  
-  3) Pin or self-host front-end dependencies with integrity metadata and add CSP.
+  1. Short-lived POST-based CSRF tokens for admin state changes and order API.  
+  2. Server-side validation of cart contents (at least one valid item, bounded quantities, non-zero totals) plus rate limiting.  
+  3. Pin or self-host front-end dependencies with integrity metadata and add CSP.
 - **Missing safeguards:** Rate limiting on `place_order`, item/quantity bounds, expiring CSRF tokens, CSP + SRI for external assets, and logging/alerting for suspicious order creation attempts.
