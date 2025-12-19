@@ -1,6 +1,6 @@
 # Security Verification – SimpleCart (ImpressCMS 2.0.1)
 
-Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php`, admin pages under `src/admin/`.  Review performed against commit `2e0500777182cf0c14dff335928df5090d47440a`.
+Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php`, admin pages under `src/admin/`. Review performed against commit `2e0500777182cf0c14dff335928df5090d47440a`.
 
 ## Findings
 
@@ -37,7 +37,7 @@ foreach ($items as $it) {
 $order->setVar('total_amount', $total);
 $orderHandler->insert($order, true);
 ```
-Empty carts are blocked earlier (`src/ajax.php`, line 50). An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
+Empty carts are blocked earlier in `src/ajax.php` line 50. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
 Fix: Validate that at least one order item was successfully added; reject or roll back the order when none are valid. Enforce reasonable quantity bounds (e.g., 1–1000), and reject requests whose computed total is zero or exceeds configured limits. Add rate limiting/throttling on `place_order`.
