@@ -55,7 +55,7 @@ Fix: Vendor these assets locally, or include SRI hashes with fixed versions (`in
 
 ## Final Summary
 - **Overall risk:** Medium. No immediate RCE/SQLi found, but CSRF hardening, business-logic validation, and supply-chain controls are needed.
-- **Refactoring priorities:**  
+- **Refactoring priorities (ordered):**  
   1. Short-lived POST-based CSRF tokens for admin state changes and order API.  
   2. Server-side validation of cart contents (at least one valid item, bounded quantities, non-zero totals) plus rate limiting.  
   3. Pin or self-host front-end dependencies with integrity metadata and add CSP.
