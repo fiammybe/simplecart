@@ -18,7 +18,10 @@ if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
 Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrer headers, logs, or browser history, enabling CSRF replay if a token is captured.  
 Severity: **Medium**.  
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
-Fix: (1) Issue short-lived, single-use tokens tied to each action (e.g., `createToken(3600, 'simplecart_order_status')` for admin status changes, `createToken(3600, 'simplecart')` for order placement). (2) Send them in POST bodies and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). (3) Convert the status change action to POST with CSRF-protected forms.
+Fix:  
+- Issue short-lived, single-use tokens tied to each action (e.g., `createToken(3600, 'simplecart_order_status')` for admin status changes, `createToken(3600, 'simplecart')` for order placement).  
+- Send them in POST bodies and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`).  
+- Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
 Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
@@ -40,7 +43,10 @@ $orderHandler->insert($order, true);
 Empty carts are blocked earlier in `src/ajax.php` line 50. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
-Fix: Validate that at least one order item was successfully added; reject or roll back the order when none are valid. Enforce reasonable quantity bounds (e.g., 1–1000), and reject requests whose computed total is zero or exceeds configured limits. Add rate limiting/throttling on `place_order`.
+Fix:  
+- Validate that at least one order item was successfully added; reject or roll back the order when none are valid.  
+- Enforce reasonable quantity bounds (e.g., 1–1000) and reject requests whose computed total is zero or exceeds configured limits.  
+- Add rate limiting or throttling on `place_order`.
 
 3) **External JS/CSS loaded without integrity or pinning (Supply Chain) (Medium)**  
 Snippet: `src/templates/simplecart_index.html` line 1 (Bulma) & line 61 (Vue) and `src/templates/simplecart_checkout.html` line 1 (Bulma) & line 56 (Vue) fetch assets from CDNs without SRI or pinning:  
