@@ -5,7 +5,7 @@ Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php
 ## Findings
 
 1) **Perpetual CSRF tokens and token leakage via GET links (Medium)**  
-Snippet: `src/ajax.php` lines 30-33 and `src/admin/order.php` lines 54-75 use `icms::$security->createToken(0, ...)` and embed the token in query strings:  
+Snippet: `src/ajax.php` line 31 and `src/class/order.php` line 26 generate CSRF tokens with unlimited lifetime and embed them in GET URLs; `src/admin/order.php` lines 53-75 later validate them:  
 ```php
 $token = icms::$security->createToken(0, 'simplecart');
 ...
@@ -20,8 +20,8 @@ Severity: **Medium**.
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
 Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`), store them in POST bodies instead of URLs, and invalidate on first use (`check(true, null, '...')`). Convert the status change action to POST with CSRF-protected forms.
 
-2) **Order placement accepts empty/invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
-Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one valid item was added; quantities are unbounded:  
+2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
+Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
 ```php
 foreach ($items as $it) {
     $pid = isset($it['product_id']) ? (int)$it['product_id'] : 0;
@@ -37,13 +37,13 @@ foreach ($items as $it) {
 $order->setVar('total_amount', $total);
 $orderHandler->insert($order, true);
 ```
-An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
+Empty carts are blocked earlier, but an attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
 Fix: Validate that at least one order item was successfully added; reject or roll back the order when none are valid. Enforce reasonable quantity bounds (e.g., 1–1000), and reject requests whose computed total is zero or exceeds configured limits. Add rate limiting/throttling on `place_order`.
 
 3) **External JS/CSS loaded without integrity or pinning (Supply Chain) (Medium)**  
-Snippet: `src/templates/simplecart_index.html` lines 1 & 61 and `src/templates/simplecart_checkout.html` lines 1 & 56 fetch Bulma/Vue from CDNs without SRI or pinning:  
+Snippet: `src/templates/simplecart_index.html` line 1 (Bulma) & line 61 (Vue) and `src/templates/simplecart_checkout.html` line 1 (Bulma) & line 56 (Vue) fetch assets from CDNs without SRI or pinning:  
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
