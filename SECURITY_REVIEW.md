@@ -1,6 +1,6 @@
 # Security Verification – SimpleCart (ImpressCMS 2.0.1)
 
-Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php`, admin pages under `src/admin/`. Review performed against commit `2e0500777182cf0c14dff335928df5090d47440a`.
+Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php`, admin pages under `src/admin/`.  Review performed against commit `2e0500777182cf0c14dff335928df5090d47440a`.
 
 ## Findings
 
@@ -15,10 +15,10 @@ if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
     redirect_header('order.php', 3, 'Security token invalid.');
 }
 ```
-Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrers, logs, or browser history, enabling CSRF replay if a token is captured.  
+Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrer headers, logs, or browser history, enabling CSRF replay if a token is captured.  
 Severity: **Medium**.  
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
-Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`). Store them in POST bodies instead of URLs and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). Convert the status change action to POST with CSRF-protected forms.
+Fix: (1) Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`). (2) Send them in POST bodies and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). (3) Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
 Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
@@ -37,7 +37,7 @@ foreach ($items as $it) {
 $order->setVar('total_amount', $total);
 $orderHandler->insert($order, true);
 ```
-Empty carts are blocked earlier. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
+Empty carts are blocked earlier (`src/ajax.php`, line 50). An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
 Fix: Validate that at least one order item was successfully added; reject or roll back the order when none are valid. Enforce reasonable quantity bounds (e.g., 1–1000), and reject requests whose computed total is zero or exceeds configured limits. Add rate limiting/throttling on `place_order`.
