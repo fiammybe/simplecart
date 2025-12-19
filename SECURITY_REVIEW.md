@@ -18,7 +18,7 @@ if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
 Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrer headers, logs, or browser history, enabling CSRF replay if a token is captured.  
 Severity: **Medium**.  
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
-Fix: (1) Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`). (2) Send them in POST bodies and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). (3) Convert the status change action to POST with CSRF-protected forms.
+Fix: (1) Issue short-lived, single-use tokens tied to each action (e.g., `createToken(3600, 'simplecart_order_status')` for admin status changes, `createToken(3600, 'simplecart')` for order placement). (2) Send them in POST bodies and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). (3) Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
 Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
