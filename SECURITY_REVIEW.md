@@ -18,7 +18,7 @@ if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
 Tokens never expire (`0` TTL) and are sent in GET URLs, so they can be replayed indefinitely and leaked via referrers, logs, or browser history, enabling CSRF replay if a token is captured.  
 Severity: **Medium**.  
 OWASP: *CWE-352 Cross-Site Request Forgery; OWASP ASVS V3.5; OWASP Top 10 2021 A01 (Broken Access Control) / A05 (Security Misconfiguration).*  
-Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`), store them in POST bodies instead of URLs, and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). Convert the status change action to POST with CSRF-protected forms.
+Fix: Issue short-lived, single-use tokens (e.g., `createToken(3600, 'simplecart')`). Store them in POST bodies instead of URLs and invalidate on first use (e.g., `check(true, $token, 'simplecart_order_status')`). Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
 Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
@@ -37,7 +37,7 @@ foreach ($items as $it) {
 $order->setVar('total_amount', $total);
 $orderHandler->insert($order, true);
 ```
-Empty carts are blocked earlier, but an attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
+Empty carts are blocked earlier. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
 Fix: Validate that at least one order item was successfully added; reject or roll back the order when none are valid. Enforce reasonable quantity bounds (e.g., 1–1000), and reject requests whose computed total is zero or exceeds configured limits. Add rate limiting/throttling on `place_order`.
