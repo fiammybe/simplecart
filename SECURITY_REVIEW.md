@@ -5,7 +5,7 @@ Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php
 ## Findings
 
 1) **Perpetual CSRF tokens and token leakage via GET links (Medium)**  
-Snippet: `src/ajax.php` line 31 and `src/class/order.php` line 26 generate CSRF tokens with unlimited lifetime and embed them in GET URLs; `src/admin/order.php` lines 53-75 later validate them:  
+Snippet: `src/ajax.php` line 31 and `src/class/order.php` line 26 generate CSRF tokens with unlimited lifetime and embed them in GET URLs; `src/admin/order.php` line 57 later validates them:  
 ```php
 $token = icms::$security->createToken(0, 'simplecart');
 ...
@@ -24,7 +24,7 @@ Fix:
 - Convert the status change action to POST with CSRF-protected forms.
 
 2) **Order placement accepts invalid carts and unbounded quantities (Business Logic / DoS) (Medium)**  
-Snippet: `src/ajax.php` lines 69-92 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
+Snippet: `src/ajax.php` lines 70-88 process items but never verify that at least one *valid* item was persisted after filtering invalid products; quantities are unbounded:  
 ```php
 foreach ($items as $it) {
     $pid = isset($it['product_id']) ? (int)$it['product_id'] : 0;
@@ -40,7 +40,7 @@ foreach ($items as $it) {
 $order->setVar('total_amount', $total);
 $orderHandler->insert($order, true);
 ```
-Empty carts are blocked earlier in `src/ajax.php` line 50. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and no items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
+Empty carts are blocked earlier in `src/ajax.php` line 50. An attacker can send a payload with only invalid product IDs (or extremely large quantities), creating orders with `total_amount` 0 and potentially zero persisted order items, bloating the database and order queue. Lack of upper bounds allows very large quantities to inflate totals or stress storage.  
 Severity: **Medium**.  
 OWASP: *A04 Insecure Design / Business Logic Abuse; CWE-840 Business Logic Errors.*  
 Fix:  
