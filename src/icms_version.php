@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '0.04';
+$modversion['version'] = '0.05';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'fiammybe';
 $modversion['credits'] = 'ImpressCMS, IPF, Augment Agent';
