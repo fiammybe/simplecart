@@ -1,7 +1,18 @@
 <?php
+ob_start();
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
+ob_end_clean();
 header('Content-Type: application/json; charset=utf-8');
+
+use SepaQr\Data;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 
 $action = isset($_REQUEST['action']) ? strtolower(preg_replace('/[^a-z_]/', '', $_REQUEST['action'])) : '';
 
@@ -37,8 +48,9 @@ try {
                 throw new Exception('Invalid method');
             }
             $raw = file_get_contents('php://input');
+            if (empty($raw)) { throw new Exception('Empty request body'); }
             $payload = json_decode($raw, true);
-            if (!is_array($payload)) { throw new Exception('Invalid JSON'); }
+            if (!is_array($payload)) { throw new Exception('Invalid JSON: ' . json_last_error_msg()); }
 
             $token = isset($payload['token']) ? $payload['token'] : '';
             if (!icms::$security->check(true, $token, 'simplecart')) {
@@ -61,10 +73,17 @@ try {
             }
             $order->setVar('customer_info', implode("\n", $infoParts));
             $order->setVar('total_amount', 0.0);
+
+            // Insert the order
             if (!$orderHandler->insert($order, true)) {
-                throw new Exception(_MD_SIMPLECART_ORDER_CREATE_FAIL);
+                $errors = $order->getErrors();
+                $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
+                throw new Exception($errorMsg);
             }
             $orderId = (int)$order->getVar('order_id');
+
+            // Generate payment reference for display (not stored in DB yet)
+            $reference = 'ORD-' . str_pad((string)$orderId, 6, '0', STR_PAD_LEFT);
 
             $total = 0.0;
             foreach ($items as $it) {
@@ -90,7 +109,46 @@ try {
             $order->setVar('total_amount', $total);
             $orderHandler->insert($order, true);
 
-            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total));
+            // Generate SEPA QR Code if configured
+            $qrCodeDataUri = null;
+
+            // Get module configuration for SEPA settings
+            $moduleHandler = icms::handler('icms_module');
+            $module = $moduleHandler->getByDirname('simplecart');
+            $configHandler = icms::handler('icms_config');
+            $config = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
+
+            if (!empty($config['beneficiary_name']) && !empty($config['iban'])) {
+                try {
+                    $paymentData = Data::create()
+                        ->setName($config['beneficiary_name'])
+                        ->setIban($config['iban'])
+                        ->setAmount($total);
+
+                    if (!empty($config['bic'])) {
+                        $paymentData->setBic($config['bic']);
+                    }
+
+                    $paymentData->setRemittanceText($reference); // Use the generated reference
+
+                    $result = Builder::create()
+                        ->writer(new PngWriter())
+                        ->writerOptions([])
+                        ->data($paymentData->toString())
+                        ->encoding(new Encoding('UTF-8'))
+                        ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+                        ->size(300)
+                        ->margin(10)
+                        ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+                        ->build();
+
+                    $qrCodeDataUri = $result->getDataUri();
+                } catch (Exception $e) {
+                    // Log error or ignore if QR generation fails, so order still succeeds
+                }
+            }
+
+            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total, 'qr_code' => $qrCodeDataUri));
             break;
 
         default:
@@ -100,4 +158,4 @@ try {
     http_response_code(400);
     echo json_encode(array('ok' => false, 'error' => $e->getMessage()));
 }
-
+exit;

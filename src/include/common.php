@@ -20,5 +20,3 @@ function simplecart_getHandler($name) {
     }
     return $handlers[$name];
 }
-
-?>

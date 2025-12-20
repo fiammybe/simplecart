@@ -1,79 +1,83 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 <link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
+<style>[x-cloak] { display: none !important; }</style>
 
-<section id="simplecart-app" class="section">
+<section class="section" x-data>
   <div class="container">
-    <h1 class="title is-4">{{ t('shop_title') }}</h1>
+    <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_SHOP_TITLE}></h1>
 
+    <!-- Products: Server-rendered with Alpine.js for add-to-cart -->
     <div class="columns is-multiline">
-      <div class="column is-12-mobile is-6-tablet is-4-desktop" v-for="p in products" :key="p.id">
+      <{foreach from=$products item=product}>
+      <div class="column is-12-mobile is-6-tablet is-4-desktop">
         <div class="card">
           <div class="card-content">
-            <p class="title is-5">{{ p.name }}</p>
-            <p class="subtitle is-6 sc-card-price">{{ currency(p.price) }}</p>
+            <p class="title is-5"><{$product.name}></p>
+            <p class="subtitle is-6 sc-card-price"><{$product.price_formatted}></p>
             <div class="buttons">
-              <button class="button is-primary is-small" @click="addToCart(p)">{{ t('add_to_cart') }}</button>
+              <button class="button is-primary is-small"
+                @click="$store.cart.add({id: <{$product.id}>, name: '<{$product.name|escape:'javascript'}>', price: <{$product.price}>})">
+                <{$smarty.const._MD_SIMPLECART_ADD_TO_CART}>
+              </button>
             </div>
           </div>
         </div>
       </div>
+      <{/foreach}>
     </div>
 
-    <div class="box" v-if="cartItems.length">
-      <h2 class="title is-5">{{ t('your_cart') }}</h2>
+    <!-- Cart: Client-side rendered by Alpine.js -->
+    <div class="box" x-show="$store.cart.items.length > 0" x-cloak>
+      <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_YOUR_CART}></h2>
       <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
           <tr>
-            <th>{{ t('name') }}</th>
+            <th><{$smarty.const._MD_SIMPLECART_NAME}></th>
             <th class="has-text-centered">Qty</th>
-            <th class="has-text-right">{{ t('total') }}</th>
+            <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_TOTAL}></th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in cartItems" :key="item.product_id">
-            <td>
-              {{ item.name }}
-              <span class="tag is-light">{{ currency(item.price) }}</span>
-            </td>
-            <td class="has-text-centered">
-              <div class="buttons has-addons is-centered">
-                <button class="button is-small" @click="dec(item)">-</button>
-                <span class="button is-static is-small">{{ item.quantity }}</span>
-                <button class="button is-small" @click="inc(item)">+</button>
-              </div>
-            </td>
-            <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
-            <td class="has-text-right">
-              <a href="#" class="button is-text is-small" @click.prevent="removeItem(item)">{{ t('remove') }}</a>
-            </td>
-          </tr>
+          <template x-for="item in $store.cart.items" :key="item.product_id">
+            <tr>
+              <td>
+                <span x-text="item.name"></span>
+                <span class="tag is-light" x-text="currency(item.price)"></span>
+              </td>
+              <td class="has-text-centered">
+                <div class="buttons has-addons is-centered">
+                  <button class="button is-small" @click="$store.cart.dec(item)">-</button>
+                  <span class="button is-static is-small" x-text="item.quantity"></span>
+                  <button class="button is-small" @click="$store.cart.inc(item)">+</button>
+                </div>
+              </td>
+              <td class="has-text-right" x-text="currency(item.price * item.quantity)"></td>
+              <td class="has-text-right">
+                <a href="#" class="button is-text is-small" @click.prevent="$store.cart.remove(item)">
+                  <{$smarty.const._MD_SIMPLECART_REMOVE}>
+                </a>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
-      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
-      <a :href="checkoutUrl" class="button is-link is-pulled-right">{{ t('checkout') }}</a>
+      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">
+        <{$smarty.const._MD_SIMPLECART_TOTAL}>: <span x-text="currency($store.cart.total)"></span>
+      </div>
+      <a href="<{$simplecart_module_url}>checkout.php" class="button is-link is-pulled-right">
+        <{$smarty.const._MD_SIMPLECART_CHECKOUT}>
+      </a>
       <div class="is-clearfix"></div>
     </div>
-    <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
+
+    <!-- Empty cart message -->
+    <div x-show="$store.cart.items.length === 0" class="notification is-light">
+      <{$smarty.const._MD_SIMPLECART_EMPTY_CART}>
+    </div>
   </div>
 </section>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-<script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
-<script>
-window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
-  mount: '#simplecart-app',
-  ajaxUrl: '<{$simplecart_ajax_url}>',
-  checkoutUrl: '<{$simplecart_module_url}>checkout.php',
-  i18n: {
-    shop_title: '<{$smarty.const._MD_SIMPLECART_SHOP_TITLE|escape}>',
-    add_to_cart: '<{$smarty.const._MD_SIMPLECART_ADD_TO_CART|escape}>',
-    your_cart: '<{$smarty.const._MD_SIMPLECART_YOUR_CART|escape}>',
-    remove: '<{$smarty.const._MD_SIMPLECART_REMOVE|escape}>',
-    total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',
-    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
-    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>',
-    name: '<{$smarty.const._MD_SIMPLECART_NAME|escape}>'
-  }
-});
-</script>
+<!-- Load cart.js first to register Alpine store, then Alpine.js -->
+<script src="<{$simplecart_module_url}>assets/js/cart.js?v=2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

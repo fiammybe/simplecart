@@ -1,73 +1,83 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 <link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
+<style>[x-cloak] { display: none !important; }</style>
 
-<section id="simplecart-checkout" class="section">
+<section class="section" x-data="checkoutForm('<{$simplecart_ajax_url}>', '<{$csrf_token}>', {
+  empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape:'javascript'}>',
+  order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS|escape:'javascript'}>'
+})">
   <div class="container">
-    <h1 class="title is-4">{{ t('checkout') }}</h1>
+    <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></h1>
 
-    <div v-if="cartItems.length">
+    <!-- Cart items display -->
+    <div x-show="$store.cart.items.length > 0" x-cloak>
       <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
           <tr>
-            <th>{{ t('name') }}</th>
-            <th class="has-text-right">{{ t('total') }}</th>
+            <th><{$smarty.const._MD_SIMPLECART_NAME}></th>
+            <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_TOTAL}></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in cartItems" :key="item.product_id">
-            <td>{{ item.name }} × {{ item.quantity }}</td>
-            <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
-          </tr>
+          <template x-for="item in $store.cart.items" :key="item.product_id">
+            <tr>
+              <td><span x-text="item.name"></span> × <span x-text="item.quantity"></span></td>
+              <td class="has-text-right" x-text="currency(item.price * item.quantity)"></td>
+            </tr>
+          </template>
         </tbody>
       </table>
 
-      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
+      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">
+        <{$smarty.const._MD_SIMPLECART_TOTAL}>: <span x-text="currency($store.cart.total)"></span>
+      </div>
 
+      <!-- Checkout form -->
       <form @submit.prevent="placeOrder">
         <div class="field">
-          <label class="label">{{ t('name') }}</label>
-          <div class="control"><input class="input" v-model="customer.name" required></div>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}></label>
+          <div class="control"><input class="input" x-model="customer.name" required></div>
         </div>
         <div class="field">
-          <label class="label">{{ t('email') }}</label>
-          <div class="control"><input class="input" type="email" v-model="customer.email" required></div>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_EMAIL}></label>
+          <div class="control"><input class="input" type="email" x-model="customer.email" required></div>
         </div>
         <div class="field">
-          <label class="label">{{ t('phone') }}</label>
-          <div class="control"><input class="input" v-model="customer.phone"></div>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_PHONE}></label>
+          <div class="control"><input class="input" x-model="customer.phone"></div>
         </div>
         <div class="field">
-          <label class="label">{{ t('address') }}</label>
-          <div class="control"><textarea class="textarea" v-model="customer.address"></textarea></div>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
+          <div class="control"><textarea class="textarea" x-model="customer.address"></textarea></div>
         </div>
         <div class="field">
           <div class="control">
-            <button :disabled="submitting" class="button is-primary">{{ t('place_order') }}</button>
+            <button :disabled="submitting" class="button is-primary">
+              <span x-show="!submitting"><{$smarty.const._MD_SIMPLECART_PLACE_ORDER}></span>
+              <span x-show="submitting">Processing...</span>
+            </button>
           </div>
         </div>
       </form>
 
-      <div v-if="message" class="notification is-info">{{ message }}</div>
+      <!-- Success/Error message -->
+      <div x-show="message" x-cloak class="notification is-info mt-4" x-text="message"></div>
+
+      <!-- SEPA QR Code -->
+      <div x-show="qrCode" x-cloak class="box has-text-centered mt-4">
+        <h3 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA}></h3>
+        <img :src="qrCode" alt="SEPA QR Code" />
+        <p class="help"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY}></p>
+      </div>
     </div>
-    <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
+
+    <!-- Empty cart message -->
+    <div x-show="$store.cart.items.length === 0" class="notification is-light">
+      <{$smarty.const._MD_SIMPLECART_EMPTY_CART}>
+    </div>
   </div>
 </section>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-<script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
-<script>
-window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
-  mount: '#simplecart-checkout',
-  ajaxUrl: '<{$simplecart_ajax_url}>',
-  i18n: {
-    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
-    total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',
-    name: '<{$smarty.const._MD_SIMPLECART_NAME|escape}>',
-    email: '<{$smarty.const._MD_SIMPLECART_EMAIL|escape}>',
-    phone: '<{$smarty.const._MD_SIMPLECART_PHONE|escape}>',
-    address: '<{$smarty.const._MD_SIMPLECART_ADDRESS|escape}>',
-    place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER|escape}>',
-    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>'
-  }
-});
-</script>
+<!-- Load cart.js first to register Alpine store and checkoutForm, then Alpine.js -->
+<script src="<{$simplecart_module_url}>assets/js/cart.js?v=2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

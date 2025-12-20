@@ -3,10 +3,10 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = 1.00;
+$modversion['version'] = '0.04';
 $modversion['description'] = _MI_SIMPLECART_DESC;
-$modversion['author'] = 'Augment Agent';
-$modversion['credits'] = 'ImpressCMS, IPF';
+$modversion['author'] = 'fiammybe';
+$modversion['credits'] = 'ImpressCMS, IPF, Augment Agent';
 $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
@@ -34,6 +34,36 @@ $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;
 $modversion['hasNotification'] = 0;
 
-// Configs (none for now)
-
-?>
+// Configs
+$modversion['config'][] = array(
+    'name' => 'beneficiary_name',
+    'title' => '_MI_SIMPLECART_CONF_BENEFICIARY',
+    'description' => '_MI_SIMPLECART_CONF_BENEFICIARY_DESC',
+    'formtype' => 'textbox',
+    'valuetype' => 'text',
+    'default' => ''
+);
+$modversion['config'][] = array(
+    'name' => 'iban',
+    'title' => '_MI_SIMPLECART_CONF_IBAN',
+    'description' => '_MI_SIMPLECART_CONF_IBAN_DESC',
+    'formtype' => 'textbox',
+    'valuetype' => 'text',
+    'default' => ''
+);
+$modversion['config'][] = array(
+    'name' => 'bic',
+    'title' => '_MI_SIMPLECART_CONF_BIC',
+    'description' => '_MI_SIMPLECART_CONF_BIC_DESC',
+    'formtype' => 'textbox',
+    'valuetype' => 'text',
+    'default' => ''
+);
+$modversion['config'][] = array(
+    'name' => 'ref_prefix',
+    'title' => '_MI_SIMPLECART_CONF_REF_PREFIX',
+    'description' => '_MI_SIMPLECART_CONF_REF_PREFIX_DESC',
+    'formtype' => 'textbox',
+    'valuetype' => 'text',
+    'default' => 'ORD-'
+);
