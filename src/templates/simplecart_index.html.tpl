@@ -47,9 +47,9 @@
               </td>
               <td class="has-text-centered">
                 <div class="buttons has-addons is-centered">
-                  <button class="button is-small" @click="$store.cart.dec(item)">-</button>
+                  <button class="button is-small" @click.stop="$store.cart.dec(item)">-</button>
                   <span class="button is-static is-small" x-text="item.quantity"></span>
-                  <button class="button is-small" @click="$store.cart.inc(item)">+</button>
+                  <button class="button is-small" @click.stop="$store.cart.inc(item)">+</button>
                 </div>
               </td>
               <td class="has-text-right" x-text="currency(item.price * item.quantity)"></td>
@@ -79,5 +79,5 @@
 </section>
 
 <!-- Load cart.js first to register Alpine store, then Alpine.js -->
-<script src="<{$simplecart_module_url}>assets/js/cart.js?v=2"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js?v=4"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
