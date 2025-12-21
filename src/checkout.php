@@ -1,7 +1,7 @@
 <?php
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
-$xoopsOption['template_main'] = 'simplecart_checkout.html';
+$xoopsOption['template_main'] = 'simplecart_checkout.html.tpl';
 include ICMS_ROOT_PATH . '/header.php';
 
 // Generate CSRF token server-side

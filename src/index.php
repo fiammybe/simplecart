@@ -1,7 +1,7 @@
 <?php
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
-$xoopsOption['template_main'] = 'simplecart_index.html';
+$xoopsOption['template_main'] = 'simplecart_index.html.tpl';
 include ICMS_ROOT_PATH . '/header.php';
 
 // Fetch products server-side for initial render

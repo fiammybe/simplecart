@@ -46,7 +46,7 @@ switch ($clean_op) {
         } else {
             $icmsAdminTpl->assign('simplecart_order_error', _AM_SIMPLECART_ORDER_NOT_FOUND);
         }
-        $icmsAdminTpl->display('db:simplecart_admin_order.html');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
         icms_cp_footer();
         break;
 
@@ -86,8 +86,7 @@ switch ($clean_op) {
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');
         $icmsAdminTpl->assign('simplecart_order_table', $objectTable->fetch());
-        $icmsAdminTpl->display('db:simplecart_admin_order.html');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
         icms_cp_footer();
         break;
 }
-?>
