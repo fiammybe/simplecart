@@ -43,13 +43,23 @@ document.addEventListener('alpine:init', () => {
     },
 
     inc(item) {
-      item.quantity++;
-      this.save();
+      const index = this.items.findIndex(i => i.product_id === item.product_id);
+      if (index !== -1) {
+        this.items[index].quantity++;
+        // Trigger reactivity by reassigning the array
+        this.items = [...this.items];
+        this.save();
+      }
     },
 
     dec(item) {
-      item.quantity = Math.max(1, item.quantity - 1);
-      this.save();
+      const index = this.items.findIndex(i => i.product_id === item.product_id);
+      if (index !== -1) {
+        this.items[index].quantity = Math.max(1, this.items[index].quantity - 1);
+        // Trigger reactivity by reassigning the array
+        this.items = [...this.items];
+        this.save();
+      }
     },
 
     remove(item) {
