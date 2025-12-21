@@ -14,6 +14,7 @@ CREATE TABLE `simplecart_order` (
   `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
   `status` varchar(32) NOT NULL DEFAULT 'pending',
   `customer_info` text,
+  `payment_reference` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`order_id`),
   KEY `status_idx` (`status`),
   KEY `timestamp_idx` (`timestamp`)
@@ -29,4 +30,3 @@ CREATE TABLE `simplecart_orderitem` (
   PRIMARY KEY (`orderitem_id`),
   KEY `order_idx` (`order_id`)
 ) ENGINE=InnoDB;
-

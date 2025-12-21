@@ -10,7 +10,7 @@ function simplecart_admin_edit_product($product_id = 0) {
     $obj = $product_id ? $icms_product_handler->get($product_id) : $icms_product_handler->create();
     icms_cp_header();
     $icmsAdminTpl->assign('simplecart_product_form', $obj->getForm(_AM_SIMPLECART_PRODUCT_FORM, 'addproduct', 'product.php', _SUBMIT)->render());
-    $icmsAdminTpl->display('db:simplecart_admin_product.html');
+    $icmsAdminTpl->display('db:simplecart_admin_product.html.tpl');
     icms_cp_footer();
 }
 
@@ -39,8 +39,7 @@ switch ($clean_op) {
         $objectTable->addIntroButton('addproduct', 'product.php?op=mod', _AM_SIMPLECART_PRODUCT_CREATE);
         $objectTable->addQuickSearch(array('name', 'description'));
         $icmsAdminTpl->assign('simplecart_product_table', $objectTable->fetch());
-        $icmsAdminTpl->display('db:simplecart_admin_product.html');
+        $icmsAdminTpl->display('db:simplecart_admin_product.html.tpl');
         icms_cp_footer();
         break;
 }
-?>

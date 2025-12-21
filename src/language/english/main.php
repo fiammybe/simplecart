@@ -15,10 +15,14 @@ define('_MD_SIMPLECART_ORDERITEM_CREATE_FAIL', 'Could not add an order item');
 
 define('_MD_SIMPLECART_ORDER_CONFIRMED', 'Order Received');
 define('_MD_SIMPLECART_ORDER_THANKS', 'Thank you for your order!');
+define('_MD_SIMPLECART_ORDER_SUCCESS', 'Order placed successfully');
 
 define('_MD_SIMPLECART_NAME', 'Name');
 define('_MD_SIMPLECART_EMAIL', 'Email');
 define('_MD_SIMPLECART_PHONE', 'Phone');
 define('_MD_SIMPLECART_ADDRESS', 'Address');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Place Order');
+
+define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Pay with SEPA QR Code');
+define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan this code with your banking app to pay.');
 ?>
