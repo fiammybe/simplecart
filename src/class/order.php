@@ -12,9 +12,19 @@ class SimplecartOrder extends icms_ipf_Object {
         // payment_reference field will be added in a future iteration
         // $this->initVar('payment_reference', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_PAYMENT_REF);
 
-        $this->setControl('customer_info', array('name' => 'textarea'));
-        $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
+        // extra questions to add to an order
+        $this->initVar('shift', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_SHIFT);
+        $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_HELPENDE_HAND);
 
+        $this->setControl('customer_info', array('name' => 'textarea'));
+        $this->setControl('shift', array("status", [
+            "name" => "radio",
+            "options" => ["8u-10u", "10u-12u"]
+        ]));
+        $this->setControl('helpende_hand', array("status", [
+            "name" => "radio",
+            "options" => ["tussen de 2 shifts", "Na afloop","Liever niet"]
+        ]));
         $this->hideFieldFromForm('order_id');
         $this->hideFieldFromForm('timestamp');
         $this->hideFieldFromForm('total_amount');
@@ -38,6 +48,33 @@ class SimplecartOrder extends icms_ipf_Object {
             $links[] = '<a href="' . $url . '" class="icms_actionlink">' . htmlspecialchars($label, ENT_QUOTES) . '</a>';
         }
         return implode(' | ', $links);
+    }
+
+    public function getItemsSummary() {
+        $orderId = (int)$this->getVar('order_id');
+        if ($orderId <= 0) {
+            return '';
+        }
+
+        $orderItemHandler = simplecart_getHandler('orderitem');
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+        $criteria->setSort('orderitem_id');
+        $criteria->setOrder('ASC');
+        $items = $orderItemHandler->getObjects($criteria, false, true);
+
+        if (empty($items)) {
+            return 'No items';
+        }
+
+        $summary = array();
+        foreach ($items as $item) {
+            $name = (string)$item->getVar('product_name');
+            $qty = (int)$item->getVar('quantity');
+            $summary[] = htmlspecialchars($name, ENT_QUOTES) . ' (x' . $qty . ')';
+        }
+
+        return implode(', ', $summary);
     }
 
 }

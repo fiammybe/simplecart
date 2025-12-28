@@ -96,7 +96,9 @@ function checkoutForm(ajaxUrl, token, i18n) {
       name: '',
       email: '',
       phone: '',
-      address: ''
+      address: '',
+      shift: '',
+      helpendehanden: ''
     },
 
     t(key) {
