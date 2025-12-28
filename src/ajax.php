@@ -107,14 +107,10 @@ try {
 
             // Load SEPA QR Code Generator
             require_once __DIR__ . '/class/SepaQrCodeGenerator.php';
+            require_once __DIR__ . '/include/common.php';
 
-            // Get configuration from module settings (or use defaults)
-            $config = array(
-                'beneficiary_name' => 'SimpleCart Shop',
-                'beneficiary_iban' => '', // Should be configured in module settings
-                'beneficiary_bic' => '',
-                'currency' => 'EUR'
-            );
+            // Get configuration from module settings using helper function
+            $config = simplecart_getSepaConfig();
 
             $generator = new SepaQrCodeGenerator($config);
             $amount = (float)$order->getVar('total_amount');

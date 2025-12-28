@@ -21,4 +21,30 @@ function simplecart_getHandler($name) {
     return $handlers[$name];
 }
 
+/**
+ * Get SEPA payment configuration
+ *
+ * @param string $key Configuration key (beneficiary_name, beneficiary_iban, beneficiary_bic, currency)
+ * @param mixed $default Default value if configuration is not set
+ * @return mixed Configuration value
+ */
+function simplecart_getSepaConfig($key = null, $default = null) {
+    static $sepaConfig = null;
+
+    if ($sepaConfig === null) {
+        $sepaConfig = array(
+            'beneficiary_name' => icms::$config['simplecart']['sepa_beneficiary_name'] ?? 'SimpleCart Shop',
+            'beneficiary_iban' => icms::$config['simplecart']['sepa_beneficiary_iban'] ?? '',
+            'beneficiary_bic' => icms::$config['simplecart']['sepa_beneficiary_bic'] ?? '',
+            'currency' => icms::$config['simplecart']['sepa_currency'] ?? 'EUR'
+        );
+    }
+
+    if ($key === null) {
+        return $sepaConfig;
+    }
+
+    return isset($sepaConfig[$key]) ? $sepaConfig[$key] : $default;
+}
+
 ?>

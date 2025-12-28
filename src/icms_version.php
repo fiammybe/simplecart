@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = 1.00;
+$modversion['version'] = '0.07';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'Augment Agent';
 $modversion['credits'] = 'ImpressCMS, IPF';
@@ -34,6 +34,51 @@ $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;
 $modversion['hasNotification'] = 0;
 
-// Configs (none for now)
+// Configuration items for SEPA payment
+$modversion['config'] = array();
+
+// SEPA Beneficiary Name
+$modversion['config'][] = array(
+    'name' => 'sepa_beneficiary_name',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_NAME',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_NAME_DESC',
+    'formtype' => 'text',
+    'valuetype' => 'text',
+    'default' => 'SimpleCart Shop',
+    'weight' => 1
+);
+
+// SEPA Beneficiary IBAN
+$modversion['config'][] = array(
+    'name' => 'sepa_beneficiary_iban',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN_DESC',
+    'formtype' => 'text',
+    'valuetype' => 'text',
+    'default' => '',
+    'weight' => 2
+);
+
+// SEPA Beneficiary BIC
+$modversion['config'][] = array(
+    'name' => 'sepa_beneficiary_bic',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_BIC',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_BIC_DESC',
+    'formtype' => 'text',
+    'valuetype' => 'text',
+    'default' => '',
+    'weight' => 3
+);
+
+// SEPA Currency Code
+$modversion['config'][] = array(
+    'name' => 'sepa_currency',
+    'title' => '_MI_SIMPLECART_SEPA_CURRENCY',
+    'description' => '_MI_SIMPLECART_SEPA_CURRENCY_DESC',
+    'formtype' => 'text',
+    'valuetype' => 'text',
+    'default' => 'EUR',
+    'weight' => 4
+);
 
 ?>
