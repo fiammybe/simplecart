@@ -74,6 +74,14 @@ try {
             $order->setVar('customer_info', implode("\n", $infoParts));
             $order->setVar('total_amount', 0.0);
 
+            // Set shift and helpende_hand fields
+            if (!empty($customer['shift'])) {
+                $order->setVar('shift', icms_core_DataFilter::htmlSpecialChars($customer['shift']));
+            }
+            if (!empty($customer['helpendehanden'])) {
+                $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
+            }
+
             // Insert the order
             if (!$orderHandler->insert($order, true)) {
                 $errors = $order->getErrors();

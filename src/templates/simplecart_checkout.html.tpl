@@ -34,6 +34,19 @@
 
       <!-- Checkout form -->
       <form @submit.prevent="placeOrder">
+          <div class="field">
+              <label class="label"><{$smarty.const._MD_SIMPLECART_SHIFT}></label>
+              <div class="control">
+                  <label class="radio">
+                      <input type="radio" name="shift" value="morning" x-model="customer.shift" required>
+                      Morning
+                  </label>
+                  <label class="radio">
+                      <input type="radio" name="shift" value="evening" x-model="customer.shift" required>
+                      Evening
+                  </label>
+              </div>
+          </div>
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}></label>
           <div class="control"><input class="input" x-model="customer.name" required></div>
@@ -50,7 +63,25 @@
           <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
           <div class="control"><textarea class="textarea" x-model="customer.address"></textarea></div>
         </div>
-        <div class="field">
+          <div class="field">
+              <label class="label"><{$smarty.const._MD_SIMPLECART_HELP}></label>
+              <div class="control">
+                  <label class="radio">
+                      <input type="radio" name="helpendehanden" value="tussen_de_2_shifts" x-model="customer.helpendehanden" required>
+                      Tussen de 2 shifts
+                  </label>
+                  <label class="radio">
+                      <input type="radio" name="helpendehanden" value="na_de_2de_shift" x-model="customer.helpendehanden" required>
+                      Na de 2de shift
+                  </label>
+                  <label class="radio">
+                      <input type="radio" name="helpendehanden" value="liever_niet" x-model="customer.helpendehanden" required>
+                      Liever niet
+                  </label>
+              </div>
+          </div>
+
+          <div class="field">
           <div class="control">
             <button :disabled="submitting" class="button is-primary">
               <span x-show="!submitting"><{$smarty.const._MD_SIMPLECART_PLACE_ORDER}></span>
