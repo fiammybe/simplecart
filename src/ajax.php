@@ -93,6 +93,41 @@ try {
             echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total));
             break;
 
+        case 'sepa_qr_data':
+            $order_id = isset($_REQUEST['order_id']) ? (int)$_REQUEST['order_id'] : 0;
+            if ($order_id <= 0) {
+                throw new Exception('Invalid order ID');
+            }
+
+            $orderHandler = simplecart_getHandler('order');
+            $order = $orderHandler->get($order_id);
+            if (!$order || $order->isNew()) {
+                throw new Exception('Order not found');
+            }
+
+            // Load SEPA QR Code Generator
+            require_once __DIR__ . '/class/SepaQrCodeGenerator.php';
+
+            // Get configuration from module settings (or use defaults)
+            $config = array(
+                'beneficiary_name' => 'SimpleCart Shop',
+                'beneficiary_iban' => '', // Should be configured in module settings
+                'beneficiary_bic' => '',
+                'currency' => 'EUR'
+            );
+
+            $generator = new SepaQrCodeGenerator($config);
+            $amount = (float)$order->getVar('total_amount');
+            $orderId = (int)$order->getVar('order_id');
+
+            try {
+                $qrData = $generator->generateQrData($orderId, $amount, (string)$orderId);
+                echo json_encode(array('ok' => true, 'qr_data' => $qrData));
+            } catch (Exception $e) {
+                throw new Exception('Failed to generate SEPA QR data: ' . $e->getMessage());
+            }
+            break;
+
         default:
             echo json_encode(array('ok' => false, 'error' => 'Unknown action'));
     }

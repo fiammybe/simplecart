@@ -21,4 +21,10 @@ define('_MD_SIMPLECART_EMAIL', 'Email');
 define('_MD_SIMPLECART_PHONE', 'Phone');
 define('_MD_SIMPLECART_ADDRESS', 'Address');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Place Order');
+define('_MD_SIMPLECART_ORDER_SUCCESS', 'Order placed successfully');
+define('_MD_SIMPLECART_ORDER_ID', 'Order ID');
+
+// SEPA Payment
+define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Pay with Bank Transfer QR Code');
+define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan this QR code with your banking app to pay via bank transfer.');
 ?>

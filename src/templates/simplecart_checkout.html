@@ -48,12 +48,24 @@
       </form>
 
       <div v-if="message" class="notification is-info">{{ message }}</div>
+
+      <!-- SEPA QR Code Section -->
+      <div v-if="showSepaQr" class="box mt-5">
+        <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
+        <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
+        <div class="has-text-centered">
+          <div id="sepa-qr-code" class="mb-4"></div>
+          <p class="help">{{ t('order_id') }}: {{ lastOrderId }}</p>
+        </div>
+      </div>
     </div>
     <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
   </div>
 </section>
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<!-- QR Code Library (qrcode.js) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
 <script>
 window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
@@ -67,7 +79,9 @@ window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
     phone: '<{$smarty.const._MD_SIMPLECART_PHONE|escape}>',
     address: '<{$smarty.const._MD_SIMPLECART_ADDRESS|escape}>',
     place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER|escape}>',
-    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>'
+    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>',
+    order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS|escape}>',
+    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID|escape}>'
   }
 });
 </script>

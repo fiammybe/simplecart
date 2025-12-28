@@ -28,7 +28,7 @@
     if (!el) return;
 
     const products = ref([]);
-    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', address:'' } });
+    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', address:'' }, lastOrderId: null, showSepaQr: false });
     const cart = useCart();
 
     const t = (k) => (opts.i18n && opts.i18n[k]) || k;
@@ -56,10 +56,42 @@
         const payload = { token: state.token, items: cart.items.value.map(i => ({ product_id: i.product_id, quantity: i.quantity })), customer: state.customer };
         const r = await fetch(opts.ajaxUrl + '?action=place_order', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
         const j = await r.json();
-        if (j.ok) { cart.clear(); state.message = t('order_success') + ' #' + j.order_id; }
+        if (j.ok) {
+          cart.clear();
+          state.message = t('order_success') + ' #' + j.order_id;
+          state.lastOrderId = j.order_id;
+          state.showSepaQr = true;
+          // Load SEPA QR code data
+          await loadSepaQrCode(j.order_id);
+        }
         else { state.message = j.error || 'Error'; }
       } catch(e) { state.message = e.message || 'Error'; }
       state.submitting = false;
+    };
+
+    const loadSepaQrCode = async (orderId) => {
+      try {
+        const r = await fetch(opts.ajaxUrl + '?action=sepa_qr_data&order_id=' + orderId);
+        const j = await r.json();
+        if (j.ok && j.qr_data) {
+          // Clear previous QR code
+          const qrContainer = document.getElementById('sepa-qr-code');
+          if (qrContainer) {
+            qrContainer.innerHTML = '';
+            // Generate QR code using qrcode.js library
+            new QRCode(qrContainer, {
+              text: j.qr_data,
+              width: 256,
+              height: 256,
+              colorDark: '#000000',
+              colorLight: '#ffffff',
+              correctLevel: QRCode.CorrectLevel.M
+            });
+          }
+        }
+      } catch(e) {
+        console.error('Failed to load SEPA QR code:', e.message);
+      }
     };
 
     const app = createApp({
@@ -81,7 +113,10 @@
           customer: state.customer,
           placeOrder,
           submitting: computed(() => state.submitting),
-          message: computed(() => state.message)
+          message: computed(() => state.message),
+          // SEPA QR Code
+          showSepaQr: computed(() => state.showSepaQr),
+          lastOrderId: computed(() => state.lastOrderId)
         };
       }
     });
