@@ -5,7 +5,19 @@
   <div class="container">
     <h1 class="title is-4">{{ t('checkout') }}</h1>
 
-    <div v-if="cartItems.length">
+    <!-- SEPA QR Code Section (shown after successful order) -->
+    <div v-if="showSepaQr" class="box mt-5">
+      <div v-if="message" class="notification is-success mb-5">{{ message }}</div>
+      <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
+      <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
+      <div class="has-text-centered">
+        <div id="sepa-qr-code" class="mb-4"></div>
+        <p class="help">{{ t('order_id') }}: {{ lastOrderId }}</p>
+      </div>
+    </div>
+
+    <!-- Checkout form (shown before order placement) -->
+    <div v-else-if="cartItems.length">
       <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
           <tr>
@@ -48,17 +60,9 @@
       </form>
 
       <div v-if="message" class="notification is-info">{{ message }}</div>
-
-      <!-- SEPA QR Code Section -->
-      <div v-if="showSepaQr" class="box mt-5">
-        <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
-        <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
-        <div class="has-text-centered">
-          <div id="sepa-qr-code" class="mb-4"></div>
-          <p class="help">{{ t('order_id') }}: {{ lastOrderId }}</p>
-        </div>
-      </div>
     </div>
+
+    <!-- Empty cart message (shown when no items) -->
     <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
   </div>
 </section>
@@ -71,6 +75,7 @@
 window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
   mount: '#simplecart-checkout',
   ajaxUrl: '<{$simplecart_ajax_url}>',
+  currency: '<{$simplecart_currency|default:"EUR"|escape}>',
   i18n: {
     checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
     total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',

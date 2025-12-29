@@ -65,6 +65,7 @@ window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
   mount: '#simplecart-app',
   ajaxUrl: '<{$simplecart_ajax_url}>',
   checkoutUrl: '<{$simplecart_module_url}>checkout.php',
+  currency: '<{$simplecart_currency|default:"EUR"|escape}>',
   i18n: {
     shop_title: '<{$smarty.const._MD_SIMPLECART_SHOP_TITLE|escape}>',
     add_to_cart: '<{$smarty.const._MD_SIMPLECART_ADD_TO_CART|escape}>',

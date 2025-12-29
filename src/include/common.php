@@ -32,12 +32,41 @@ function simplecart_getSepaConfig($key = null, $default = null) {
     static $sepaConfig = null;
 
     if ($sepaConfig === null) {
+        // Get module configuration by loading the module object with config
+        $moduleHandler = icms::handler('icms_module');
+        $module = $moduleHandler->getByDirname('simplecart', true);
+
+        $moduleConfig = array();
+        if ($module && isset($module->config) && is_array($module->config)) {
+            $moduleConfig = $module->config;
+        }
+
+        // Debug logging
+        error_log('=== simplecart_getSepaConfig DEBUG ===');
+        error_log('module object exists: ' . ($module ? 'true' : 'false'));
+        error_log('module->config exists: ' . (isset($module->config) ? 'true' : 'false'));
+        error_log('moduleConfig type: ' . gettype($moduleConfig));
+        error_log('moduleConfig is_array: ' . (is_array($moduleConfig) ? 'true' : 'false'));
+
+        if (is_array($moduleConfig)) {
+            error_log('moduleConfig keys: ' . implode(', ', array_keys($moduleConfig)));
+            error_log('sepa_beneficiary_name: ' . (isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'NOT SET'));
+            error_log('sepa_beneficiary_iban: ' . (isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : 'NOT SET'));
+            error_log('sepa_beneficiary_bic: ' . (isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : 'NOT SET'));
+            error_log('sepa_currency: ' . (isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'NOT SET'));
+        } else {
+            error_log('moduleConfig is not an array! Value: ' . var_export($moduleConfig, true));
+        }
+
         $sepaConfig = array(
-            'beneficiary_name' => icms::$config['simplecart']['sepa_beneficiary_name'] ?? 'SimpleCart Shop',
-            'beneficiary_iban' => icms::$config['simplecart']['sepa_beneficiary_iban'] ?? '',
-            'beneficiary_bic' => icms::$config['simplecart']['sepa_beneficiary_bic'] ?? '',
-            'currency' => icms::$config['simplecart']['sepa_currency'] ?? 'EUR'
+            'beneficiary_name' => isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'SimpleCart Shop',
+            'beneficiary_iban' => isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : '',
+            'beneficiary_bic' => isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : '',
+            'currency' => isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'EUR'
         );
+
+        error_log('Final sepaConfig: ' . json_encode($sepaConfig));
+        error_log('=== END DEBUG ===');
     }
 
     if ($key === null) {

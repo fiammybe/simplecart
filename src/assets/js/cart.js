@@ -21,7 +21,7 @@
     return { items, add, inc, dec, remove, total, clear };
   }
 
-  function currency(n){ return new Intl.NumberFormat(undefined, { style:'currency', currency:'USD'}).format(n); }
+  function currency(n, currencyCode = 'EUR'){ return new Intl.NumberFormat(undefined, { style:'currency', currency: currencyCode }).format(n); }
 
   function boot(opts){
     const el = document.querySelector(opts.mount);
@@ -30,8 +30,10 @@
     const products = ref([]);
     const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', address:'' }, lastOrderId: null, showSepaQr: false });
     const cart = useCart();
+    const currencyCode = opts.currency || 'EUR';
 
     const t = (k) => (opts.i18n && opts.i18n[k]) || k;
+    const currencyFormatter = (n) => currency(n, currencyCode);
     const loadProducts = async () => {
       try {
         const r = await fetch(opts.ajaxUrl + '?action=products');
@@ -72,7 +74,19 @@
     const loadSepaQrCode = async (orderId) => {
       try {
         const r = await fetch(opts.ajaxUrl + '?action=sepa_qr_data&order_id=' + orderId);
-        const j = await r.json();
+        const responseText = await r.text();
+        console.log('SEPA QR raw response:', responseText);
+
+        let j;
+        try {
+          j = JSON.parse(responseText);
+        } catch(parseError) {
+          console.error('JSON parse error:', parseError.message);
+          console.error('Response text:', responseText);
+          throw new Error('Invalid JSON response: ' + responseText.substring(0, 100));
+        }
+
+        console.log('SEPA QR response:', j);
         if (j.ok && j.qr_data) {
           // Clear previous QR code
           const qrContainer = document.getElementById('sepa-qr-code');
@@ -87,7 +101,12 @@
               colorLight: '#ffffff',
               correctLevel: QRCode.CorrectLevel.M
             });
+            console.log('QR code generated successfully');
+          } else {
+            console.error('QR code container not found');
           }
+        } else {
+          console.error('SEPA QR data error:', j.error || 'Unknown error');
         }
       } catch(e) {
         console.error('Failed to load SEPA QR code:', e.message);
@@ -106,7 +125,7 @@
           dec: cart.dec,
           removeItem: cart.remove,
           total: cart.total,
-          currency,
+          currency: currencyFormatter,
           t,
           checkoutUrl,
           // checkout

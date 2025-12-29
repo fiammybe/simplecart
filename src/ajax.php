@@ -1,6 +1,14 @@
 <?php
+// Start output buffering to prevent any accidental output before JSON
+ob_start();
+
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
+
+// Clear any output that may have been generated
+ob_end_clean();
+
+// Set JSON header
 header('Content-Type: application/json; charset=utf-8');
 
 $action = isset($_REQUEST['action']) ? strtolower(preg_replace('/[^a-z_]/', '', $_REQUEST['action'])) : '';
@@ -105,12 +113,18 @@ try {
                 throw new Exception('Order not found');
             }
 
-            // Load SEPA QR Code Generator
-            require_once __DIR__ . '/class/SepaQrCodeGenerator.php';
-            require_once __DIR__ . '/include/common.php';
-
             // Get configuration from module settings using helper function
             $config = simplecart_getSepaConfig();
+
+            // Validate that IBAN is configured
+            if (empty($config['beneficiary_iban'])) {
+                throw new Exception('SEPA payment is not configured. Please configure IBAN in module settings.');
+            }
+
+            // Load SEPA QR Code Generator
+            if (!class_exists('SepaQrCodeGenerator')) {
+                require_once __DIR__ . '/class/SepaQrCodeGenerator.php';
+            }
 
             $generator = new SepaQrCodeGenerator($config);
             $amount = (float)$order->getVar('total_amount');

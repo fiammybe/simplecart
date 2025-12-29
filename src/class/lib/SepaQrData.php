@@ -38,7 +38,7 @@ class SepaQrData
         );
     }
 
-    public function setServiceTag(string $serviceTag = 'BCD'): static
+    public function setServiceTag(string $serviceTag = 'BCD'): self
     {
         if ($serviceTag !== 'BCD') {
             throw new InvalidArgumentException("Invalid service tag: $serviceTag. Should be BCD.");
@@ -49,7 +49,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setVersion(int $version = 2): static
+    public function setVersion(int $version = 2): self
     {
         if ($version < 1 || $version > 2) {
             throw new InvalidArgumentException("Invalid version: $version. Should be either 1 or 2.");
@@ -60,7 +60,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setCharacterSet(int $characterSet = self::UTF_8): static
+    public function setCharacterSet(int $characterSet = self::UTF_8): self
     {
         if ($characterSet < 1 || $characterSet > 8) {
             throw new InvalidArgumentException("Invalid character set: $characterSet. Should be between 1 and 8.");
@@ -71,7 +71,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setIdentification(string $identification = 'SCT'): static
+    public function setIdentification(string $identification = 'SCT'): self
     {
         if ($identification !== 'SCT') {
             throw new InvalidArgumentException("Invalid identification code: $identification. Should be SCT.");
@@ -82,7 +82,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setBic(string $bic): static
+    public function setBic(string $bic): self
     {
         if (strlen($bic) !== 8 && strlen($bic) !== 11) {
             throw new InvalidArgumentException("Invalid BIC of the beneficiary: $bic. Should be either 8 or 11 characters.");
@@ -93,7 +93,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         if (strlen($name) > 70) {
             throw new InvalidArgumentException("Invalid name of the beneficiary: $name. Should be maximum 70 characters.");
@@ -104,7 +104,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setIban(string $iban): static
+    public function setIban(string $iban): self
     {
         if (strlen($iban) > 34) {
             throw new InvalidArgumentException("Invalid account number of the beneficiary: $iban. Should be maximum 34 characters.");
@@ -115,7 +115,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setCurrency(string $currency): static
+    public function setCurrency(string $currency): self
     {
         if (strlen($currency) !== 3) {
             throw new InvalidArgumentException("Invalid currency: $currency. Should be a valid 3 character ISO 4217 code.");
@@ -126,7 +126,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setAmount(float $amount): static
+    public function setAmount(float $amount): self
     {
         if ($amount < 0.01) {
             throw new InvalidArgumentException("Invalid amount: $amount. Should be minumum 0.01 Euro.");
@@ -141,7 +141,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setPurpose(string $purpose): static
+    public function setPurpose(string $purpose): self
     {
         if (strlen($purpose) !== 4) {
             throw new InvalidArgumentException("Invalid purpose code: $purpose. Should be 4 characters.");
@@ -152,7 +152,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setRemittanceReference(string $remittanceReference): static
+    public function setRemittanceReference(string $remittanceReference): self
     {
         if (strlen($remittanceReference) > 35) {
             throw new InvalidArgumentException("Invalid structured remittance information: $remittanceReference. Should be maximum 35 characters.");
@@ -167,7 +167,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setRemittanceText(string $remittanceText): static
+    public function setRemittanceText(string $remittanceText): self
     {
         if (strlen($remittanceText) > 140) {
             throw new InvalidArgumentException("Invalid unstructured remittance information: $remittanceText. Should be maximum 140 characters.");
@@ -182,7 +182,7 @@ class SepaQrData
         return $this;
     }
 
-    public function setInformation(string $information): static
+    public function setInformation(string $information): self
     {
         if (strlen($information) > 70) {
             throw new InvalidArgumentException("Invalid beneficiary to originator information: $information. Should be maximum 70 characters.");
