@@ -5,7 +5,7 @@
 <section class="section" x-data="checkoutForm('<{$simplecart_ajax_url}>', '<{$csrf_token}>', {
   empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape:'javascript'}>',
   order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS|escape:'javascript'}>'
-})">
+}, <{$checkout_fields_json}>)">
   <div class="container">
     <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></h1>
 
@@ -34,19 +34,7 @@
 
       <!-- Checkout form -->
       <form @submit.prevent="placeOrder">
-          <div class="field">
-              <label class="label"><{$smarty.const._MD_SIMPLECART_SHIFT}></label>
-              <div class="control">
-                  <label class="radio">
-                      <input type="radio" name="shift" value="morning" x-model="customer.shift" required>
-                      Morning
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="shift" value="evening" x-model="customer.shift" required>
-                      Evening
-                  </label>
-              </div>
-          </div>
+        <!-- Base customer fields -->
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}></label>
           <div class="control"><input class="input" x-model="customer.name" required></div>
@@ -63,25 +51,46 @@
           <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
           <div class="control"><textarea class="textarea" x-model="customer.address"></textarea></div>
         </div>
-          <div class="field">
-              <label class="label"><{$smarty.const._MD_SIMPLECART_HELP}></label>
-              <div class="control">
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="tussen_de_2_shifts" x-model="customer.helpendehanden" required>
-                      Tussen de 2 shifts
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="na_de_2de_shift" x-model="customer.helpendehanden" required>
-                      Na de 2de shift
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="liever_niet" x-model="customer.helpendehanden" required>
-                      Liever niet
-                  </label>
-              </div>
-          </div>
 
+        <!-- Dynamic fields from order object -->
+        <template x-for="field in dynamicFields" :key="field.name">
           <div class="field">
+            <label class="label" x-text="field.label"></label>
+            <div class="control">
+              <!-- Text input -->
+              <template x-if="field.type === 'text'">
+                <input class="input" type="text" 
+                       x-model="customer[field.name]" 
+                       :required="field.required">
+              </template>
+              
+              <!-- Textarea -->
+              <template x-if="field.type === 'textarea'">
+                <textarea class="textarea" 
+                          x-model="customer[field.name]" 
+                          :required="field.required"></textarea>
+              </template>
+              
+              <!-- Radio buttons -->
+              <template x-if="field.type === 'radio'">
+                <div>
+                  <template x-for="(option, index) in field.options" :key="index">
+                    <label class="radio">
+                      <input type="radio" 
+                             :name="field.name" 
+                             :value="option" 
+                             x-model="customer[field.name]" 
+                             :required="field.required">
+                      <span x-text="option"></span>
+                    </label>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <div class="field">
           <div class="control">
             <button :disabled="submitting" class="button is-primary">
               <span x-show="!submitting"><{$smarty.const._MD_SIMPLECART_PLACE_ORDER}></span>
@@ -110,5 +119,5 @@
 </section>
 
 <!-- Load cart.js first to register Alpine store and checkoutForm, then Alpine.js -->
-<script src="<{$simplecart_module_url}>assets/js/cart.js?v=4"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js?v=5"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

@@ -67,19 +67,23 @@ try {
 
             $order = $orderHandler->create();
             $order->setVar('status', 'pending');
+            
+            // Build customer_info from base fields
             $infoParts = array();
             foreach (array('name','email','phone','address') as $k) {
-                if (!empty($customer[$k])) { $infoParts[] = ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k]); }
+                if (!empty($customer[$k])) { 
+                    $infoParts[] = ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k]); 
+                }
             }
             $order->setVar('customer_info', implode("\n", $infoParts));
             $order->setVar('total_amount', 0.0);
 
-            // Set shift and helpende_hand fields
-            if (!empty($customer['shift'])) {
-                $order->setVar('shift', icms_core_DataFilter::htmlSpecialChars($customer['shift']));
-            }
-            if (!empty($customer['helpendehanden'])) {
-                $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
+            // Dynamically set order fields from customer data
+            $checkoutFields = $order->getCheckoutFields();
+            foreach ($checkoutFields as $fieldName => $fieldDef) {
+                if (isset($customer[$fieldName])) {
+                    $order->setVar($fieldName, icms_core_DataFilter::htmlSpecialChars($customer[$fieldName]));
+                }
             }
 
             // Insert the order
