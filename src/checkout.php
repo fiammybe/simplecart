@@ -9,31 +9,30 @@ $csrfToken = icms::$security->createToken(0, 'simplecart');
 
 // Get order handler and create a temporary order object to get field definitions
 $orderHandler = simplecart_getHandler('order');
-$orderObj = $orderHandler->create();
-$checkoutFields = $orderObj->getCheckoutFields();
+$checkoutFields = $orderHandler->create()
+    ->getCheckoutFields();
 
 // Convert fields to JSON-friendly format for template
-$fieldsForTemplate = array();
-foreach ($checkoutFields as $fieldName => $fieldDef) {
-    $field = array(
-        'name' => $fieldName,
+$fieldsForTemplate = array_map(function($fieldDef) {
+    $field = [
+        'name' => $fieldDef['name'],
         'label' => $fieldDef['label'],
         'required' => $fieldDef['required'],
         'type' => 'text', // default
-    );
+    ];
     
     // Determine field type from control
     if (isset($fieldDef['control']) && is_array($fieldDef['control'])) {
         if (isset($fieldDef['control'][1]['name']) && $fieldDef['control'][1]['name'] === 'radio') {
             $field['type'] = 'radio';
-            $field['options'] = $fieldDef['control'][1]['options'] ?? array();
+            $field['options'] = $fieldDef['control'][1]['options'] ?? [];
         }
     } elseif ($fieldDef['type'] === XOBJ_DTYPE_TXTAREA) {
         $field['type'] = 'textarea';
     }
     
-    $fieldsForTemplate[] = $field;
-}
+    return $field;
+}, $checkoutFields);
 
 $icmsTpl->assign('csrf_token', $csrfToken);
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
