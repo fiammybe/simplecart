@@ -21,11 +21,14 @@ $fieldsForTemplate = array_map(function($fieldDef) {
         'type' => 'text', // default
     ];
     
-    // Determine field type from control
-    if (isset($fieldDef['control']) && is_array($fieldDef['control'])) {
-        if (isset($fieldDef['control'][1]['name']) && $fieldDef['control'][1]['name'] === 'radio') {
+    // Determine field type from control with validation
+    if (isset($fieldDef['control']) && is_array($fieldDef['control']) 
+        && isset($fieldDef['control'][1]) && is_array($fieldDef['control'][1])) {
+        $controlConfig = $fieldDef['control'][1];
+        if (isset($controlConfig['name']) && $controlConfig['name'] === 'radio' 
+            && isset($controlConfig['options']) && is_array($controlConfig['options'])) {
             $field['type'] = 'radio';
-            $field['options'] = $fieldDef['control'][1]['options'] ?? [];
+            $field['options'] = $controlConfig['options'];
         }
     } elseif ($fieldDef['type'] === XOBJ_DTYPE_TXTAREA) {
         $field['type'] = 'textarea';
@@ -37,6 +40,7 @@ $fieldsForTemplate = array_map(function($fieldDef) {
 $icmsTpl->assign('csrf_token', $csrfToken);
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_ajax_url', SIMPLECART_URL . 'ajax.php');
+$icmsTpl->assign('simplecart_version', SIMPLECART_VERSION);
 $icmsTpl->assign('checkout_fields', $fieldsForTemplate);
 $icmsTpl->assign('checkout_fields_json', json_encode($fieldsForTemplate));
 

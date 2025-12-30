@@ -79,11 +79,20 @@ try {
             $order->setVar('customer_info', implode("\n", $infoParts))
                   ->setVar('total_amount', 0.0);
 
-            // Dynamically set order fields from customer data
+            // Dynamically set order fields from customer data with appropriate sanitization
             $checkoutFields = $order->getCheckoutFields();
             array_walk($checkoutFields, function($fieldDef, $fieldName) use ($order, $customer) {
                 if (isset($customer[$fieldName])) {
-                    $order->setVar($fieldName, icms_core_DataFilter::htmlSpecialChars($customer[$fieldName]));
+                    $value = $customer[$fieldName];
+                    // Apply appropriate sanitization based on field type
+                    if ($fieldDef['type'] === XOBJ_DTYPE_TXTAREA) {
+                        // For textarea, preserve line breaks but escape HTML
+                        $value = icms_core_DataFilter::htmlSpecialChars($value);
+                    } else {
+                        // For text and radio fields, basic HTML escaping
+                        $value = icms_core_DataFilter::htmlSpecialChars($value);
+                    }
+                    $order->setVar($fieldName, $value);
                 }
             });
 

@@ -98,8 +98,9 @@ function checkoutForm(ajaxUrl, token, i18n, dynamicFields = []) {
       email: '',
       phone: '',
       address: '',
-      // Initialize dynamic fields
+      // Initialize dynamic fields with appropriate default values based on type
       ...dynamicFields.reduce((acc, field) => {
+        // Radio buttons should default to empty string to remain unselected
         acc[field.name] = '';
         return acc;
       }, {})

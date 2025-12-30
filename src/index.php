@@ -27,6 +27,7 @@ foreach ($productObjects as $p) {
 $icmsTpl->assign('products', $products);
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_ajax_url', SIMPLECART_URL . 'ajax.php');
+$icmsTpl->assign('simplecart_version', SIMPLECART_VERSION);
 
 include ICMS_ROOT_PATH . '/footer.php';
 

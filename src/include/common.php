@@ -5,6 +5,7 @@ if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_DIRNAME', basename(dirname(__DIR__)));
     define('SIMPLECART_URL', ICMS_URL . '/modules/' . SIMPLECART_DIRNAME . '/');
     define('SIMPLECART_ROOT_PATH', ICMS_ROOT_PATH . '/modules/' . SIMPLECART_DIRNAME . '/');
+    define('SIMPLECART_VERSION', '0.06'); // Module version for cache busting
 }
 
 icms_loadLanguageFile('simplecart', 'main');

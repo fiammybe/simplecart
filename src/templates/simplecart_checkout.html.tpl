@@ -119,5 +119,5 @@
 </section>
 
 <!-- Load cart.js first to register Alpine store and checkoutForm, then Alpine.js -->
-<script src="<{$simplecart_module_url}>assets/js/cart.js?v=5"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js?v=<{$simplecart_version}>"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
