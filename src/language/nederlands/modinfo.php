@@ -19,6 +19,8 @@ define('_MI_SIMPLECART_ORDER_TOTAL', 'Totaal');
 define('_MI_SIMPLECART_ORDER_STATUS', 'Status');
 define('_MI_SIMPLECART_ORDER_CUSTOMER_INFO', 'Klant info');
 define('_MI_SIMPLECART_ORDER_PAYMENT_REF', 'Betalingsreferentie');
+define('_MI_SIMPLECART_ORDER_SHIFT', 'Shift');
+define('_MI_SIMPLECART_ORDER_HELPENDE_HAND', 'Helpende hand');
 
 // Order item fields
 define('_MI_SIMPLECART_ORDERITEM_ORDER_ID', 'Bestelling');

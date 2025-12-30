@@ -77,6 +77,46 @@ class SimplecartOrder extends icms_ipf_Object {
         return implode(', ', $summary);
     }
 
+    /**
+     * Get form-renderable fields for checkout
+     * Returns metadata for fields that should be displayed on checkout form
+     * @return array Array of field definitions
+     */
+    public function getCheckoutFields() {
+        $fields = array();
+        
+        // Get all vars that should be visible on checkout form
+        $vars = $this->getVars();
+        
+        foreach ($vars as $key => $var) {
+            // Skip fields that are hidden from form or internal
+            if ($this->isFieldHiddenFromForm($key) || 
+                in_array($key, array('order_id', 'timestamp', 'total_amount', 'status', 'customer_info'))) {
+                continue;
+            }
+            
+            // Get field configuration
+            $control = $this->controls[$key] ?? null;
+            $fieldDef = array(
+                'name' => $key,
+                'label' => $var['caption'] ?? ucfirst(str_replace('_', ' ', $key)),
+                'type' => $var['data_type'] ?? XOBJ_DTYPE_TXTBOX,
+                'required' => $var['required'] ?? false,
+                'value' => $this->getVar($key, 'e'),
+                'control' => $control
+            );
+            
+            // Add options for radio/select controls
+            if (is_array($control) && isset($control[1]['options'])) {
+                $fieldDef['options'] = $control[1]['options'];
+            }
+            
+            $fields[$key] = $fieldDef;
+        }
+        
+        return $fields;
+    }
+
 }
 
 class SimplecartOrderHandler extends icms_ipf_Handler {

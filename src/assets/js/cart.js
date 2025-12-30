@@ -84,21 +84,26 @@ document.addEventListener('alpine:init', () => {
 
 /**
  * Checkout form component data
- * Usage: x-data="checkoutForm('ajax-url', 'csrf-token', {...i18n})"
+ * Usage: x-data="checkoutForm('ajax-url', 'csrf-token', {...i18n}, [...dynamicFields])"
  */
-function checkoutForm(ajaxUrl, token, i18n) {
+function checkoutForm(ajaxUrl, token, i18n, dynamicFields = []) {
   return {
     token: token,
     submitting: false,
     message: '',
     qrCode: null,
+    dynamicFields: dynamicFields,
     customer: {
       name: '',
       email: '',
       phone: '',
       address: '',
-      shift: '',
-      helpendehanden: ''
+      // Initialize dynamic fields with appropriate default values based on type
+      ...dynamicFields.reduce((acc, field) => {
+        // Radio buttons should default to empty string to remain unselected
+        acc[field.name] = '';
+        return acc;
+      }, {})
     },
 
     t(key) {

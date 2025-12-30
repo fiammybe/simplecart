@@ -52,13 +52,13 @@ try {
             $payload = json_decode($raw, true);
             if (!is_array($payload)) { throw new Exception('Invalid JSON: ' . json_last_error_msg()); }
 
-            $token = isset($payload['token']) ? $payload['token'] : '';
+            $token = $payload['token'] ?? '';
             if (!icms::$security->check(true, $token, 'simplecart')) {
                 throw new Exception(_MD_SIMPLECART_CSRF_FAIL);
             }
 
-            $items = isset($payload['items']) && is_array($payload['items']) ? $payload['items'] : array();
-            $customer = isset($payload['customer']) && is_array($payload['customer']) ? $payload['customer'] : array();
+            $items = is_array($payload['items'] ?? null) ? $payload['items'] : [];
+            $customer = is_array($payload['customer'] ?? null) ? $payload['customer'] : [];
             if (empty($items)) { throw new Exception(_MD_SIMPLECART_EMPTY_CART); }
 
             $productHandler = simplecart_getHandler('product');
@@ -67,20 +67,34 @@ try {
 
             $order = $orderHandler->create();
             $order->setVar('status', 'pending');
-            $infoParts = array();
-            foreach (array('name','email','phone','address') as $k) {
-                if (!empty($customer[$k])) { $infoParts[] = ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k]); }
-            }
-            $order->setVar('customer_info', implode("\n", $infoParts));
-            $order->setVar('total_amount', 0.0);
+            
+            // Build customer_info from base fields using fluent approach
+            $baseFields = ['name', 'email', 'phone', 'address'];
+            $infoParts = array_filter(array_map(function($k) use ($customer) {
+                return !empty($customer[$k]) 
+                    ? ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k])
+                    : null;
+            }, $baseFields));
+            
+            $order->setVar('customer_info', implode("\n", $infoParts))
+                  ->setVar('total_amount', 0.0);
 
-            // Set shift and helpende_hand fields
-            if (!empty($customer['shift'])) {
-                $order->setVar('shift', icms_core_DataFilter::htmlSpecialChars($customer['shift']));
-            }
-            if (!empty($customer['helpendehanden'])) {
-                $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
-            }
+            // Dynamically set order fields from customer data with appropriate sanitization
+            $checkoutFields = $order->getCheckoutFields();
+            array_walk($checkoutFields, function($fieldDef, $fieldName) use ($order, $customer) {
+                if (isset($customer[$fieldName])) {
+                    $value = $customer[$fieldName];
+                    // Apply appropriate sanitization based on field type
+                    if ($fieldDef['type'] === XOBJ_DTYPE_TXTAREA) {
+                        // For textarea, preserve line breaks but escape HTML
+                        $value = icms_core_DataFilter::htmlSpecialChars($value);
+                    } else {
+                        // For text and radio fields, basic HTML escaping
+                        $value = icms_core_DataFilter::htmlSpecialChars($value);
+                    }
+                    $order->setVar($fieldName, $value);
+                }
+            });
 
             // Insert the order
             if (!$orderHandler->insert($order, true)) {
