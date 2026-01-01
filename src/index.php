@@ -9,6 +9,6 @@ $icmsTpl->assign('simplecart_ajax_url', SIMPLECART_URL . 'ajax.php');
 $sepaConfig = simplecart_getSepaConfig();
 $currency = !empty($sepaConfig['currency']) ? $sepaConfig['currency'] : 'EUR';
 $icmsTpl->assign('simplecart_currency', $currency);
-error_log('Index: simplecart_currency assigned = ' . $currency);
+//error_log('Index: simplecart_currency assigned = ' . $currency);
 include ICMS_ROOT_PATH . '/footer.php';
 
