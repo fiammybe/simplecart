@@ -98,7 +98,7 @@ try {
             $order->setVar('total_amount', $total);
             $orderHandler->insert($order, true);
 
-            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total));
+            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total), JSON_THROW_ON_ERROR);
             break;
 
         case 'sepa_qr_data':
@@ -120,6 +120,7 @@ try {
             if (empty($config['beneficiary_iban'])) {
                 throw new Exception('SEPA payment is not configured. Please configure IBAN in module settings.');
             }
+
 
             // Load SEPA QR Code Generator
             if (!class_exists('SepaQrCodeGenerator')) {

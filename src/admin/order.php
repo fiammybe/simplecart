@@ -82,6 +82,7 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));
         $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 120));
+        $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120));
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');
@@ -90,4 +91,3 @@ switch ($clean_op) {
         icms_cp_footer();
         break;
 }
-?>
