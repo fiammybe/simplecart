@@ -1,5 +1,5 @@
 <div class="icms-admin-content">
-  <h2><{$smarty.const._AM_SIMPLECART_ORDER_ADMIN|escape}></h2>
+  <h2><{$smarty.const._AM_SIMPLECART_ORDER_ADMIN}></h2>
   <{if isset($simplecart_order_heading)}>
     <h3><{$simplecart_order_heading|default:''}></h3>
   <{/if}>

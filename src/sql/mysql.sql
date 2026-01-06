@@ -14,6 +14,9 @@ CREATE TABLE `simplecart_order` (
   `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
   `status` varchar(32) NOT NULL DEFAULT 'pending',
   `customer_info` text,
+  `payment_ref` text,
+  `shift` varchar(50),
+  `helpende_hand` varchar(50),
   PRIMARY KEY (`order_id`),
   KEY `status_idx` (`status`),
   KEY `timestamp_idx` (`timestamp`)

@@ -28,7 +28,8 @@
     if (!el) return;
 
     const products = ref([]);
-    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', address:'' }, lastOrderId: null, showSepaQr: false });
+    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', shift:'', helpendehanden:'' }, lastOrderId: null, showSepaQr: false, sepaInfo: { beneficiary_name: '', beneficiary_iban: '', amount: 0 } });
+    const errors = reactive({ shift: '', helpendehanden: '' });
     const cart = useCart();
     const currencyCode = opts.currency || 'EUR';
 
@@ -50,10 +51,28 @@
       } catch(e) { /* ignore */ }
     };
 
+    const validateForm = () => {
+      errors.shift = '';
+      errors.helpendehanden = '';
+      let isValid = true;
+
+      if (!state.customer.shift) {
+        errors.shift = 'Please select a shift';
+        isValid = false;
+      }
+      if (!state.customer.helpendehanden) {
+        errors.helpendehanden = 'Please select an option';
+        isValid = false;
+      }
+
+      return isValid;
+    };
+
     const placeOrder = async () => {
       state.submitting = true; state.message = '';
       try {
         if (!cart.items.value.length) { state.message = t('empty_cart'); state.submitting=false; return; }
+        if (!validateForm()) { state.submitting=false; return; }
         if (!state.token) await loadToken();
         const payload = { token: state.token, items: cart.items.value.map(i => ({ product_id: i.product_id, quantity: i.quantity })), customer: state.customer };
         const r = await fetch(opts.ajaxUrl + '?action=place_order', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
@@ -88,6 +107,13 @@
 
         console.log('SEPA QR response:', j);
         if (j.ok && j.qr_data) {
+          // Store payment information for display
+          state.sepaInfo = {
+            beneficiary_name: j.beneficiary_name || '',
+            beneficiary_iban: j.beneficiary_iban || '',
+            amount: j.amount || 0
+          };
+
           // Clear previous QR code
           const qrContainer = document.getElementById('sepa-qr-code');
           if (qrContainer) {
@@ -133,9 +159,11 @@
           placeOrder,
           submitting: computed(() => state.submitting),
           message: computed(() => state.message),
+          errors,
           // SEPA QR Code
           showSepaQr: computed(() => state.showSepaQr),
-          lastOrderId: computed(() => state.lastOrderId)
+          lastOrderId: computed(() => state.lastOrderId),
+          sepaInfo: computed(() => state.sepaInfo)
         };
       }
     });

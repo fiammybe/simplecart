@@ -16,15 +16,20 @@ define('_MD_SIMPLECART_ORDERITEM_CREATE_FAIL', 'Een onderdeel van de bestelling 
 define('_MD_SIMPLECART_ORDER_CONFIRMED', 'Bestelling ontvangen');
 define('_MD_SIMPLECART_ORDER_THANKS', 'Dank u voor uw bestelling!');
 define('_MD_SIMPLECART_ORDER_SUCCESS', 'De bestelling werd met succes geplaatst');
-define('_MD_SIMPLECART_ORDER_SHIFT', 'Shift');
 
 define('_MD_SIMPLECART_NAME', 'Naam');
 define('_MD_SIMPLECART_EMAIL', 'Email');
 define('_MD_SIMPLECART_PHONE', 'Telefoon');
 define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
-define('_MD_SIMPLECART_SHIFT', 'Welke shift');
+define('_MD_SIMPLECART_ORDER_SHIFT', 'Welke shift');
+define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1');
+define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2');
+
 define('_MD_SIMPLECART_HELP', 'Help mee');
+define('_MD_SIMPLECART_HELP_1', 'Help mee 1');
+define('_MD_SIMPLECART_HELP_2', 'Help mee 2');
+define('_MD_SIMPLECART_HELP_3', 'Help mee 3');
 
 define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Betaal met overschrijving QR Code');
 define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan deze code met uw bankapp om te betalen via overschrijving.');

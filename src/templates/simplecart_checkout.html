@@ -11,8 +11,31 @@
       <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
       <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
       <div class="has-text-centered">
-        <div id="sepa-qr-code" class="mb-4"></div>
-        <p class="help">{{ t('order_id') }}: {{ lastOrderId }}</p>
+        <div id="sepa-qr-code" class="mb-5"></div>
+        <p class="help mb-4">{{ t('order_id') }}: {{ lastOrderId }}</p>
+
+        <!-- Payment Information -->
+        <div class="box has-background-light">
+          <div class="content">
+            <p><strong><{$smarty.const._MD_SIMPLECART_PAYMENT_INFO|escape}></strong></p>
+            <table class="table is-fullwidth is-narrow">
+              <tbody>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_BENEFICIARY|escape}></strong></td>
+                  <td>{{ sepaInfo.beneficiary_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_IBAN|escape}></strong></td>
+                  <td class="is-family-monospace">{{ sepaInfo.beneficiary_iban }}</td>
+                </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_AMOUNT|escape}></strong></td>
+                  <td>{{ currency(sepaInfo.amount) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -36,6 +59,22 @@
       <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
 
       <form @submit.prevent="placeOrder">
+        <!-- Shift Radio Button Group -->
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_ORDER_SHIFT|escape}></label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.shift" value="Shift 1" required>
+              <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_1|escape}>
+            </label>
+            <label class="radio">
+              <input type="radio" v-model="customer.shift" value="Shift 2" required>
+              <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_2|escape}>
+            </label>
+            <p v-if="errors.shift" class="help is-danger">{{ errors.shift }}</p>
+          </div>
+        </div>
+
         <div class="field">
           <label class="label">{{ t('name') }}</label>
           <div class="control"><input class="input" v-model="customer.name" required></div>
@@ -48,10 +87,27 @@
           <label class="label">{{ t('phone') }}</label>
           <div class="control"><input class="input" v-model="customer.phone"></div>
         </div>
+
+        <!-- Helpende Hand Radio Button Group -->
         <div class="field">
-          <label class="label">{{ t('address') }}</label>
-          <div class="control"><textarea class="textarea" v-model="customer.address"></textarea></div>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_HELP|escape}></label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 1" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_1|escape}>
+            </label>
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 2" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_2|escape}>
+            </label>
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 3" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_3|escape}>
+            </label>
+            <p v-if="errors.helpendehanden" class="help is-danger">{{ errors.helpendehanden }}</p>
+          </div>
         </div>
+
         <div class="field">
           <div class="control">
             <button :disabled="submitting" class="button is-primary">{{ t('place_order') }}</button>
@@ -75,18 +131,18 @@
 window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
   mount: '#simplecart-checkout',
   ajaxUrl: '<{$simplecart_ajax_url}>',
-  currency: '<{$simplecart_currency|default:"EUR"|escape}>',
+  currency: '<{$simplecart_currency|default:"EUR"}>',
   i18n: {
-    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
-    total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',
-    name: '<{$smarty.const._MD_SIMPLECART_NAME|escape}>',
-    email: '<{$smarty.const._MD_SIMPLECART_EMAIL|escape}>',
-    phone: '<{$smarty.const._MD_SIMPLECART_PHONE|escape}>',
-    address: '<{$smarty.const._MD_SIMPLECART_ADDRESS|escape}>',
-    place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER|escape}>',
-    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>',
-    order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS|escape}>',
-    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID|escape}>'
+    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT}>',
+    total: '<{$smarty.const._MD_SIMPLECART_TOTAL}>',
+    name: '<{$smarty.const._MD_SIMPLECART_NAME}>',
+    email: '<{$smarty.const._MD_SIMPLECART_EMAIL}>',
+    phone: '<{$smarty.const._MD_SIMPLECART_PHONE}>',
+    address: '<{$smarty.const._MD_SIMPLECART_ADDRESS}>',
+    place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER}>',
+    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART}>',
+    order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS}>',
+    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID}>'
   }
 });
 </script>

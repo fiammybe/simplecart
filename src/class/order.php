@@ -10,6 +10,8 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_SIMPLECART_ORDER_STATUS);
         $this->initVar('customer_info', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
         $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
+        $this->initVar('shift', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_SHIFT);
+        $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_HELPENDE_HAND);
 
         $this->setControl('customer_info', array('name' => 'textarea'));
         $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
@@ -26,10 +28,9 @@ class SimplecartOrder extends icms_ipf_Object {
         $base = $this->handler->_moduleUrl . 'admin/order.php';
         $token = icms::$security->createToken(0, 'simplecart_order_status');
         $actions = array(
-            'awaiting_payment' => 'Awaiting payment',
-            'paid' => 'Paid',
-            'reimbursed' => 'Reimbursed',
-            'closed' => 'Closed',
+            'paid' => 'Betaald',
+            'reimbursed' => 'Terugbetaald',
+            'closed' => 'Afgesloten',
         );
         $links = array();
         foreach ($actions as $key => $label) {
@@ -37,6 +38,33 @@ class SimplecartOrder extends icms_ipf_Object {
             $links[] = '<a href="' . $url . '" class="icms_actionlink">' . htmlspecialchars($label, ENT_QUOTES) . '</a>';
         }
         return implode(' | ', $links);
+    }
+
+    public function getItemsSummary() {
+        $orderId = (int)$this->getVar('order_id');
+        if ($orderId <= 0) {
+            return '';
+        }
+
+        $orderItemHandler = simplecart_getHandler('orderitem');
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+        $criteria->setSort('orderitem_id');
+        $criteria->setOrder('ASC');
+        $items = $orderItemHandler->getObjects($criteria, false, true);
+
+        if (empty($items)) {
+            return 'No items';
+        }
+
+        $summary = array();
+        foreach ($items as $item) {
+            $name = (string)$item->getVar('product_name');
+            $qty = (int)$item->getVar('quantity');
+            $summary[] = htmlspecialchars($name, ENT_QUOTES) . ' (x' . $qty . ')';
+        }
+
+        return implode(', ', $summary);
     }
 
 }

@@ -69,8 +69,19 @@ try {
             }
             $order->setVar('customer_info', implode("\n", $infoParts));
             $order->setVar('total_amount', 0.0);
+
+            // Set shift and helpende_hand fields
+            if (!empty($customer['shift'])) {
+                $order->setVar('shift', icms_core_DataFilter::htmlSpecialChars($customer['shift']));
+            }
+            if (!empty($customer['helpendehanden'])) {
+                $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
+            }
+
             if (!$orderHandler->insert($order, true)) {
-                throw new Exception(_MD_SIMPLECART_ORDER_CREATE_FAIL);
+                $errors = $order->getErrors();
+                $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
+                throw new Exception($errorMsg);
             }
             $orderId = (int)$order->getVar('order_id');
 
@@ -133,7 +144,13 @@ try {
 
             try {
                 $qrData = $generator->generateQrData($orderId, $amount, (string)$orderId);
-                echo json_encode(array('ok' => true, 'qr_data' => $qrData));
+                echo json_encode(array(
+                    'ok' => true,
+                    'qr_data' => $qrData,
+                    'beneficiary_name' => $config['beneficiary_name'],
+                    'beneficiary_iban' => $config['beneficiary_iban'],
+                    'amount' => $amount
+                ));
             } catch (Exception $e) {
                 throw new Exception('Failed to generate SEPA QR data: ' . $e->getMessage());
             }
