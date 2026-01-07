@@ -56,10 +56,6 @@ class OrderConfirmationEmail {
         $orderId = (int)$this->order->getVar('order_id');
         $totalAmount = (float)$this->order->getVar('total_amount');
         $timestamp = (int)$this->order->getVar('timestamp');
-        // If timestamp is 0 or invalid, use current time as fallback
-        if ($timestamp <= 0) {
-            $timestamp = time();
-        }
         $orderDate = date('Y-m-d H:i:s', $timestamp);
 
         $text = '';
@@ -113,8 +109,6 @@ class OrderConfirmationEmail {
             "",
             $this->formatCurrency($totalAmount)
         );
-        $text .= str_repeat('=', 70) . "\n";
-        $text .= "Bestelling " . $orderId . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
         // Payment Information Section
@@ -128,7 +122,7 @@ class OrderConfirmationEmail {
                 $text .= "BIC: " . $this->sepaConfig['beneficiary_bic'] . "\n";
             }
             $text .= _MD_SIMPLECART_AMOUNT . ": " . $this->formatCurrency($totalAmount) . "\n\n";
-            $text .= "Please use the SEPA QR code provided in the checkout page to complete your payment.\n";
+            $text .= "_MD_SIMPLECART_MAIL_PAYMENTINFO" . "\n\n";
             $text .= str_repeat('-', 70) . "\n\n";
         }
 

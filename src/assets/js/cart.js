@@ -29,7 +29,7 @@
 
     const products = ref([]);
     const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', shift:'', helpendehanden:'' }, lastOrderId: null, showSepaQr: false, sepaInfo: { beneficiary_name: '', beneficiary_iban: '', amount: 0 } });
-    const errors = reactive({ shift: '', helpendehanden: '' });
+    const errors = reactive({ shift: '', helpendehanden: '', email: '' });
     const cart = useCart();
     const currencyCode = opts.currency || 'EUR';
 
@@ -54,9 +54,16 @@
       } catch(e) { /* ignore */ }
     };
 
+    const validateEmail = (email) => {
+      // RFC 5322 simplified email validation regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
     const validateForm = () => {
       errors.shift = '';
       errors.helpendehanden = '';
+      errors.email = '';
       let isValid = true;
 
       if (!state.customer.shift) {
@@ -65,6 +72,13 @@
       }
       if (!state.customer.helpendehanden) {
         errors.helpendehanden = 'Please select an option';
+        isValid = false;
+      }
+      if (!state.customer.email) {
+        errors.email = 'Email is required';
+        isValid = false;
+      } else if (!validateEmail(state.customer.email)) {
+        errors.email = 'Please enter a valid email address';
         isValid = false;
       }
 

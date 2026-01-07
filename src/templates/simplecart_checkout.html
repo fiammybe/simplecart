@@ -32,6 +32,10 @@
                   <td><strong><{$smarty.const._MD_SIMPLECART_AMOUNT|escape}></strong></td>
                   <td>{{ currency(sepaInfo.amount) }}</td>
                 </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_ORDER_ID|escape}></strong></td>
+                  <td>{{ t('order_id') }}: {{ lastOrderId }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -81,7 +85,8 @@
         </div>
         <div class="field">
           <label class="label">{{ t('email') }}</label>
-          <div class="control"><input class="input" type="email" v-model="customer.email" required></div>
+          <div class="control"><input class="input" :class="{ 'is-danger': errors.email }" type="email" v-model="customer.email" required></div>
+          <p v-if="errors.email" class="help is-danger">{{ errors.email }}</p>
         </div>
         <div class="field">
           <label class="label">{{ t('phone') }}</label>

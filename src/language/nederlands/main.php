@@ -1,12 +1,13 @@
 <?php
 // Frontend strings
 
-define('_MD_SIMPLECART_SHOP_TITLE', 'Producten');
+define('_MD_SIMPLECART_SHOP_TITLE', 'Tickets ColoMAenPA ontbijt op 8 februari 2026');
+define('_MD_SIMPLECART_SHOP_DESC', 'Kies de tickets die u wil bestellen. U kan de shift kiezen op de afrekenpagina.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Plaats in winkelmandje');
 define('_MD_SIMPLECART_YOUR_CART', 'Winkelmandje');
 define('_MD_SIMPLECART_REMOVE', 'Verwijder');
 define('_MD_SIMPLECART_TOTAL', 'Totaal');
-define('_MD_SIMPLECART_CHECKOUT', 'Checkout');
+define('_MD_SIMPLECART_CHECKOUT', 'Afrekenen');
 define('_MD_SIMPLECART_EMPTY_CART', 'Het winkelmandje is leeg');
 
 define('_MD_SIMPLECART_CSRF_FAIL', 'Security check gefaald. Herlaad de pagina en probeer het opnieuw.');
@@ -52,3 +53,4 @@ define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Eenheidsprijs');
 define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Hoeveelheid');
 define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotaal');
 define('_MD_SIMPLECART_EMAIL_FOOTER', 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op.');
+define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Gebruik aub de bovenstaande informatie om te betalen via overschrijving. In geval van vragen kan u ons altijd contacteren op colomaenpa@gmail.com met uw bestelnummer als referentie.');

@@ -2,6 +2,7 @@
 // Frontend strings
 
 define('_MD_SIMPLECART_SHOP_TITLE', 'Products');
+define('_MD_SIMPLECART_SHOP_DESC', 'Select the tickets you want to order. You can choose the shift on the checkout page.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Add to Cart');
 define('_MD_SIMPLECART_YOUR_CART', 'Your Cart');
 define('_MD_SIMPLECART_REMOVE', 'Remove');
@@ -53,3 +54,5 @@ define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Unit Price');
 define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Qty');
 define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotal');
 define('_MD_SIMPLECART_EMAIL_FOOTER', 'Thank you for your business. If you have any questions about your order, please contact us.');
+define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Please use the above information to pay by bank transfer. If you have any questions about your order, please contact us at colomaenpa@gmail.com with your order number as reference.');
+
