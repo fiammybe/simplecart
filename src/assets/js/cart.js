@@ -50,9 +50,8 @@
         if (j.ok) {
           state.token = j.token;
           state.tokenName = j.token_name || 'simplecart';
-          console.log('Token loaded successfully');
         }
-      } catch(e) { console.error('Failed to load token:', e); }
+      } catch(e) { /* ignore */ }
     };
 
     const validateForm = () => {
@@ -78,15 +77,9 @@
         if (!cart.items.value.length) { state.message = t('empty_cart'); state.submitting=false; return; }
         if (!validateForm()) { state.submitting=false; return; }
         if (!state.token) await loadToken();
-
-        console.log('Placing order with token:', state.token);
         const payload = { token: state.token, items: cart.items.value.map(i => ({ product_id: i.product_id, quantity: i.quantity })), customer: state.customer };
-        console.log('Payload:', payload);
-
         const r = await fetch(opts.ajaxUrl + '?action=place_order', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
         const j = await r.json();
-        console.log('Response:', j);
-
         if (j.ok) {
           cart.clear();
           state.message = t('order_success') + ' #' + j.order_id;

@@ -37,8 +37,6 @@ try {
 
         case 'token':
             $token = icms::$security->createToken(0, 'simplecart');
-            // Don't use icms_core_Debug::message() as it outputs HTML
-            // Just return the token in JSON
             echo json_encode(array(
                 'ok' => true,
                 'token' => $token,
@@ -79,7 +77,6 @@ try {
                 }
             }
             $order->setVar('customer_info', json_encode($customerData));
-            icms_core_Debug::message('Order: Storing customer_info as JSON: ' . json_encode($customerData));
             $order->setVar('total_amount', 0.0);
 
             // Set shift and helpende_hand fields
@@ -122,13 +119,7 @@ try {
             $orderHandler->insert($order, true);
 
             // Send confirmation email
-            icms_core_Debug::message('Order created with ID: ' . $orderId . ', Total: ' . $total);
-            icms_core_Debug::message('Calling simplecart_sendOrderConfirmationEmail()');
             $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
-            icms_core_Debug::message('simplecart_sendOrderConfirmationEmail() returned: ' . ($emailResult ? 'true' : 'false'));
-            if (!$emailResult) {
-                icms_core_Debug::message('Email sending failed, but order was created successfully', 'warning');
-            }
 
             echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total), JSON_THROW_ON_ERROR);
             break;
