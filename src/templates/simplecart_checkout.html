@@ -91,11 +91,13 @@
         <!-- Helpende Hand Radio Button Group -->
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_HELP|escape}></label>
+	        <p><{$smarty.const._MD_SIMPLECART_HELP_DESC}></p>"
           <div class="control">
             <label class="radio">
               <input type="radio" v-model="customer.helpendehanden" value="Help 1" required>
               <{$smarty.const._MD_SIMPLECART_HELP_1|escape}>
             </label>
+
             <label class="radio">
               <input type="radio" v-model="customer.helpendehanden" value="Help 2" required>
               <{$smarty.const._MD_SIMPLECART_HELP_2|escape}>

@@ -28,7 +28,7 @@ define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1 (8:00 - 9:30)');
 define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2 (9:45 - 11:00)');
 
 define('_MD_SIMPLECART_HELP', 'Hulp nodig');
-// UNUSED: define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons na je shift helpen met opruimen en afwassen? Het duurt maar 30 minuten en maakt een wereld van verschil! Geef hieronder aan of je beschikbaar bent om te helpen na shift 1 of shift 2.');
+define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons na je shift helpen met opruimen en afwassen? Het duurt maar 30 minuten en maakt een wereld van verschil! </br>Geef hieronder aan of je beschikbaar bent om te helpen na shift 1 of shift 2.');
 define('_MD_SIMPLECART_HELP_1', 'Hulp na Shift 1');
 define('_MD_SIMPLECART_HELP_2', 'Hulp na Shift 2');
 define('_MD_SIMPLECART_HELP_3', 'Geen hulp, ik kom alleen voor het ontbijt');

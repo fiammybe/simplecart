@@ -56,6 +56,10 @@ class OrderConfirmationEmail {
         $orderId = (int)$this->order->getVar('order_id');
         $totalAmount = (float)$this->order->getVar('total_amount');
         $timestamp = (int)$this->order->getVar('timestamp');
+        // If timestamp is 0 or invalid, use current time as fallback
+        if ($timestamp <= 0) {
+            $timestamp = time();
+        }
         $orderDate = date('Y-m-d H:i:s', $timestamp);
 
         $text = '';

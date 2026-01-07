@@ -66,7 +66,7 @@ class SepaQrCodeGenerator
 
             // Set remittance text with order reference
             if (!empty($reference)) {
-                $remittanceText = 'Order #' . $reference;
+                $remittanceText = $reference;
                 if (strlen($remittanceText) <= 140) {
                     $sepaData->setRemittanceText($remittanceText);
                 }

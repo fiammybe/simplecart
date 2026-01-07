@@ -68,6 +68,7 @@ try {
 
             $order = $orderHandler->create();
             $order->setVar('status', 'pending');
+            $order->setVar('timestamp', time());
 
             // Store customer data as JSON for better data integrity and easier parsing
             $customerData = array();
@@ -155,7 +156,8 @@ try {
             $orderId = (int)$order->getVar('order_id');
 
             try {
-                $qrData = $generator->generateQrData($orderId, $amount, (string)$orderId);
+                $orderReference = 'Bestelling ' . $orderId;
+                $qrData = $generator->generateQrData($orderId, $amount, $orderReference);
                 echo json_encode(array(
                     'ok' => true,
                     'qr_data' => $qrData,
