@@ -10,7 +10,7 @@
         <div class="card">
           <div class="card-content">
             <p class="title is-5">{{ p.name }}</p>
-            <p class="is-6 sc-card-price">{{ currency(p.price) }}</p>
+            <p class="tag is-light is-size-3 sc-card-price">{{ currency(p.price) }}</p>
             <div class="buttons">
               <button class="button is-primary is-small" @click="addToCart(p)">{{ t('add_to_cart') }}</button>
             </div>

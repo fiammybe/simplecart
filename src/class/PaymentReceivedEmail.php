@@ -2,10 +2,11 @@
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 /**
- * OrderConfirmationEmail - Generates plain text confirmation emails for orders
+ * PaymentReceivedEmail - Generates payment received notification emails
+ * Reuses the order overview template from OrderConfirmationEmail
  */
 
-class OrderConfirmationEmail {
+class PaymentReceivedEmail {
     private $order;
     private $orderItems;
     private $customerEmail;
@@ -49,7 +50,7 @@ class OrderConfirmationEmail {
 
     public function getSubject() {
         $orderId = (int)$this->order->getVar('order_id');
-        return sprintf(_MD_SIMPLECART_EMAIL_SUBJECT, $orderId);
+        return sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT, $orderId);
     }
 
     public function getTextContent() {
@@ -60,18 +61,20 @@ class OrderConfirmationEmail {
 
         $text = '';
         $text .= str_repeat('=', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_GREETING . " " . $this->customerName . "\n\n";
-        $text .= _MD_SIMPLECART_EMAIL_THANK_YOU . "\n";
+        $text .= _MD_SIMPLECART_PAYMENT_RECEIVED_HEADING . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
-        // Order Details Section
+        $text .= _MD_SIMPLECART_EMAIL_GREETING . " " . $this->customerName . "\n\n";
+        $text .= sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE, $orderId) . "\n\n";
+
+        // Order Details Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
         $text .= _MD_SIMPLECART_EMAIL_ORDER_DETAILS . "\n";
         $text .= str_repeat('-', 70) . "\n";
         $text .= _MD_SIMPLECART_ORDER_ID . ": #" . $orderId . "\n";
         $text .= _MD_SIMPLECART_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
 
-        // Items Section
+        // Items Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
         $text .= _MD_SIMPLECART_EMAIL_ITEMS . "\n";
         $text .= str_repeat('-', 70) . "\n";
@@ -109,21 +112,6 @@ class OrderConfirmationEmail {
             $this->formatCurrency($totalAmount)
         );
         $text .= str_repeat('=', 70) . "\n\n";
-
-        // Payment Information Section
-        if (!empty($this->sepaConfig['beneficiary_iban'])) {
-            $text .= str_repeat('-', 70) . "\n";
-            $text .= _MD_SIMPLECART_PAYMENT_INFO . "\n";
-            $text .= str_repeat('-', 70) . "\n";
-            $text .= _MD_SIMPLECART_BENEFICIARY . ": " . $this->sepaConfig['beneficiary_name'] . "\n";
-            $text .= _MD_SIMPLECART_IBAN . ": " . $this->sepaConfig['beneficiary_iban'] . "\n";
-            if (!empty($this->sepaConfig['beneficiary_bic'])) {
-                $text .= "BIC: " . $this->sepaConfig['beneficiary_bic'] . "\n";
-            }
-            $text .= _MD_SIMPLECART_AMOUNT . ": " . $this->formatCurrency($totalAmount) . "\n\n";
-            $text .= "_MD_SIMPLECART_MAIL_PAYMENTINFO" . "\n\n";
-            $text .= str_repeat('-', 70) . "\n\n";
-        }
 
         // Footer
         $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";

@@ -12,7 +12,6 @@
       <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
       <div class="has-text-centered">
         <div id="sepa-qr-code" class="mb-5"></div>
-        <p class="help mb-4">{{ t('order_id') }}: {{ lastOrderId }}</p>
 
         <!-- Payment Information -->
         <div class="box has-background-light">
@@ -33,8 +32,8 @@
                   <td>{{ currency(sepaInfo.amount) }}</td>
                 </tr>
                 <tr>
-                  <td><strong><{$smarty.const._MD_SIMPLECART_ORDER_ID|escape}></strong></td>
-                  <td>{{ t('order_id') }}: {{ lastOrderId }}</td>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_MSG|escape}></strong></td>
+                  <td>{{ t('order_id') }} {{ lastOrderId }}</td>
                 </tr>
               </tbody>
             </table>

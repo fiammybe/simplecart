@@ -41,6 +41,7 @@ define('_MD_SIMPLECART_BENEFICIARY', 'Begunstigde');
 define('_MD_SIMPLECART_IBAN', 'IBAN');
 define('_MD_SIMPLECART_AMOUNT', 'Bedrag');
 // UNUSED: define('_MD_SIMPLECART_BIC', 'BIC');
+define('_MD_SIMPLECART_MSG', 'Mededeling');
 
 // Email Confirmation
 define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging #%d');
@@ -54,3 +55,8 @@ define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Hoeveelheid');
 define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotaal');
 define('_MD_SIMPLECART_EMAIL_FOOTER', 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op.');
 define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Gebruik aub de bovenstaande informatie om te betalen via overschrijving. In geval van vragen kan u ons altijd contacteren op colomaenpa@gmail.com met uw bestelnummer als referentie.');
+
+// Email Payment Received Notification
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT', 'Betaling ontvangen - Bestelling #%d');
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING', 'Betaling ontvangen!');
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We hebben uw betaling voor bestelling #%d ontvangen. Dank u!');

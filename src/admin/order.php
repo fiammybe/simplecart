@@ -71,6 +71,12 @@ switch ($clean_op) {
         }
         $obj->setVar('status', $status);
         $icms_order_handler->insert($obj, true);
+
+        // Send payment received email if status changed to 'paid'
+        if ($status === 'paid') {
+            simplecart_sendPaymentReceivedEmail($obj, $order_id);
+        }
+
         redirect_header('order.php', 2, 'Order status updated.');
         exit;
 

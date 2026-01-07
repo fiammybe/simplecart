@@ -56,3 +56,8 @@ define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotal');
 define('_MD_SIMPLECART_EMAIL_FOOTER', 'Thank you for your business. If you have any questions about your order, please contact us.');
 define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Please use the above information to pay by bank transfer. If you have any questions about your order, please contact us at colomaenpa@gmail.com with your order number as reference.');
 
+// Email Payment Received Notification
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT', 'Payment Received - Order #%d');
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING', 'Payment Received!');
+define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We have received your payment for order #%d. Thank you!');
+

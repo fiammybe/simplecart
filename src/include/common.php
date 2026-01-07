@@ -123,3 +123,59 @@ function simplecart_sendOrderConfirmationEmail($order, $orderId) {
         return false;
     }
 }
+
+/**
+ * Send payment received notification email to customer
+ * Triggered when admin changes order status to 'paid'
+ *
+ * @param SimplecartOrder $order The order object
+ * @param int $orderId The order ID
+ * @return bool True if email was sent successfully, false otherwise
+ */
+function simplecart_sendPaymentReceivedEmail($order, $orderId) {
+    try {
+        // Load email classes
+        if (!class_exists('PaymentReceivedEmail')) {
+            require_once SIMPLECART_ROOT_PATH . 'class/PaymentReceivedEmail.php';
+        }
+
+        if (!class_exists('EmailSender')) {
+            require_once SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+        }
+
+        // Get order items
+        $orderItemHandler = simplecart_getHandler('orderitem');
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('order_id', (int)$orderId));
+        $criteria->setSort('orderitem_id');
+        $criteria->setOrder('ASC');
+        $orderItems = $orderItemHandler->getObjects($criteria, false, true);
+
+        if (empty($orderItems)) {
+            return false;
+        }
+
+        // Get SEPA configuration
+        $sepaConfig = simplecart_getSepaConfig();
+        $currency = $sepaConfig['currency'];
+
+        // Create email template
+        $emailTemplate = new PaymentReceivedEmail($order, $orderItems, $sepaConfig, $currency);
+
+        $customerEmail = $emailTemplate->getCustomerEmail();
+
+        if (empty($customerEmail)) {
+            return false;
+        }
+
+        // Send email
+        $subject = $emailTemplate->getSubject();
+        $textContent = $emailTemplate->getTextContent();
+
+        $result = EmailSender::sendTextEmail($customerEmail, $subject, $textContent);
+
+        return $result;
+    } catch (Exception $e) {
+        return false;
+    }
+}
