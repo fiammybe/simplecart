@@ -39,3 +39,15 @@ define('_MD_SIMPLECART_PAYMENT_INFO', 'Payment Information');
 define('_MD_SIMPLECART_BENEFICIARY', 'Beneficiary');
 define('_MD_SIMPLECART_IBAN', 'IBAN');
 define('_MD_SIMPLECART_AMOUNT', 'Amount');
+
+// Email Confirmation
+define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Order Confirmation #%d');
+define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Thank You for Your Order!');
+define('_MD_SIMPLECART_EMAIL_GREETING', 'Dear');
+define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Order Details');
+define('_MD_SIMPLECART_EMAIL_ORDER_DATE', 'Order Date');
+define('_MD_SIMPLECART_EMAIL_ITEMS', 'Order Items');
+define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Unit Price');
+define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Qty');
+define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotal');
+define('_MD_SIMPLECART_EMAIL_FOOTER', 'Thank you for your business. If you have any questions about your order, please contact us.');

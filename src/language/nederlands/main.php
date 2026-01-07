@@ -33,3 +33,19 @@ define('_MD_SIMPLECART_HELP_3', 'Help mee 3');
 
 define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Betaal met overschrijving QR Code');
 define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan deze code met uw bankapp om te betalen via overschrijving.');
+define('_MD_SIMPLECART_PAYMENT_INFO', 'Betalingsinformatie');
+define('_MD_SIMPLECART_BENEFICIARY', 'Begunstigde');
+define('_MD_SIMPLECART_IBAN', 'IBAN');
+define('_MD_SIMPLECART_AMOUNT', 'Bedrag');
+
+// Email Confirmation
+define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging #%d');
+define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Dank u voor uw bestelling!');
+define('_MD_SIMPLECART_EMAIL_GREETING', 'Beste');
+define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Bestelgegevens');
+define('_MD_SIMPLECART_EMAIL_ORDER_DATE', 'Besteldatum');
+define('_MD_SIMPLECART_EMAIL_ITEMS', 'Bestellingsartikelen');
+define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Eenheidsprijs');
+define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Hoeveelheid');
+define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotaal');
+define('_MD_SIMPLECART_EMAIL_FOOTER', 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op.');

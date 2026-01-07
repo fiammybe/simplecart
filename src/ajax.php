@@ -37,7 +37,17 @@ try {
 
         case 'token':
             $token = icms::$security->createToken(0, 'simplecart');
-            echo json_encode(array('ok' => true, 'token' => $token, 'token_name' => 'simplecart'));
+            icms_core_Debug::message('token: Created token: ' . $token);
+            icms_core_Debug::message('token: Session ID: ' . session_id());
+            echo json_encode(array(
+                'ok' => true,
+                'token' => $token,
+                'token_name' => 'simplecart',
+                '_debug' => array(
+                    'session_id' => session_id(),
+                    'token_created' => true
+                )
+            ));
             break;
 
         case 'place_order':
@@ -49,7 +59,12 @@ try {
             if (!is_array($payload)) { throw new Exception('Invalid JSON'); }
 
             $token = isset($payload['token']) ? $payload['token'] : '';
-            if (!icms::$security->check(true, $token, 'simplecart')) {
+            $tokenValid = icms::$security->check(true, $token, 'simplecart');
+            icms_core_Debug::message('place_order: Received token: ' . $token);
+            icms_core_Debug::message('place_order: Session ID: ' . session_id());
+            icms_core_Debug::message('place_order: Token check result: ' . ($tokenValid ? 'PASS' : 'FAIL'));
+            if (!$tokenValid) {
+                icms_core_Debug::message('place_order: CSRF token validation failed', 'error');
                 throw new Exception(_MD_SIMPLECART_CSRF_FAIL);
             }
 
@@ -63,11 +78,16 @@ try {
 
             $order = $orderHandler->create();
             $order->setVar('status', 'pending');
-            $infoParts = array();
+
+            // Store customer data as JSON for better data integrity and easier parsing
+            $customerData = array();
             foreach (array('name','email','phone','address') as $k) {
-                if (!empty($customer[$k])) { $infoParts[] = ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k]); }
+                if (!empty($customer[$k])) {
+                    $customerData[$k] = $customer[$k];
+                }
             }
-            $order->setVar('customer_info', implode("\n", $infoParts));
+            $order->setVar('customer_info', json_encode($customerData));
+            icms_core_Debug::message('Order: Storing customer_info as JSON: ' . json_encode($customerData));
             $order->setVar('total_amount', 0.0);
 
             // Set shift and helpende_hand fields
@@ -108,6 +128,15 @@ try {
 
             $order->setVar('total_amount', $total);
             $orderHandler->insert($order, true);
+
+            // Send confirmation email
+            icms_core_Debug::message('Order created with ID: ' . $orderId . ', Total: ' . $total);
+            icms_core_Debug::message('Calling simplecart_sendOrderConfirmationEmail()');
+            $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
+            icms_core_Debug::message('simplecart_sendOrderConfirmationEmail() returned: ' . ($emailResult ? 'true' : 'false'));
+            if (!$emailResult) {
+                icms_core_Debug::message('Email sending failed, but order was created successfully', 'warning');
+            }
 
             echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total), JSON_THROW_ON_ERROR);
             break;
