@@ -37,16 +37,12 @@ try {
 
         case 'token':
             $token = icms::$security->createToken(0, 'simplecart');
-            icms_core_Debug::message('token: Created token: ' . $token);
-            icms_core_Debug::message('token: Session ID: ' . session_id());
+            // Don't use icms_core_Debug::message() as it outputs HTML
+            // Just return the token in JSON
             echo json_encode(array(
                 'ok' => true,
                 'token' => $token,
-                'token_name' => 'simplecart',
-                '_debug' => array(
-                    'session_id' => session_id(),
-                    'token_created' => true
-                )
+                'token_name' => 'simplecart'
             ));
             break;
 
@@ -60,11 +56,7 @@ try {
 
             $token = isset($payload['token']) ? $payload['token'] : '';
             $tokenValid = icms::$security->check(true, $token, 'simplecart');
-            icms_core_Debug::message('place_order: Received token: ' . $token);
-            icms_core_Debug::message('place_order: Session ID: ' . session_id());
-            icms_core_Debug::message('place_order: Token check result: ' . ($tokenValid ? 'PASS' : 'FAIL'));
             if (!$tokenValid) {
-                icms_core_Debug::message('place_order: CSRF token validation failed', 'error');
                 throw new Exception(_MD_SIMPLECART_CSRF_FAIL);
             }
 

@@ -50,8 +50,7 @@
         if (j.ok) {
           state.token = j.token;
           state.tokenName = j.token_name || 'simplecart';
-          console.log('Token loaded:', state.token, 'Token name:', state.tokenName);
-          if (j._debug) { console.log('Debug info:', j._debug); }
+          console.log('Token loaded successfully');
         }
       } catch(e) { console.error('Failed to load token:', e); }
     };
