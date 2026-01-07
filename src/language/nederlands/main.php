@@ -22,14 +22,16 @@ define('_MD_SIMPLECART_EMAIL', 'Email');
 define('_MD_SIMPLECART_PHONE', 'Telefoon');
 define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
+define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
 define('_MD_SIMPLECART_ORDER_SHIFT', 'Welke shift');
-define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1');
-define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2');
+define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1 (8:00 - 9:30)');
+define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2 (9:45 - 11:00)');
 
-define('_MD_SIMPLECART_HELP', 'Help mee');
-define('_MD_SIMPLECART_HELP_1', 'Help mee 1');
-define('_MD_SIMPLECART_HELP_2', 'Help mee 2');
-define('_MD_SIMPLECART_HELP_3', 'Help mee 3');
+define('_MD_SIMPLECART_HELP', 'Hulp nodig');
+// UNUSED: define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons na je shift helpen met opruimen en afwassen? Het duurt maar 30 minuten en maakt een wereld van verschil! Geef hieronder aan of je beschikbaar bent om te helpen na shift 1 of shift 2.');
+define('_MD_SIMPLECART_HELP_1', 'Hulp na Shift 1');
+define('_MD_SIMPLECART_HELP_2', 'Hulp na Shift 2');
+define('_MD_SIMPLECART_HELP_3', 'Geen hulp, ik kom alleen voor het ontbijt');
 
 define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Betaal met overschrijving QR Code');
 define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan deze code met uw bankapp om te betalen via overschrijving.');
@@ -37,6 +39,7 @@ define('_MD_SIMPLECART_PAYMENT_INFO', 'Betalingsinformatie');
 define('_MD_SIMPLECART_BENEFICIARY', 'Begunstigde');
 define('_MD_SIMPLECART_IBAN', 'IBAN');
 define('_MD_SIMPLECART_AMOUNT', 'Bedrag');
+// UNUSED: define('_MD_SIMPLECART_BIC', 'BIC');
 
 // Email Confirmation
 define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging #%d');

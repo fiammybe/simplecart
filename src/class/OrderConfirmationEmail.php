@@ -109,6 +109,8 @@ class OrderConfirmationEmail {
             "",
             $this->formatCurrency($totalAmount)
         );
+        $text .= str_repeat('=', 70) . "\n";
+        $text .= "Bestelling " . $orderId . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
         // Payment Information Section
