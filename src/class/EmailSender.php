@@ -22,21 +22,48 @@ class EmailSender {
         try {
             global $icmsConfig;
 
+            // Debug logging
+            $debugEnabled = defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL;
+            if ($debugEnabled) {
+                require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                simplecart_debugLog("EmailSender::sendTextEmail() called");
+                simplecart_debugLog("  - toEmail: {$toEmail}");
+                simplecart_debugLog("  - subject: {$subject}");
+                simplecart_debugLog("  - textContent length: " . strlen($textContent) . " characters");
+                simplecart_debugLog("  - fromEmail: " . (empty($fromEmail) ? "not provided (will use admin email)" : $fromEmail));
+            }
+
             // Validate email address
             if (!self::isValidEmail($toEmail)) {
+                if ($debugEnabled) {
+                    simplecart_debugLog("ERROR: Email validation failed for: {$toEmail}");
+                }
                 return false;
+            }
+
+            if ($debugEnabled) {
+                simplecart_debugLog("Email validation passed for: {$toEmail}");
             }
 
             // Get sender email if not provided
             if (empty($fromEmail)) {
-                $fromEmail = $icmsConfig['adminmail'];
+                $fromEmail = "info@colomaenpa.be";
+                if ($debugEnabled) {
+                    simplecart_debugLog("Using defined email as sender: {$fromEmail}");
+                }
             }
 
             // Create ImpressCMS messaging handler
+            if ($debugEnabled) {
+                simplecart_debugLog("Creating icms_messaging_Handler...");
+            }
             $handler = new icms_messaging_Handler();
             $handler->useMail();
 
             // Set email properties
+            if ($debugEnabled) {
+                simplecart_debugLog("Setting email handler properties...");
+            }
             $handler->setFromEmail($fromEmail);
             $handler->setFromName($icmsConfig['sitename']);
             $handler->setSubject($subject);
@@ -44,14 +71,32 @@ class EmailSender {
             $handler->setToEmails($toEmail);
 
             // Send email (false = no debug output)
+            if ($debugEnabled) {
+                simplecart_debugLog("Calling handler->send(false)...");
+            }
             $result = $handler->send(false);
 
+            if ($debugEnabled) {
+                simplecart_debugLog("handler->send() returned: " . ($result ? "TRUE" : "FALSE"));
+            }
+
             if ($result) {
+                if ($debugEnabled) {
+                    simplecart_debugLog("Email sent successfully to: {$toEmail}");
+                }
                 return true;
             } else {
+                if ($debugEnabled) {
+                    simplecart_debugLog("Email sending failed for: {$toEmail}");
+                }
                 return false;
             }
         } catch (Exception $e) {
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                simplecart_debugLog("EXCEPTION in EmailSender::sendTextEmail(): " . $e->getMessage());
+                simplecart_debugLog("Exception trace: " . $e->getTraceAsString());
+            }
             return false;
         }
     }

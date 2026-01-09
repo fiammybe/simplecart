@@ -11,6 +11,9 @@ class PaymentReceivedEmail {
     private $orderItems;
     private $customerEmail;
     private $customerName;
+    private $customerPhone;
+    private $customerShift;
+    private $customerHelpendehanden;
     private $sepaConfig;
     private $currency;
 
@@ -25,23 +28,27 @@ class PaymentReceivedEmail {
     }
 
     private function extractCustomerInfo() {
-        $customerInfo = (string)$this->order->getVar('customer_info');
-
-        // Decode HTML entities (setVar() HTML-encodes the data)
-        $customerInfoDecoded = html_entity_decode($customerInfo, ENT_QUOTES, 'UTF-8');
+        // Use 'n' format to get raw JSON without HTML decoding
+        $customerInfo = (string)$this->order->getVar('customer_info', 'n');
 
         // Parse customer_info as JSON
-        $customerData = json_decode($customerInfoDecoded, true);
+        $customerData = json_decode($customerInfo, true);
 
         if (is_array($customerData)) {
             // Extract email and name from JSON
             $this->customerEmail = isset($customerData['email']) ? trim($customerData['email']) : '';
             $this->customerName = isset($customerData['name']) ? trim($customerData['name']) : '';
+            $this->customerPhone = isset($customerData['phone']) ? trim($customerData['phone']) : '';
         } else {
             // JSON parsing failed
             $this->customerEmail = '';
             $this->customerName = '';
+            $this->customerPhone = '';
         }
+
+        // Extract shift and helpende_hand from order fields
+        $this->customerShift = (string)$this->order->getVar('shift');
+        $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');
     }
 
     public function getCustomerEmail() {
@@ -73,6 +80,29 @@ class PaymentReceivedEmail {
         $text .= str_repeat('-', 70) . "\n";
         $text .= _MD_SIMPLECART_ORDER_ID . ": #" . $orderId . "\n";
         $text .= _MD_SIMPLECART_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
+
+        // Customer Information Section
+        $text .= str_repeat('-', 70) . "\n";
+        $text .= _MD_SIMPLECART_EMAIL_CUSTOMER_INFO . "\n";
+        $text .= str_repeat('-', 70) . "\n";
+        if (!empty($this->customerName)) {
+            $text .= _MD_SIMPLECART_NAME . ": " . $this->customerName . "\n";
+        }
+        if (!empty($this->customerEmail)) {
+            $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+        }
+        if (!empty($this->customerPhone)) {
+            $text .= _MD_SIMPLECART_PHONE . ": " . $this->customerPhone . "\n";
+        }
+        if (!empty($this->customerShift)) {
+            $shiftText = $this->getShiftLabel($this->customerShift);
+            $text .= _MD_SIMPLECART_ORDER_SHIFT . ": " . $shiftText . "\n";
+        }
+        if (!empty($this->customerHelpendehanden)) {
+            $helpText = $this->getHelpLabel($this->customerHelpendehanden);
+            $text .= _MD_SIMPLECART_HELP_MAIL . ": " . $helpText . "\n";
+        }
+        $text .= "\n";
 
         // Items Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
@@ -122,6 +152,48 @@ class PaymentReceivedEmail {
 
     private function formatCurrency($amount) {
         return number_format((float)$amount, 2, '.', ',') . ' ' . $this->currency;
+    }
+
+    /**
+     * Map shift value to translated label
+     *
+     * @param string $shift The shift value (e.g., "Shift 1", "Shift 2")
+     * @return string The translated shift label
+     */
+    private function getShiftLabel($shift) {
+        $shift = trim($shift);
+
+        // Map shift values to language constants
+        if (strpos($shift, '1') !== false) {
+            return defined('_MD_SIMPLECART_ORDER_SHIFT_1') ? _MD_SIMPLECART_ORDER_SHIFT_1 : $shift;
+        } elseif (strpos($shift, '2') !== false) {
+            return defined('_MD_SIMPLECART_ORDER_SHIFT_2') ? _MD_SIMPLECART_ORDER_SHIFT_2 : $shift;
+        }
+
+        return $shift;
+    }
+
+    /**
+     * Map helpende handen value to translated label
+     *
+     * @param string $help The helpende handen value
+     * @return string The translated help label
+     */
+    private function getHelpLabel($help) {
+        $help = trim($help);
+
+        // Map help values to language constants
+        if (strpos($help, '1') !== false) {
+            return defined('_MD_SIMPLECART_HELP_1') ? _MD_SIMPLECART_HELP_1 : $help;
+        } elseif (strpos($help, '2') !== false) {
+            return defined('_MD_SIMPLECART_HELP_2') ? _MD_SIMPLECART_HELP_2 : $help;
+        } elseif (strpos($help, '3') !== false) {
+            return defined('_MD_SIMPLECART_HELP_3') ? _MD_SIMPLECART_HELP_3 : $help;
+        } elseif (strpos($help, '4') !== false) {
+            return defined('_MD_SIMPLECART_HELP_4') ? _MD_SIMPLECART_HELP_4 : $help;
+        }
+
+        return $help;
     }
 }
 ?>
