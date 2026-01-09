@@ -70,6 +70,8 @@
               <input type="radio" v-model="customer.shift" value="Shift 1" required>
               <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_1|escape}>
             </label>
+          </div>
+	        <div class="control">
             <label class="radio">
               <input type="radio" v-model="customer.shift" value="Shift 2" required>
               <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_2|escape}>
@@ -101,14 +103,23 @@
               <input type="radio" v-model="customer.helpendehanden" value="Help 1" required>
               <{$smarty.const._MD_SIMPLECART_HELP_1|escape}>
             </label>
-
+</div>
+	        <div class="control">
             <label class="radio">
               <input type="radio" v-model="customer.helpendehanden" value="Help 2" required>
               <{$smarty.const._MD_SIMPLECART_HELP_2|escape}>
             </label>
+	        </div>
+	        <div class="control">
             <label class="radio">
               <input type="radio" v-model="customer.helpendehanden" value="Help 3" required>
               <{$smarty.const._MD_SIMPLECART_HELP_3|escape}>
+            </label>
+	        </div>
+	        <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 4" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_4|escape}>
             </label>
             <p v-if="errors.helpendehanden" class="help is-danger">{{ errors.helpendehanden }}</p>
           </div>
