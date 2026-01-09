@@ -49,6 +49,7 @@ define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Thank You for Your Order!');
 define('_MD_SIMPLECART_EMAIL_GREETING', 'Dear');
 define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Order Details');
 define('_MD_SIMPLECART_EMAIL_ORDER_DATE', 'Order Date');
+define('_MD_SIMPLECART_EMAIL_CUSTOMER_INFO', 'Customer Information');
 define('_MD_SIMPLECART_EMAIL_ITEMS', 'Order Items');
 define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Unit Price');
 define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Qty');

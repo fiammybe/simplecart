@@ -25,14 +25,16 @@ define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
 define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
 define('_MD_SIMPLECART_ORDER_SHIFT', 'Welke shift');
-define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1 (8:00 - 9:30)');
-define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2 (9:45 - 11:00)');
+define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1 (8:00 - 9:15)');
+define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2 (09:45 - 11:30)');
 
 define('_MD_SIMPLECART_HELP', 'Hulp nodig');
 define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons na je shift helpen met opruimen en afwassen? Het duurt maar 30 minuten en maakt een wereld van verschil! </br>Geef hieronder aan of je beschikbaar bent om te helpen na shift 1 of shift 2.');
+define('_MD_SIMPLECART_HELP_MAIL', 'Ik kom helpen');
 define('_MD_SIMPLECART_HELP_1', 'Hulp na Shift 1');
 define('_MD_SIMPLECART_HELP_2', 'Hulp na Shift 2');
-define('_MD_SIMPLECART_HELP_3', 'Geen hulp, ik kom alleen voor het ontbijt');
+define('_MD_SIMPLECART_HELP_3', 'Na shift 1 EN na shift 2 - ik was graag af');
+define('_MD_SIMPLECART_HELP_4', 'Geen hulp, ik kom alleen voor het ontbijt');
 
 define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Betaal met overschrijving QR Code');
 define('_MD_SIMPLECART_SCAN_TO_PAY', 'Scan deze code met uw bankapp om te betalen via overschrijving.');
@@ -49,12 +51,13 @@ define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Dank u voor uw bestelling!');
 define('_MD_SIMPLECART_EMAIL_GREETING', 'Beste');
 define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Bestelgegevens');
 define('_MD_SIMPLECART_EMAIL_ORDER_DATE', 'Besteldatum');
+define('_MD_SIMPLECART_EMAIL_CUSTOMER_INFO', 'Klantgegevens');
 define('_MD_SIMPLECART_EMAIL_ITEMS', 'Bestellingsartikelen');
 define('_MD_SIMPLECART_EMAIL_UNIT_PRICE', 'Eenheidsprijs');
 define('_MD_SIMPLECART_EMAIL_QUANTITY', 'Hoeveelheid');
 define('_MD_SIMPLECART_EMAIL_SUBTOTAL', 'Subtotaal');
-define('_MD_SIMPLECART_EMAIL_FOOTER', 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op.');
-define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Gebruik aub de bovenstaande informatie om te betalen via overschrijving. In geval van vragen kan u ons altijd contacteren op colomaenpa@gmail.com met uw bestelnummer als referentie.');
+define('_MD_SIMPLECART_EMAIL_FOOTER', 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op via colomaenpa@gmail.com.');
+define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Indien de betaling via QR code niet gelukt is, kan u de bovenstaande informatie gebruiken om te betalen via overschrijving. In geval van vragen kan u ons altijd contacteren op colomaenpa@gmail.com met uw bestelnummer als referentie.');
 
 // Email Payment Received Notification
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT', 'Betaling ontvangen - Bestelling #%d');
