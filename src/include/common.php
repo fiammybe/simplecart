@@ -6,11 +6,42 @@ if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_URL', ICMS_URL . '/modules/' . SIMPLECART_DIRNAME . '/');
     define('SIMPLECART_ROOT_PATH', ICMS_ROOT_PATH . '/modules/' . SIMPLECART_DIRNAME . '/');
     define('SIMPLECART_VERSION', '0.08'); // Module version for cache busting
+    define('SIMPLECART_DEBUG_EMAIL', true); // Set to false to disable email debug logging
+    define('SIMPLECART_DEBUG_LOG_FILE', SIMPLECART_ROOT_PATH . 'debug_email.log');
 }
 
 icms_loadLanguageFile('simplecart', 'main');
 icms_loadLanguageFile('simplecart', 'admin');
 icms_loadLanguageFile('simplecart', 'modinfo');
+
+/**
+ * Debug logging for email sending process
+ * Writes to file-based log to avoid breaking AJAX responses
+ *
+ * @param string $message The message to log
+ * @return void
+ */
+function simplecart_debugLog($message) {
+    if (!defined('SIMPLECART_DEBUG_EMAIL') || !SIMPLECART_DEBUG_EMAIL) {
+        return;
+    }
+
+    try {
+        $timestamp = date('Y-m-d H:i:s');
+        $logMessage = "[{$timestamp}] [SIMPLECART EMAIL DEBUG] {$message}\n";
+
+        // Ensure log file directory exists and is writable
+        $logDir = dirname(SIMPLECART_DEBUG_LOG_FILE);
+        if (!is_dir($logDir)) {
+            @mkdir($logDir, 0755, true);
+        }
+
+        // Append to log file
+        @file_put_contents(SIMPLECART_DEBUG_LOG_FILE, $logMessage, FILE_APPEND | LOCK_EX);
+    } catch (Exception $e) {
+        // Silently fail - don't break the email sending process
+    }
+}
 
 function simplecart_getHandler($name) {
     static $handlers = array();
@@ -77,17 +108,23 @@ function simplecart_getSepaConfig($key = null, $default = null) {
  * @return bool True if email was sent successfully, false otherwise
  */
 function simplecart_sendOrderConfirmationEmail($order, $orderId) {
+    simplecart_debugLog("=== START: simplecart_sendOrderConfirmationEmail() called for order ID: {$orderId}");
+
     try {
         // Load email classes
+        simplecart_debugLog("Loading email classes...");
         if (!class_exists('OrderConfirmationEmail')) {
             require_once SIMPLECART_ROOT_PATH . 'class/OrderConfirmationEmail.php';
+            simplecart_debugLog("OrderConfirmationEmail class loaded");
         }
 
         if (!class_exists('EmailSender')) {
             require_once SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+            simplecart_debugLog("EmailSender class loaded");
         }
 
         // Get order items
+        simplecart_debugLog("Fetching order items for order ID: {$orderId}");
         $orderItemHandler = simplecart_getHandler('orderitem');
         $criteria = new icms_db_criteria_Compo();
         $criteria->add(new icms_db_criteria_Item('order_id', (int)$orderId));
@@ -96,30 +133,51 @@ function simplecart_sendOrderConfirmationEmail($order, $orderId) {
         $orderItems = $orderItemHandler->getObjects($criteria, false, true);
 
         if (empty($orderItems)) {
+            simplecart_debugLog("ERROR: No order items found for order ID: {$orderId}");
+            simplecart_debugLog("=== END: simplecart_sendOrderConfirmationEmail() - FAILED (no items)");
             return false;
         }
 
+        simplecart_debugLog("Found " . count($orderItems) . " order items");
+
         // Get SEPA configuration
+        simplecart_debugLog("Retrieving SEPA configuration...");
         $sepaConfig = simplecart_getSepaConfig();
         $currency = $sepaConfig['currency'];
+        simplecart_debugLog("SEPA config retrieved. Currency: {$currency}");
 
         // Create email template
+        simplecart_debugLog("Creating OrderConfirmationEmail template...");
         $emailTemplate = new OrderConfirmationEmail($order, $orderItems, $sepaConfig, $currency);
+        simplecart_debugLog("OrderConfirmationEmail template created successfully");
 
         $customerEmail = $emailTemplate->getCustomerEmail();
+        simplecart_debugLog("Customer email extracted: " . (empty($customerEmail) ? "EMPTY" : $customerEmail));
 
         if (empty($customerEmail)) {
+            simplecart_debugLog("ERROR: Customer email is empty");
+            simplecart_debugLog("=== END: simplecart_sendOrderConfirmationEmail() - FAILED (no email)");
             return false;
         }
 
         // Send email
+        simplecart_debugLog("Generating email subject and content...");
         $subject = $emailTemplate->getSubject();
         $textContent = $emailTemplate->getTextContent();
+        simplecart_debugLog("Email subject: {$subject}");
+        simplecart_debugLog("Email content length: " . strlen($textContent) . " characters");
 
+        simplecart_debugLog("Calling EmailSender::sendTextEmail() with recipient: {$customerEmail}");
         $result = EmailSender::sendTextEmail($customerEmail, $subject, $textContent);
+
+        simplecart_debugLog("EmailSender::sendTextEmail() returned: " . ($result ? "TRUE (success)" : "FALSE (failed)"));
+        simplecart_debugLog("=== END: simplecart_sendOrderConfirmationEmail() - " . ($result ? "SUCCESS" : "FAILED"));
 
         return $result;
     } catch (Exception $e) {
+        simplecart_debugLog("EXCEPTION caught: " . $e->getMessage());
+        simplecart_debugLog("Exception trace: " . $e->getTraceAsString());
+        simplecart_debugLog("=== END: simplecart_sendOrderConfirmationEmail() - EXCEPTION");
         return false;
     }
 }

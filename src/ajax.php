@@ -77,7 +77,12 @@ try {
                     $customerData[$k] = $customer[$k];
                 }
             }
-            $order->setVar('customer_info', json_encode($customerData));
+            $customerInfoJson = json_encode($customerData);
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: Storing customer_info as JSON: " . $customerInfoJson);
+            }
+            // Use 'n' format to store raw JSON without HTML encoding
+            $order->setVar('customer_info', $customerInfoJson, 'n');
             $order->setVar('total_amount', 0.0);
 
             // Set shift and helpende_hand fields
@@ -120,7 +125,13 @@ try {
             $orderHandler->insert($order, true);
 
             // Send confirmation email
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: {$orderId}");
+            }
             $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: simplecart_sendOrderConfirmationEmail() returned: " . ($emailResult ? "TRUE" : "FALSE"));
+            }
 
             echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total), JSON_THROW_ON_ERROR);
             break;
