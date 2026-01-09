@@ -21,16 +21,35 @@ class OrderConfirmationEmail {
 
         // Extract customer info from order
         $this->extractCustomerInfo();
+
+        // Debug logging
+        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+            require_once dirname(__DIR__) . '/include/common.php';
+            simplecart_debugLog("OrderConfirmationEmail constructor: customer_email='" . $this->customerEmail . "', customer_name='" . $this->customerName . "'");
+        }
     }
 
     private function extractCustomerInfo() {
-        $customerInfo = (string)$this->order->getVar('customer_info');
+        // Use 'n' format to get raw JSON without HTML decoding
+        $customerInfo = (string)$this->order->getVar('customer_info', 'n');
 
-        // Decode HTML entities (setVar() HTML-encodes the data)
-        $customerInfoDecoded = html_entity_decode($customerInfo, ENT_QUOTES, 'UTF-8');
+        // Debug logging
+        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+            require_once dirname(__DIR__) . '/include/common.php';
+            simplecart_debugLog("extractCustomerInfo() - Raw customer_info: " . substr($customerInfo, 0, 200));
+        }
 
         // Parse customer_info as JSON
-        $customerData = json_decode($customerInfoDecoded, true);
+        $customerData = json_decode($customerInfo, true);
+
+        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+            simplecart_debugLog("extractCustomerInfo() - JSON decode result: " . (is_array($customerData) ? "SUCCESS (array)" : "FAILED (not array)"));
+            if (!is_array($customerData)) {
+                simplecart_debugLog("extractCustomerInfo() - JSON error: " . json_last_error_msg());
+            } else {
+                simplecart_debugLog("extractCustomerInfo() - Decoded data keys: " . implode(', ', array_keys($customerData)));
+            }
+        }
 
         if (is_array($customerData)) {
             // Extract email and name from JSON
@@ -121,7 +140,7 @@ class OrderConfirmationEmail {
                 $text .= "BIC: " . $this->sepaConfig['beneficiary_bic'] . "\n";
             }
             $text .= _MD_SIMPLECART_AMOUNT . ": " . $this->formatCurrency($totalAmount) . "\n\n";
-            $text .= "_MD_SIMPLECART_MAIL_PAYMENTINFO" . "\n\n";
+            $text .= _MD_SIMPLECART_MAIL_PAYMENTINFO . "\n\n";
             $text .= str_repeat('-', 70) . "\n\n";
         }
 
