@@ -25,7 +25,9 @@ class EmailSender {
             // Debug logging
             $debugEnabled = defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL;
             if ($debugEnabled) {
-                require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                if (!function_exists('simplecart_debugLog')) {
+                    require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                }
                 simplecart_debugLog("EmailSender::sendTextEmail() called");
                 simplecart_debugLog("  - toEmail: {$toEmail}");
                 simplecart_debugLog("  - subject: {$subject}");
@@ -93,7 +95,9 @@ class EmailSender {
             }
         } catch (Exception $e) {
             if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
-                require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                if (!function_exists('simplecart_debugLog')) {
+                    require_once dirname(dirname(__FILE__)) . '/include/common.php';
+                }
                 simplecart_debugLog("EXCEPTION in EmailSender::sendTextEmail(): " . $e->getMessage());
                 simplecart_debugLog("Exception trace: " . $e->getTraceAsString());
             }

@@ -35,11 +35,13 @@ define('_MI_SIMPLECART_STATUS_COMPLETED', 'Voltooid');
 define('_MI_SIMPLECART_STATUS_CANCELLED', 'Geannuleerd');
 
 // Configs
-define('_MI_SIMPLECART_CONF_BENEFICIARY', 'Naam van de bestemmeling');
-define('_MI_SIMPLECART_CONF_BENEFICIARY_DESC', 'De naam van de rekeninghouder voor SEPA betalingen');
-define('_MI_SIMPLECART_CONF_IBAN', 'IBAN');
-define('_MI_SIMPLECART_CONF_IBAN_DESC', 'Rekeningnummer');
-define('_MI_SIMPLECART_CONF_BIC', 'BIC');
-define('_MI_SIMPLECART_CONF_BIC_DESC', 'Bank Identifier Code (niet nodig voor betalingen tussen Belgische rekening)');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_NAME', 'Naam van de bestemmeling');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_NAME_DESC', 'De naam van de rekeninghouder voor SEPA betalingen');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN', 'IBAN');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN_DESC', 'Rekeningnummer');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC', 'BIC');
+define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC_DESC', 'Bank Identifier Code (niet nodig voor betalingen tussen Belgische rekening)');
+define('_MI_SIMPLECART_SEPA_CURRENCY', 'Munteenheid');
+define('_MI_SIMPLECART_SEPA_CURRENCY_DESC', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');

@@ -114,12 +114,42 @@ function simplecart_sendOrderConfirmationEmail($order, $orderId) {
         // Load email classes
         simplecart_debugLog("Loading email classes...");
         if (!class_exists('OrderConfirmationEmail')) {
-            require_once SIMPLECART_ROOT_PATH . 'class/OrderConfirmationEmail.php';
+            $orderConfirmationEmailPath = SIMPLECART_ROOT_PATH . 'class/OrderConfirmationEmail.php';
+            simplecart_debugLog("Attempting to load OrderConfirmationEmail from: {$orderConfirmationEmailPath}");
+            if (!file_exists($orderConfirmationEmailPath)) {
+                simplecart_debugLog("ERROR: OrderConfirmationEmail file not found at: {$orderConfirmationEmailPath}");
+                return false;
+            }
+            try {
+                require_once $orderConfirmationEmailPath;
+            } catch (Exception $e) {
+                simplecart_debugLog("ERROR: Exception while loading OrderConfirmationEmail: " . $e->getMessage());
+                return false;
+            }
+            if (!class_exists('OrderConfirmationEmail')) {
+                simplecart_debugLog("ERROR: OrderConfirmationEmail class not found after require_once");
+                return false;
+            }
             simplecart_debugLog("OrderConfirmationEmail class loaded");
         }
 
         if (!class_exists('EmailSender')) {
-            require_once SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+            $emailSenderPath = SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+            simplecart_debugLog("Attempting to load EmailSender from: {$emailSenderPath}");
+            if (!file_exists($emailSenderPath)) {
+                simplecart_debugLog("ERROR: EmailSender file not found at: {$emailSenderPath}");
+                return false;
+            }
+            try {
+                require_once $emailSenderPath;
+            } catch (Exception $e) {
+                simplecart_debugLog("ERROR: Exception while loading EmailSender: " . $e->getMessage());
+                return false;
+            }
+            if (!class_exists('EmailSender')) {
+                simplecart_debugLog("ERROR: EmailSender class not found after require_once");
+                return false;
+            }
             simplecart_debugLog("EmailSender class loaded");
         }
 
@@ -194,11 +224,19 @@ function simplecart_sendPaymentReceivedEmail($order, $orderId) {
     try {
         // Load email classes
         if (!class_exists('PaymentReceivedEmail')) {
-            require_once SIMPLECART_ROOT_PATH . 'class/PaymentReceivedEmail.php';
+            $paymentReceivedEmailPath = SIMPLECART_ROOT_PATH . 'class/PaymentReceivedEmail.php';
+            if (!file_exists($paymentReceivedEmailPath)) {
+                return false;
+            }
+            require_once $paymentReceivedEmailPath;
         }
 
         if (!class_exists('EmailSender')) {
-            require_once SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+            $emailSenderPath = SIMPLECART_ROOT_PATH . 'class/EmailSender.php';
+            if (!file_exists($emailSenderPath)) {
+                return false;
+            }
+            require_once $emailSenderPath;
         }
 
         // Get order items

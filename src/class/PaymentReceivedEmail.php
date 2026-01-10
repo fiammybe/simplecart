@@ -12,6 +12,7 @@ class PaymentReceivedEmail {
     private $customerEmail;
     private $customerName;
     private $customerPhone;
+    private $customerTablePreference;
     private $customerShift;
     private $customerHelpendehanden;
     private $sepaConfig;
@@ -39,11 +40,13 @@ class PaymentReceivedEmail {
             $this->customerEmail = isset($customerData['email']) ? trim($customerData['email']) : '';
             $this->customerName = isset($customerData['name']) ? trim($customerData['name']) : '';
             $this->customerPhone = isset($customerData['phone']) ? trim($customerData['phone']) : '';
+            $this->customerTablePreference = isset($customerData['tablePreference']) ? trim($customerData['tablePreference']) : '';
         } else {
             // JSON parsing failed
             $this->customerEmail = '';
             $this->customerName = '';
             $this->customerPhone = '';
+            $this->customerTablePreference = '';
         }
 
         // Extract shift and helpende_hand from order fields
@@ -93,6 +96,9 @@ class PaymentReceivedEmail {
         }
         if (!empty($this->customerPhone)) {
             $text .= _MD_SIMPLECART_PHONE . ": " . $this->customerPhone . "\n";
+        }
+        if (!empty($this->customerTablePreference)) {
+            $text .= _MD_SIMPLECART_TABLE_PREFERENCE . ": " . $this->customerTablePreference . "\n";
         }
         if (!empty($this->customerShift)) {
             $shiftText = $this->getShiftLabel($this->customerShift);

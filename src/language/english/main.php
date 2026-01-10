@@ -28,11 +28,24 @@ define('_MD_SIMPLECART_ADDRESS', 'Address');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Place Order');
 define('_MD_SIMPLECART_ORDER_ID', 'Order ID');
 
+define('_MD_SIMPLECART_TABLE_PREFERENCE', 'I would like to sit at the same table as');
+
 define('_MD_SIMPLECART_HELP', 'Help Needed');
 define('_MD_SIMPLECART_HELP_DESC', 'Would you like to help us clean up and wash dishes after your shift? It only takes 30 minutes and makes a world of difference! Please indicate below if you are available to help after shift 1 or shift 2.');
 define('_MD_SIMPLECART_HELP_1', 'Help after Shift 1');
 define('_MD_SIMPLECART_HELP_2', 'Help after Shift 2');
 define('_MD_SIMPLECART_HELP_3', 'No help, I am only coming for breakfast');
+define('_MD_SIMPLECART_HELP_MAIL', 'Help Preference');
+
+// Order Summary
+define('_MD_SIMPLECART_ORDER_SUMMARY', 'Order Summary');
+define('_MD_SIMPLECART_CUSTOMER_INFO', 'Customer & Event Information');
+define('_MD_SIMPLECART_CART_ITEMS', 'Order Items');
+define('_MD_SIMPLECART_PRODUCT_NAME', 'Product');
+define('_MD_SIMPLECART_QUANTITY', 'Quantity');
+define('_MD_SIMPLECART_UNIT_PRICE', 'Unit Price');
+define('_MD_SIMPLECART_SUBTOTAL', 'Subtotal');
+define('_MD_SIMPLECART_GRAND_TOTAL', 'Grand Total');
 
 // SEPA Payment
 define('_MD_SIMPLECART_PAY_WITH_SEPA', 'Pay with Bank Transfer QR Code');

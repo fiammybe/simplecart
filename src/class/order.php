@@ -28,8 +28,8 @@ class SimplecartOrder extends icms_ipf_Object {
         $token = icms::$security->createToken(0, 'simplecart_order_status');
         $actions = array(
             'paid' => 'Betaald',
-            'reimbursed' => 'Terugbetaald',
-            'closed' => 'Afgesloten',
+//            'reimbursed' => 'Terugbetaald',
+//            'closed' => 'Afgesloten',
         );
         $links = array();
         foreach ($actions as $key => $label) {

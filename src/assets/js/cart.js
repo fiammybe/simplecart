@@ -28,7 +28,7 @@
     if (!el) return;
 
     const products = ref([]);
-    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', shift:'', helpendehanden:'' }, lastOrderId: null, showSepaQr: false, sepaInfo: { beneficiary_name: '', beneficiary_iban: '', amount: 0 } });
+    const state = reactive({ token: null, tokenName: 'simplecart', submitting:false, message:'', customer:{ name:'', email:'', phone:'', tablePreference:'', shift:'', helpendehanden:'' }, lastOrderId: null, showSepaQr: false, sepaInfo: { beneficiary_name: '', beneficiary_iban: '', amount: 0 }, orderSummary: { name: '', email: '', phone: '', tablePreference: '', shift: '', helpendehanden: '', items: [], total: 0 } });
     const errors = reactive({ shift: '', helpendehanden: '', email: '' });
     const cart = useCart();
     const currencyCode = opts.currency || 'EUR';
@@ -95,6 +95,17 @@
         const r = await fetch(opts.ajaxUrl + '?action=place_order', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
         const j = await r.json();
         if (j.ok) {
+          // Store order summary data before clearing cart
+          state.orderSummary = {
+            name: state.customer.name,
+            email: state.customer.email,
+            phone: state.customer.phone,
+            tablePreference: state.customer.tablePreference,
+            shift: state.customer.shift,
+            helpendehanden: state.customer.helpendehanden,
+            items: cart.items.value.map(i => ({ ...i })),
+            total: cart.total.value
+          };
           cart.clear();
           state.message = t('order_success') + ' #' + j.order_id;
           state.lastOrderId = j.order_id;
@@ -180,7 +191,9 @@
           // SEPA QR Code
           showSepaQr: computed(() => state.showSepaQr),
           lastOrderId: computed(() => state.lastOrderId),
-          sepaInfo: computed(() => state.sepaInfo)
+          sepaInfo: computed(() => state.sepaInfo),
+          // Order Summary
+          orderSummary: computed(() => state.orderSummary)
         };
       }
     });

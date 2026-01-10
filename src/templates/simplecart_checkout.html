@@ -8,6 +8,74 @@
     <!-- SEPA QR Code Section (shown after successful order) -->
     <div v-if="showSepaQr" class="box mt-5">
       <div v-if="message" class="notification is-success mb-5">{{ message }}</div>
+
+      <!-- Order Summary Section -->
+      <div class="mb-6">
+        <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY|escape}></h2>
+
+        <!-- Customer & Event Information Section -->
+        <div class="mb-5">
+          <h3 class="subtitle is-6"><{$smarty.const._MD_SIMPLECART_CUSTOMER_INFO|escape}></h3>
+          <table class="table is-fullwidth is-narrow">
+            <tbody>
+              <tr v-if="orderSummary.name">
+                <td><strong><{$smarty.const._MD_SIMPLECART_NAME|escape}></strong></td>
+                <td>{{ orderSummary.name }}</td>
+              </tr>
+              <tr v-if="orderSummary.email">
+                <td><strong><{$smarty.const._MD_SIMPLECART_EMAIL|escape}></strong></td>
+                <td>{{ orderSummary.email }}</td>
+              </tr>
+              <tr v-if="orderSummary.phone">
+                <td><strong><{$smarty.const._MD_SIMPLECART_PHONE|escape}></strong></td>
+                <td>{{ orderSummary.phone }}</td>
+              </tr>
+              <tr v-if="orderSummary.tablePreference">
+                <td><strong><{$smarty.const._MD_SIMPLECART_TABLE_PREFERENCE|escape}></strong></td>
+                <td>{{ orderSummary.tablePreference }}</td>
+              </tr>
+              <tr v-if="orderSummary.shift">
+                <td><strong><{$smarty.const._MD_SIMPLECART_ORDER_SHIFT|escape}></strong></td>
+                <td>{{ orderSummary.shift }}</td>
+              </tr>
+              <tr v-if="orderSummary.helpendehanden">
+                <td><strong><{$smarty.const._MD_SIMPLECART_HELP|escape}></strong></td>
+                <td>{{ orderSummary.helpendehanden }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cart Items Section -->
+        <div class="mb-5">
+          <h3 class="subtitle is-6"><{$smarty.const._MD_SIMPLECART_CART_ITEMS|escape}></h3>
+          <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th><{$smarty.const._MD_SIMPLECART_PRODUCT_NAME|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_QUANTITY|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_UNIT_PRICE|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_SUBTOTAL|escape}></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in orderSummary.items" :key="item.product_id">
+                <td>{{ item.name }}</td>
+                <td class="has-text-right">{{ item.quantity }}</td>
+                <td class="has-text-right">{{ currency(item.price) }}</td>
+                <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="has-text-right"><strong><{$smarty.const._MD_SIMPLECART_GRAND_TOTAL|escape}></strong></td>
+                <td class="has-text-right"><strong>{{ currency(orderSummary.total) }}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
       <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
       <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
       <div class="has-text-centered">
@@ -94,6 +162,11 @@
           <div class="control"><input class="input" v-model="customer.phone"></div>
         </div>
 
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_TABLE_PREFERENCE|escape}></label>
+          <div class="control"><input class="input" v-model="customer.tablePreference" placeholder="e.g., John Smith"></div>
+        </div>
+
         <!-- Helpende Hand Radio Button Group -->
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_HELP|escape}></label>
@@ -160,6 +233,16 @@ window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
     empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART}>',
     order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS}>',
     order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID}>'
+  },
+  orderSummary: {
+    title: '<{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY}>',
+    customerInfo: '<{$smarty.const._MD_SIMPLECART_CUSTOMER_INFO}>',
+    cartItems: '<{$smarty.const._MD_SIMPLECART_CART_ITEMS}>',
+    productName: '<{$smarty.const._MD_SIMPLECART_PRODUCT_NAME}>',
+    quantity: '<{$smarty.const._MD_SIMPLECART_QUANTITY}>',
+    unitPrice: '<{$smarty.const._MD_SIMPLECART_UNIT_PRICE}>',
+    subtotal: '<{$smarty.const._MD_SIMPLECART_SUBTOTAL}>',
+    grandTotal: '<{$smarty.const._MD_SIMPLECART_GRAND_TOTAL}>'
   }
 });
 </script>

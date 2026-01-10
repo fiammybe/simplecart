@@ -72,7 +72,7 @@ try {
 
             // Store customer data as JSON for better data integrity and easier parsing
             $customerData = array();
-            foreach (array('name','email','phone','address') as $k) {
+            foreach (array('name','email','phone','address','tablePreference') as $k) {
                 if (!empty($customer[$k])) {
                     $customerData[$k] = $customer[$k];
                 }

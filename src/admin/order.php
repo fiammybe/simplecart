@@ -71,32 +71,7 @@ switch ($clean_op) {
         }
         $obj->setVar('status', $status);
         $icms_order_handler->insert($obj, true);
-
-        // Send payment received email if status changed to 'paid'
-        if ($status === 'paid') {
-            simplecart_sendPaymentReceivedEmail($obj, $order_id);
-        }
-
         redirect_header('order.php', 2, 'Order status updated.');
-        exit;
-
-    case 'delete':
-        // Delete order with CSRF protection
-        $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
-        if (!icms::$security->check(true, $token, 'simplecart_order_delete')) {
-            redirect_header('order.php', 3, 'Security token invalid.');
-            exit;
-        }
-        $obj = $icms_order_handler->get($order_id);
-        if (!$obj || $obj->isNew()) {
-            redirect_header('order.php', 3, 'Order not found.');
-            exit;
-        }
-        if ($icms_order_handler->delete($obj, true)) {
-            redirect_header('order.php', 2, _AM_SIMPLECART_ORDER_DELETED);
-        } else {
-            redirect_header('order.php', 3, 'Error deleting order.');
-        }
         exit;
 
     default:
@@ -111,7 +86,6 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');
-        $objectTable->addCustomAction('getDeleteLink');
         $icmsAdminTpl->assign('simplecart_order_table', $objectTable->fetch());
         $icmsAdminTpl->display('db:simplecart_admin_order.html');
         icms_cp_footer();
