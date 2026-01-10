@@ -35,6 +35,21 @@
 
     const t = (k) => (opts.i18n && opts.i18n[k]) || k;
     const currencyFormatter = (n) => currency(n, currencyCode);
+
+    // Translation functions for shift and help options
+    const translateShift = (value) => {
+      if (value === 'Shift 1') return t('shift_1');
+      if (value === 'Shift 2') return t('shift_2');
+      return value;
+    };
+
+    const translateHelp = (value) => {
+      if (value === 'Help 1') return t('help_1');
+      if (value === 'Help 2') return t('help_2');
+      if (value === 'Help 3') return t('help_3');
+      if (value === 'Help 4') return t('help_4');
+      return value;
+    };
     const loadProducts = async () => {
       try {
         const r = await fetch(opts.ajaxUrl + '?action=products');
@@ -193,7 +208,10 @@
           lastOrderId: computed(() => state.lastOrderId),
           sepaInfo: computed(() => state.sepaInfo),
           // Order Summary
-          orderSummary: computed(() => state.orderSummary)
+          orderSummary: computed(() => state.orderSummary),
+          // Translation functions for shift and help options
+          translateShift,
+          translateHelp
         };
       }
     });

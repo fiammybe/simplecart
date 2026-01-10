@@ -34,7 +34,8 @@ define('_MD_SIMPLECART_HELP', 'Help Needed');
 define('_MD_SIMPLECART_HELP_DESC', 'Would you like to help us clean up and wash dishes after your shift? It only takes 30 minutes and makes a world of difference! Please indicate below if you are available to help after shift 1 or shift 2.');
 define('_MD_SIMPLECART_HELP_1', 'Help after Shift 1');
 define('_MD_SIMPLECART_HELP_2', 'Help after Shift 2');
-define('_MD_SIMPLECART_HELP_3', 'No help, I am only coming for breakfast');
+define('_MD_SIMPLECART_HELP_3', 'Help after both shifts');
+define('_MD_SIMPLECART_HELP_4', 'No help, I am only coming for breakfast');
 define('_MD_SIMPLECART_HELP_MAIL', 'Help Preference');
 
 // Order Summary

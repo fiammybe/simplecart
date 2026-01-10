@@ -36,11 +36,11 @@
               </tr>
               <tr v-if="orderSummary.shift">
                 <td><strong><{$smarty.const._MD_SIMPLECART_ORDER_SHIFT|escape}></strong></td>
-                <td>{{ orderSummary.shift }}</td>
+                <td>{{ translateShift(orderSummary.shift) }}</td>
               </tr>
               <tr v-if="orderSummary.helpendehanden">
                 <td><strong><{$smarty.const._MD_SIMPLECART_HELP|escape}></strong></td>
-                <td>{{ orderSummary.helpendehanden }}</td>
+                <td>{{ translateHelp(orderSummary.helpendehanden) }}</td>
               </tr>
             </tbody>
           </table>
@@ -232,7 +232,13 @@ window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
     place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER}>',
     empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART}>',
     order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS}>',
-    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID}>'
+    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID}>',
+    shift_1: '<{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_1}>',
+    shift_2: '<{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_2}>',
+    help_1: '<{$smarty.const._MD_SIMPLECART_HELP_1}>',
+    help_2: '<{$smarty.const._MD_SIMPLECART_HELP_2}>',
+    help_3: '<{$smarty.const._MD_SIMPLECART_HELP_3}>',
+    help_4: '<{$smarty.const._MD_SIMPLECART_HELP_4}>'
   },
   orderSummary: {
     title: '<{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY}>',
