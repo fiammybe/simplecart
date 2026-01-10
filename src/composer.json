@@ -1,0 +1,7 @@
+{
+    "require": {
+        "smhg/sepa-qr": "^2.0",
+        "endroid/qr-code": "^4.0"
+    }
+}
+
