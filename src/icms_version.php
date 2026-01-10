@@ -3,10 +3,10 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '0.06';
+$modversion['version'] = '1.1.4';
 $modversion['description'] = _MI_SIMPLECART_DESC;
-$modversion['author'] = 'fiammybe';
-$modversion['credits'] = 'ImpressCMS, IPF, Augment Agent';
+$modversion['author'] = 'Augment Agent';
+$modversion['credits'] = 'ImpressCMS, IPF';
 $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
@@ -24,46 +24,61 @@ $modversion['tables'] = array(
     'simplecart_orderitem'
 );
 
-$modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');
-$modversion['templates'][] = array('file' => 'simplecart_checkout.html.tpl', 'description' => 'SimpleCart Checkout');
+$modversion['templates'][] = array('file' => 'simplecart_index.html', 'description' => 'SimpleCart Front Index');
+$modversion['templates'][] = array('file' => 'simplecart_checkout.html', 'description' => 'SimpleCart Checkout');
 $modversion['templates'][] = array('file' => 'simplecart_order_confirm.html', 'description' => 'SimpleCart Order Confirmation');
-$modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl', 'description' => 'Admin - Products');
-$modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
+$modversion['templates'][] = array('file' => 'simplecart_admin_product.html', 'description' => 'Admin - Products');
+$modversion['templates'][] = array('file' => 'simplecart_admin_order.html', 'description' => 'Admin - Orders');
 
 $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;
 $modversion['hasNotification'] = 0;
 
-// Configs
+// Configuration items for SEPA payment
+$modversion['config'] = array();
+
+// SEPA Beneficiary Name
 $modversion['config'][] = array(
-    'name' => 'beneficiary_name',
-    'title' => '_MI_SIMPLECART_CONF_BENEFICIARY',
-    'description' => '_MI_SIMPLECART_CONF_BENEFICIARY_DESC',
-    'formtype' => 'textbox',
+    'name' => 'sepa_beneficiary_name',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_NAME',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_NAME_DESC',
+    'formtype' => 'text',
     'valuetype' => 'text',
-    'default' => ''
+    'default' => 'SimpleCart Shop',
+    'weight' => 1
 );
+
+// SEPA Beneficiary IBAN
 $modversion['config'][] = array(
-    'name' => 'iban',
-    'title' => '_MI_SIMPLECART_CONF_IBAN',
-    'description' => '_MI_SIMPLECART_CONF_IBAN_DESC',
-    'formtype' => 'textbox',
+    'name' => 'sepa_beneficiary_iban',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_IBAN_DESC',
+    'formtype' => 'text',
     'valuetype' => 'text',
-    'default' => ''
+    'default' => '',
+    'weight' => 2
 );
+
+// SEPA Beneficiary BIC
 $modversion['config'][] = array(
-    'name' => 'bic',
-    'title' => '_MI_SIMPLECART_CONF_BIC',
-    'description' => '_MI_SIMPLECART_CONF_BIC_DESC',
-    'formtype' => 'textbox',
+    'name' => 'sepa_beneficiary_bic',
+    'title' => '_MI_SIMPLECART_SEPA_BENEFICIARY_BIC',
+    'description' => '_MI_SIMPLECART_SEPA_BENEFICIARY_BIC_DESC',
+    'formtype' => 'text',
     'valuetype' => 'text',
-    'default' => ''
+    'default' => '',
+    'weight' => 3
 );
+
+// SEPA Currency Code
 $modversion['config'][] = array(
-    'name' => 'ref_prefix',
-    'title' => '_MI_SIMPLECART_CONF_REF_PREFIX',
-    'description' => '_MI_SIMPLECART_CONF_REF_PREFIX_DESC',
-    'formtype' => 'textbox',
+    'name' => 'sepa_currency',
+    'title' => '_MI_SIMPLECART_SEPA_CURRENCY',
+    'description' => '_MI_SIMPLECART_SEPA_CURRENCY_DESC',
+    'formtype' => 'text',
     'valuetype' => 'text',
-    'default' => 'ORD-'
+    'default' => 'EUR',
+    'weight' => 4
 );
+
+?>

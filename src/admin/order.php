@@ -46,7 +46,7 @@ switch ($clean_op) {
         } else {
             $icmsAdminTpl->assign('simplecart_order_error', _AM_SIMPLECART_ORDER_NOT_FOUND);
         }
-        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html');
         icms_cp_footer();
         break;
 
@@ -80,17 +80,14 @@ switch ($clean_op) {
         // Read-only list: remove default edit/delete actions
         $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array());
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
-        $objectTable->addColumn(new icms_ipf_view_Column('shift', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));
-        $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 60));
+        $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 120));
+        $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120));
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
-        //$objectTable->addColumn(new icms_ipf_view_Column('getItemsSummary', 'left', 300, 'Items'));
-        $objectTable->addColumn(new icms_ipf_view_Column('order_summary', 'left', 300, 'getItemsSummary',false,null, false));
-
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');
         $icmsAdminTpl->assign('simplecart_order_table', $objectTable->fetch());
-        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html');
         icms_cp_footer();
         break;
 }

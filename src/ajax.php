@@ -1,18 +1,15 @@
 <?php
+// Start output buffering to prevent any accidental output before JSON
 ob_start();
+
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
-ob_end_clean();
-header('Content-Type: application/json; charset=utf-8');
 
-use SepaQr\Data;
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Label\LabelAlignment;
-use Endroid\QrCode\Label\Font\NotoSans;
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
+// Clear any output that may have been generated
+ob_end_clean();
+
+// Set JSON header
+header('Content-Type: application/json; charset=utf-8');
 
 $action = isset($_REQUEST['action']) ? strtolower(preg_replace('/[^a-z_]/', '', $_REQUEST['action'])) : '';
 
@@ -40,7 +37,11 @@ try {
 
         case 'token':
             $token = icms::$security->createToken(0, 'simplecart');
-            echo json_encode(array('ok' => true, 'token' => $token, 'token_name' => 'simplecart'));
+            echo json_encode(array(
+                'ok' => true,
+                'token' => $token,
+                'token_name' => 'simplecart'
+            ));
             break;
 
         case 'place_order':
@@ -48,12 +49,12 @@ try {
                 throw new Exception('Invalid method');
             }
             $raw = file_get_contents('php://input');
-            if (empty($raw)) { throw new Exception('Empty request body'); }
             $payload = json_decode($raw, true);
-            if (!is_array($payload)) { throw new Exception('Invalid JSON: ' . json_last_error_msg()); }
+            if (!is_array($payload)) { throw new Exception('Invalid JSON'); }
 
             $token = isset($payload['token']) ? $payload['token'] : '';
-            if (!icms::$security->check(true, $token, 'simplecart')) {
+            $tokenValid = icms::$security->check(true, $token, 'simplecart');
+            if (!$tokenValid) {
                 throw new Exception(_MD_SIMPLECART_CSRF_FAIL);
             }
 
@@ -67,11 +68,21 @@ try {
 
             $order = $orderHandler->create();
             $order->setVar('status', 'pending');
-            $infoParts = array();
-            foreach (array('name','email','phone','address') as $k) {
-                if (!empty($customer[$k])) { $infoParts[] = ucfirst($k) . ': ' . icms_core_DataFilter::htmlSpecialChars($customer[$k]); }
+            $order->setVar('timestamp', time());
+
+            // Store customer data as JSON for better data integrity and easier parsing
+            $customerData = array();
+            foreach (array('name','email','phone','address','tablePreference') as $k) {
+                if (!empty($customer[$k])) {
+                    $customerData[$k] = $customer[$k];
+                }
             }
-            $order->setVar('customer_info', implode("\n", $infoParts));
+            $customerInfoJson = json_encode($customerData);
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: Storing customer_info as JSON: " . $customerInfoJson);
+            }
+            // Use 'n' format to store raw JSON without HTML encoding
+            $order->setVar('customer_info', $customerInfoJson, 'n');
             $order->setVar('total_amount', 0.0);
 
             // Set shift and helpende_hand fields
@@ -82,16 +93,12 @@ try {
                 $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
             }
 
-            // Insert the order
             if (!$orderHandler->insert($order, true)) {
                 $errors = $order->getErrors();
                 $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
                 throw new Exception($errorMsg);
             }
             $orderId = (int)$order->getVar('order_id');
-
-            // Generate payment reference for display (not stored in DB yet)
-            $reference = 'ORD-' . str_pad((string)$orderId, 6, '0', STR_PAD_LEFT);
 
             $total = 0.0;
             foreach ($items as $it) {
@@ -117,46 +124,61 @@ try {
             $order->setVar('total_amount', $total);
             $orderHandler->insert($order, true);
 
-            // Generate SEPA QR Code if configured
-            $qrCodeDataUri = null;
-
-            // Get module configuration for SEPA settings
-            $moduleHandler = icms::handler('icms_module');
-            $module = $moduleHandler->getByDirname('simplecart');
-            $configHandler = icms::handler('icms_config');
-            $config = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
-
-            if (!empty($config['beneficiary_name']) && !empty($config['iban'])) {
-                try {
-                    $paymentData = Data::create()
-                        ->setName($config['beneficiary_name'])
-                        ->setIban($config['iban'])
-                        ->setAmount($total);
-
-                    if (!empty($config['bic'])) {
-                        $paymentData->setBic($config['bic']);
-                    }
-
-                    $paymentData->setRemittanceText($reference); // Use the generated reference
-
-                    $result = Builder::create()
-                        ->writer(new PngWriter())
-                        ->writerOptions([])
-                        ->data($paymentData->toString())
-                        ->encoding(new Encoding('UTF-8'))
-                        ->errorCorrectionLevel(ErrorCorrectionLevel::High)
-                        ->size(300)
-                        ->margin(10)
-                        ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-                        ->build();
-
-                    $qrCodeDataUri = $result->getDataUri();
-                } catch (Exception $e) {
-                    // Log error or ignore if QR generation fails, so order still succeeds
-                }
+            // Send confirmation email
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: {$orderId}");
+            }
+            $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("ajax.php: simplecart_sendOrderConfirmationEmail() returned: " . ($emailResult ? "TRUE" : "FALSE"));
             }
 
-            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total, 'qr_code' => $qrCodeDataUri));
+            echo json_encode(array('ok' => true, 'order_id' => $orderId, 'total' => $total), JSON_THROW_ON_ERROR);
+            break;
+
+        case 'sepa_qr_data':
+            $order_id = isset($_REQUEST['order_id']) ? (int)$_REQUEST['order_id'] : 0;
+            if ($order_id <= 0) {
+                throw new Exception('Invalid order ID');
+            }
+
+            $orderHandler = simplecart_getHandler('order');
+            $order = $orderHandler->get($order_id);
+            if (!$order || $order->isNew()) {
+                throw new Exception('Order not found');
+            }
+
+            // Get configuration from module settings using helper function
+            $config = simplecart_getSepaConfig();
+
+            // Validate that IBAN is configured
+            if (empty($config['beneficiary_iban'])) {
+                throw new Exception('SEPA payment is not configured. Please configure IBAN in module settings.');
+            }
+
+
+            // Load SEPA QR Code Generator
+            if (!class_exists('SepaQrCodeGenerator')) {
+                require_once __DIR__ . '/class/SepaQrCodeGenerator.php';
+            }
+
+            $generator = new SepaQrCodeGenerator($config);
+            $amount = (float)$order->getVar('total_amount');
+            $orderId = (int)$order->getVar('order_id');
+
+            try {
+                $orderReference = 'Bestelling ' . $orderId;
+                $qrData = $generator->generateQrData($orderId, $amount, $orderReference);
+                echo json_encode(array(
+                    'ok' => true,
+                    'qr_data' => $qrData,
+                    'beneficiary_name' => $config['beneficiary_name'],
+                    'beneficiary_iban' => $config['beneficiary_iban'],
+                    'amount' => $amount
+                ));
+            } catch (Exception $e) {
+                throw new Exception('Failed to generate SEPA QR data: ' . $e->getMessage());
+            }
             break;
 
         default:
@@ -166,4 +188,4 @@ try {
     http_response_code(400);
     echo json_encode(array('ok' => false, 'error' => $e->getMessage()));
 }
-exit;
+

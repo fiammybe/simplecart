@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
+
+<section id="simplecart-app" class="section">
+  <div class="container">
+    <h1 class="title is-4">{{ t('shop_title') }}</h1>
+<p><{$smarty.const._MD_SIMPLECART_SHOP_DESC|escape}></p>
+    <div class="columns is-multiline mt-3">
+      <div class="column is-12-mobile is-6-tablet is-4-desktop" v-for="p in products" :key="p.id">
+        <div class="card">
+          <div class="card-content">
+            <p class="title is-5">{{ p.name }}</p>
+            <p class="tag is-light is-size-3 sc-card-price">{{ currency(p.price) }}</p>
+            <div class="buttons">
+              <button class="button is-primary is-small" @click="addToCart(p)">{{ t('add_to_cart') }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box" v-if="cartItems.length">
+      <h2 class="title is-5">{{ t('your_cart') }}</h2>
+      <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th>{{ t('name') }}</th>
+            <th class="has-text-centered">Qty</th>
+            <th class="has-text-right">{{ t('total') }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in cartItems" :key="item.product_id">
+            <td>
+              {{ item.name }}
+              <span class="tag is-light">{{ currency(item.price) }}</span>
+            </td>
+            <td class="has-text-centered">
+              <div class="buttons has-addons is-centered">
+                <button class="button is-small" @click="dec(item)">-</button>
+                <span class="button is-static is-small">{{ item.quantity }}</span>
+                <button class="button is-small" @click="inc(item)">+</button>
+              </div>
+            </td>
+            <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
+            <td class="has-text-right">
+              <a href="#" class="button is-text is-small" @click.prevent="removeItem(item)">{{ t('remove') }}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
+      <a :href="checkoutUrl" class="button is-link is-pulled-right">{{ t('checkout') }}</a>
+      <div class="is-clearfix"></div>
+    </div>
+    <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
+<script>
+window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
+  mount: '#simplecart-app',
+  ajaxUrl: '<{$simplecart_ajax_url}>',
+  checkoutUrl: '<{$simplecart_module_url}>checkout.php',
+  currency: '<{$simplecart_currency|default:"EUR"|escape}>',
+  i18n: {
+    shop_title: '<{$smarty.const._MD_SIMPLECART_SHOP_TITLE|escape}>',
+    add_to_cart: '<{$smarty.const._MD_SIMPLECART_ADD_TO_CART|escape}>',
+    your_cart: '<{$smarty.const._MD_SIMPLECART_YOUR_CART|escape}>',
+    remove: '<{$smarty.const._MD_SIMPLECART_REMOVE|escape}>',
+    total: '<{$smarty.const._MD_SIMPLECART_TOTAL|escape}>',
+    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT|escape}>',
+    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape}>',
+    name: '<{$smarty.const._MD_SIMPLECART_NAME|escape}>'
+  }
+});
+</script>

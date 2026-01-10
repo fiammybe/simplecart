@@ -8,23 +8,13 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->initVar('timestamp', XOBJ_DTYPE_LTIME, time(), false, null, '', false, _MI_SIMPLECART_ORDER_TIMESTAMP, '', false, true, false);
         $this->initVar('total_amount', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDER_TOTAL);
         $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_SIMPLECART_ORDER_STATUS);
-        $this->initVar('customer_info', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
-        // payment_reference field will be added in a future iteration
-        // $this->initVar('payment_reference', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_PAYMENT_REF);
-
-        // extra questions to add to an order
+        $this->initVar('customer_info', XOBJ_DTYPE_TXTBOX, '', false, 500, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
+        $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
         $this->initVar('shift', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_SHIFT);
         $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_HELPENDE_HAND);
 
-        $this->setControl('customer_info', array('name' => 'textarea'));
-        $this->setControl('shift', array("status", [
-            "name" => "radio",
-            "options" => ["8u-10u", "10u-12u"]
-        ]));
-        $this->setControl('helpende_hand', array("status", [
-            "name" => "radio",
-            "options" => ["tussen de 2 shifts", "Na afloop","Liever niet"]
-        ]));
+        $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
+
         $this->hideFieldFromForm('order_id');
         $this->hideFieldFromForm('timestamp');
         $this->hideFieldFromForm('total_amount');
@@ -37,10 +27,9 @@ class SimplecartOrder extends icms_ipf_Object {
         $base = $this->handler->_moduleUrl . 'admin/order.php';
         $token = icms::$security->createToken(0, 'simplecart_order_status');
         $actions = array(
-            'awaiting_payment' => 'Awaiting payment',
-            'paid' => 'Paid',
-            'reimbursed' => 'Reimbursed',
-            'closed' => 'Closed',
+            'paid' => 'Betaald',
+//            'reimbursed' => 'Terugbetaald',
+//            'closed' => 'Afgesloten',
         );
         $links = array();
         foreach ($actions as $key => $label) {
@@ -48,6 +37,14 @@ class SimplecartOrder extends icms_ipf_Object {
             $links[] = '<a href="' . $url . '" class="icms_actionlink">' . htmlspecialchars($label, ENT_QUOTES) . '</a>';
         }
         return implode(' | ', $links);
+    }
+
+    public function getDeleteLink() {
+        $id = (int)$this->getVar('order_id');
+        $base = $this->handler->_moduleUrl . 'admin/order.php';
+        $token = icms::$security->createToken(0, 'simplecart_order_delete');
+        $url = $base . '?op=delete&order_id=' . $id . '&token=' . urlencode($token);
+        return '<a href="' . $url . '" class="icms_actionlink" onclick="return confirm(\'' . addslashes(_AM_SIMPLECART_ORDER_DELETE_CONFIRM) . '\');">Delete</a>';
     }
 
     public function getItemsSummary() {
@@ -117,6 +114,18 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
 
     public function beforeUpdate(&$obj) {
         // Prevent editing orders via admin (enforce read-only by ignoring admin saves)
+        return true;
+    }
+
+    public function beforeDelete(&$obj) {
+        // Delete all order items associated with this order
+        $orderId = (int)$obj->getVar('order_id');
+        if ($orderId > 0) {
+            $orderItemHandler = simplecart_getHandler('orderitem');
+            $criteria = new icms_db_criteria_Compo();
+            $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+            $orderItemHandler->deleteAll($criteria);
+        }
         return true;
     }
 }
