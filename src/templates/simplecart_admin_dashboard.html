@@ -1,0 +1,56 @@
+<div class="simplecart-admin-dashboard">
+    <{if !$dashboard}>
+    <p>No dashboard data.</p>
+    <{else}>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Shift</th>
+                <th>Total Orders</th>
+                <th>Total Amount</th>
+                <th>Paid Orders</th>
+                <th>Paid Amount</th>
+                <th>Pending Orders</th>
+                <th>Pending Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        <{foreach from=$dashboard item=row}>
+            <tr>
+                <td><{$row.shift_name|default:''|escape:'html'}></td>
+
+                <td>
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>">
+                        <{$row.total_orders|default:0|escape:'html'}>
+                    </a>
+                </td>
+
+                <td>
+                    <{$row.total_amount|default:0|number_format:2:'.':','|escape:'html'}>
+                </td>
+
+                <td>
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=paid">
+                        <{$row.paid_orders|default:0|escape:'html'}>
+                    </a>
+                </td>
+
+                <td>
+                    <{$row.paid_amount|default:0|number_format:2:'.':','|escape:'html'}>
+                </td>
+
+                <td>
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=pending">
+                        <{$row.pending_orders|default:0|escape:'html'}>
+                    </a>
+                </td>
+
+                <td>
+                    <{$row.pending_amount|default:0|number_format:2:'.':','|escape:'html'}>
+                </td>
+            </tr>
+        <{/foreach}>
+        </tbody>
+    </table>
+    <{/if}>
+</div>

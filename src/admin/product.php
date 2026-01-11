@@ -13,24 +13,33 @@ function simplecart_admin_edit_product($product_id = 0) {
     $icmsAdminTpl->display('db:simplecart_admin_product.html.tpl');
     icms_cp_footer();
 }
-
 switch ($clean_op) {
     case 'mod':
+        icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         simplecart_admin_edit_product($product_id);
+        icms_cp_footer();
         break;
 
     case 'addproduct':
+        icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         $controller = new icms_ipf_Controller($icms_product_handler);
         $controller->storeFromDefaultForm(_AM_SIMPLECART_PRODUCT_CREATED, _AM_SIMPLECART_PRODUCT_UPDATED, 'product.php');
+        icms_cp_footer();
         break;
 
     case 'del':
+        icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         $controller = new icms_ipf_Controller($icms_product_handler);
         $controller->handleObjectDeletion(_AM_SIMPLECART_PRODUCT_DELETE_CONFIRM);
+        icms_cp_footer();
         break;
 
     default:
         icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
         $objectTable = new icms_ipf_view_Table($icms_product_handler);
         $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
