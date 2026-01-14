@@ -1,0 +1,12 @@
+# Security: Protect debug log files from direct access
+<Files "debug_email.log">
+    Require all denied
+</Files>
+
+# Security: Prevent directory listing
+Options -Indexes
+
+# Security: Protect sensitive configuration files
+<FilesMatch "\.(log|bak|sql|ini|conf)$">
+    Require all denied
+</FilesMatch>

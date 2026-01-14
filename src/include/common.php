@@ -17,6 +17,7 @@ icms_loadLanguageFile('simplecart', 'modinfo');
 /**
  * Debug logging for email sending process
  * Writes to file-based log to avoid breaking AJAX responses
+ * Only logs when SIMPLECART_DEBUG_EMAIL is enabled
  *
  * @param string $message The message to log
  * @return void
@@ -28,6 +29,8 @@ function simplecart_debugLog($message) {
 
     try {
         $timestamp = date('Y-m-d H:i:s');
+        // Security: Sanitize message to prevent log injection
+        $message = preg_replace('/[\r\n]+/', ' ', $message);
         $logMessage = "[{$timestamp}] [SIMPLECART EMAIL DEBUG] {$message}\n";
 
         // Ensure log file directory exists and is writable
@@ -36,10 +39,18 @@ function simplecart_debugLog($message) {
             @mkdir($logDir, 0755, true);
         }
 
-        // Append to log file
-        @file_put_contents(SIMPLECART_DEBUG_LOG_FILE, $logMessage, FILE_APPEND | LOCK_EX);
+        // Security: Ensure log file has restricted permissions
+        $logFile = SIMPLECART_DEBUG_LOG_FILE;
+        if (!file_exists($logFile)) {
+            @touch($logFile);
+            @chmod($logFile, 0640);
+        }
+
+        // Append to log file with file locking
+        @file_put_contents($logFile, $logMessage, FILE_APPEND | LOCK_EX);
     } catch (Exception $e) {
         // Silently fail - don't break the email sending process
+        // Don't log the error to avoid infinite loops
     }
 }
 

@@ -54,9 +54,13 @@ switch ($clean_op) {
         break;
 
     case 'changestatus':
-        // Change order status with CSRF protection
-        $status = isset($_REQUEST['status']) ? preg_replace('/[^a-z_]/', '', $_REQUEST['status']) : '';
-        $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
+        // Security: Change order status with CSRF protection via POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect_header('order.php', 3, 'Invalid request method.');
+            exit;
+        }
+        $status = isset($_POST['status']) ? preg_replace('/[^a-z_]/', '', $_POST['status']) : '';
+        $token = isset($_POST['token']) ? $_POST['token'] : '';
         if (!icms::$security->check(true, $token, 'simplecart_order_status')) {
             redirect_header('order.php', 3, 'Security token invalid.');
             exit;
