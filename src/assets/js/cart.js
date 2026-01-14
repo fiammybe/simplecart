@@ -13,7 +13,14 @@
       if (found) { found.quantity += 1; } else { items.value.push({ product_id: p.id, name: p.name, price: p.price, quantity: 1 }); }
       save();
     };
-    const inc = (i) => { i.quantity += 1; save(); };
+    const inc = (i) => { 
+        // Security: Enforce max quantity limit (defense in depth)
+        if (i.quantity >= 1000) {
+            return;
+        }
+        i.quantity += 1; 
+        save(); 
+    };
     const dec = (i) => { i.quantity = Math.max(1, i.quantity - 1); save(); };
     const remove = (i) => { items.value = items.value.filter(x => x !== i); save(); };
     const total = computed(() => items.value.reduce((s, i) => s + i.price * i.quantity, 0));

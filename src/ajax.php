@@ -5,11 +5,52 @@ ob_start();
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
 
+/**
+ * Simple rate limiting implementation for order placement
+ * @param string $identifier Client identifier (IP address or session)
+ * @param int $maxRequests Maximum requests allowed
+ * @param int $timeWindow Time window in seconds
+ * @return bool True if rate limit not exceeded, false otherwise
+ */
+function simplecart_checkRateLimit($identifier, $maxRequests = 5, $timeWindow = 300) {
+    $cacheKey = 'simplecart_ratelimit_' . md5($identifier);
+    $cacheHandler = icms::handler('icms_cache');
+    
+    $attempts = $cacheHandler->read($cacheKey);
+    if ($attempts === false) {
+        $attempts = array();
+    }
+    
+    // Clean old attempts outside time window
+    $now = time();
+    $attempts = array_filter($attempts, function($timestamp) use ($now, $timeWindow) {
+        return ($now - $timestamp) < $timeWindow;
+    });
+    
+    // Check if limit exceeded
+    if (count($attempts) >= $maxRequests) {
+        return false;
+    }
+    
+    // Add current attempt
+    $attempts[] = $now;
+    $cacheHandler->write($cacheKey, $attempts, $timeWindow);
+    
+    return true;
+}
+
 // Clear any output that may have been generated
 ob_end_clean();
 
 // Set JSON header
 header('Content-Type: application/json; charset=utf-8');
+
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+// Add Referrer-Policy for CSRF token protection
+header('Referrer-Policy: strict-origin-when-cross-origin');
 
 $action = isset($_REQUEST['action']) ? strtolower(preg_replace('/[^a-z_]/', '', $_REQUEST['action'])) : '';
 
@@ -36,7 +77,8 @@ try {
             break;
 
         case 'token':
-            $token = icms::$security->createToken(0, 'simplecart');
+            // Create token with 1 hour (3600 seconds) expiry for security
+            $token = icms::$security->createToken(3600, 'simplecart');
             echo json_encode(array(
                 'ok' => true,
                 'token' => $token,
@@ -48,6 +90,14 @@ try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception('Invalid method');
             }
+            
+            // Security: Rate limiting - 5 orders per 5 minutes per IP
+            $clientIdentifier = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
+            if (!simplecart_checkRateLimit($clientIdentifier, 5, 300)) {
+                http_response_code(429);
+                throw new Exception('Rate limit exceeded. Please try again later.');
+            }
+            
             $raw = file_get_contents('php://input');
             $payload = json_decode($raw, true);
             if (!is_array($payload)) { throw new Exception('Invalid JSON'); }
@@ -61,6 +111,35 @@ try {
             $items = isset($payload['items']) && is_array($payload['items']) ? $payload['items'] : array();
             $customer = isset($payload['customer']) && is_array($payload['customer']) ? $payload['customer'] : array();
             if (empty($items)) { throw new Exception(_MD_SIMPLECART_EMPTY_CART); }
+            
+            // Security: Validate customer input lengths and format
+            $requiredFields = array('name', 'email');
+            foreach ($requiredFields as $field) {
+                if (empty($customer[$field])) {
+                    throw new Exception('Required field missing: ' . $field);
+                }
+            }
+            
+            // Validate and sanitize customer data
+            if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
+                throw new Exception('Invalid email address format');
+            }
+            
+            // Enforce length constraints
+            $maxLengths = array(
+                'name' => 100,
+                'email' => 255,
+                'phone' => 50,
+                'address' => 500,
+                'tablePreference' => 100,
+                'shift' => 50,
+                'helpendehanden' => 50
+            );
+            foreach ($maxLengths as $field => $maxLen) {
+                if (isset($customer[$field]) && strlen($customer[$field]) > $maxLen) {
+                    throw new Exception("Field '{$field}' exceeds maximum length of {$maxLen} characters");
+                }
+            }
 
             $productHandler = simplecart_getHandler('product');
             $orderHandler = simplecart_getHandler('order');
@@ -101,10 +180,19 @@ try {
             $orderId = (int)$order->getVar('order_id');
 
             $total = 0.0;
+            $validItemCount = 0;
+            $maxQuantityPerItem = 1000; // Security: Enforce max quantity limit
+            
             foreach ($items as $it) {
                 $pid = isset($it['product_id']) ? (int)$it['product_id'] : 0;
                 $qty = isset($it['quantity']) ? (int)$it['quantity'] : 0;
                 if ($pid <= 0 || $qty <= 0) { continue; }
+                
+                // Security: Enforce quantity upper bound
+                if ($qty > $maxQuantityPerItem) {
+                    throw new Exception("Quantity for product ID {$pid} exceeds maximum allowed ({$maxQuantityPerItem})");
+                }
+                
                 $prod = $productHandler->get($pid);
                 if (!$prod || $prod->isNew() || (int)$prod->getVar('active') !== 1) { continue; }
                 $price = (float)$prod->getVar('price');
@@ -119,6 +207,17 @@ try {
                     throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
                 }
                 $total += $qty * $price;
+                $validItemCount++;
+            }
+            
+            // Security: Ensure at least one valid item was added
+            if ($validItemCount === 0) {
+                throw new Exception('No valid items in cart. Order cannot be placed.');
+            }
+            
+            // Security: Ensure total is not zero
+            if ($total <= 0) {
+                throw new Exception('Order total must be greater than zero');
             }
 
             $order->setVar('total_amount', $total);
@@ -145,7 +244,17 @@ try {
             $orderHandler = simplecart_getHandler('order');
             $order = $orderHandler->get($order_id);
             if (!$order || $order->isNew()) {
+                // Security: Add delay to prevent timing-based order enumeration
+                usleep(100000); // 100ms delay
                 throw new Exception('Order not found');
+            }
+            
+            // Security: Verify order was recently created (within last 24 hours) 
+            // This prevents old orders from being queried indefinitely
+            $orderTimestamp = (int)$order->getVar('timestamp');
+            $hoursSinceCreation = (time() - $orderTimestamp) / 3600;
+            if ($hoursSinceCreation > 24) {
+                throw new Exception('QR code generation expired. Please contact support for payment details.');
             }
 
             // Get configuration from module settings using helper function

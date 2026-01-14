@@ -25,7 +25,8 @@ class SimplecartOrder extends icms_ipf_Object {
     public function getStatusActionLinks() {
         $id = (int)$this->getVar('order_id');
         $base = $this->handler->_moduleUrl . 'admin/order.php';
-        $token = icms::$security->createToken(0, 'simplecart_order_status');
+        // Security: Create time-limited token (1 hour) for status changes
+        $token = icms::$security->createToken(3600, 'simplecart_order_status');
         $actions = array(
             'paid' => 'Betaald',
 //            'reimbursed' => 'Terugbetaald',
@@ -33,8 +34,16 @@ class SimplecartOrder extends icms_ipf_Object {
         );
         $links = array();
         foreach ($actions as $key => $label) {
-            $url = $base . '?op=changestatus&order_id=' . $id . '&status=' . $key . '&token=' . urlencode($token);
-            $links[] = '<a href="' . $url . '" class="icms_actionlink">' . htmlspecialchars($label, ENT_QUOTES) . '</a>';
+            // Security: Use POST form instead of GET link to prevent CSRF
+            $formId = 'status_form_' . $id . '_' . $key;
+            $links[] = '<form id="' . $formId . '" method="POST" action="' . $base . '" style="display:inline;">' .
+                       '<input type="hidden" name="op" value="changestatus">' .
+                       '<input type="hidden" name="order_id" value="' . $id . '">' .
+                       '<input type="hidden" name="status" value="' . $key . '">' .
+                       '<input type="hidden" name="token" value="' . htmlspecialchars($token, ENT_QUOTES) . '">' .
+                       '<a href="#" onclick="document.getElementById(\'' . $formId . '\').submit(); return false;" class="icms_actionlink">' . 
+                       htmlspecialchars($label, ENT_QUOTES) . '</a>' .
+                       '</form>';
         }
         return implode(' | ', $links);
     }
@@ -42,9 +51,15 @@ class SimplecartOrder extends icms_ipf_Object {
     public function getDeleteLink() {
         $id = (int)$this->getVar('order_id');
         $base = $this->handler->_moduleUrl . 'admin/order.php';
-        $token = icms::$security->createToken(0, 'simplecart_order_delete');
-        $url = $base . '?op=delete&order_id=' . $id . '&token=' . urlencode($token);
-        return '<a href="' . $url . '" class="icms_actionlink" onclick="return confirm(\'' . addslashes(_AM_SIMPLECART_ORDER_DELETE_CONFIRM) . '\');">Delete</a>';
+        // Security: Create time-limited token (1 hour) for delete action
+        $token = icms::$security->createToken(3600, 'simplecart_order_delete');
+        $formId = 'delete_form_' . $id;
+        return '<form id="' . $formId . '" method="POST" action="' . $base . '" style="display:inline;">' .
+               '<input type="hidden" name="op" value="delete">' .
+               '<input type="hidden" name="order_id" value="' . $id . '">' .
+               '<input type="hidden" name="token" value="' . htmlspecialchars($token, ENT_QUOTES) . '">' .
+               '<a href="#" onclick="if(confirm(\'' . addslashes(_AM_SIMPLECART_ORDER_DELETE_CONFIRM) . '\')) { document.getElementById(\'' . $formId . '\').submit(); } return false;" class="icms_actionlink">Delete</a>' .
+               '</form>';
     }
 
     public function getItemsSummary() {
