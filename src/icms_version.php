@@ -24,11 +24,12 @@ $modversion['tables'] = array(
     'simplecart_orderitem'
 );
 
-$modversion['templates'][] = array('file' => 'simplecart_index.html', 'description' => 'SimpleCart Front Index');
-$modversion['templates'][] = array('file' => 'simplecart_checkout.html', 'description' => 'SimpleCart Checkout');
-$modversion['templates'][] = array('file' => 'simplecart_order_confirm.html', 'description' => 'SimpleCart Order Confirmation');
+
+$modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');
+$modversion['templates'][] = array('file' => 'simplecart_checkout.html.tpl', 'description' => 'SimpleCart Checkout');
+$modversion['templates'][] = array('file' => 'simplecart_order_confirm.html.tpl', 'description' => 'SimpleCart Order Confirmation');
 $modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl', 'description' => 'Admin - Products');
-$modversion['templates'][] = array('file' => 'simplecart_admin_order.html', 'description' => 'Admin - Orders');
+$modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
 $modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html', 'description' => 'Admin - Dashboard');
 
 $modversion['hasSearch'] = 0;
