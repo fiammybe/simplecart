@@ -13,6 +13,9 @@ if ((!isset($_REQUEST['op']) || $clean_op === 'list' || $clean_op === '') && $or
 switch ($clean_op) {
     case 'view':
         icms_cp_header();
+
+        icms::$module->displayAdminMenu(2, 'SimpleCart');
+
         global $icmsAdminTpl;
         $obj = $icms_order_handler->get($order_id);
         if ($obj && !$obj->isNew()) {
@@ -46,7 +49,7 @@ switch ($clean_op) {
         } else {
             $icmsAdminTpl->assign('simplecart_order_error', _AM_SIMPLECART_ORDER_NOT_FOUND);
         }
-        $icmsAdminTpl->display('db:simplecart_admin_order.html');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
         icms_cp_footer();
         break;
 
@@ -80,9 +83,41 @@ switch ($clean_op) {
 
     default:
         icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
+
+        // Build criteria from request filters so the table honors URL parameters
+        $criteria = new icms_db_criteria_Compo();
+
+        // Filter by shift (accept raw string, fall back to "Unassigned" handling in other places)
+        if (isset($_REQUEST['shift']) && $_REQUEST['shift'] !== '') {
+            $shift = trim((string)$_REQUEST['shift']);
+            // Use equality filter on the 'shift' field
+            $criteria->add(new icms_db_criteria_Item('shift', $shift));
+        }
+
+        // Filter by status — only allow 'pending' or 'paid' (empty = no filter)
+        $allowed_status = array('pending', 'paid');
+        if (isset($_REQUEST['status']) && $_REQUEST['status'] !== '') {
+            $status = strtolower(trim($_REQUEST['status']));
+            if (in_array($status, $allowed_status, true)) {
+                $criteria->add(new icms_db_criteria_Item('status', $status));
+            }
+        }
+
         // Read-only list: remove default edit/delete actions
         $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array());
+
+        // Try to attach the criteria in a compatible way with multiple IPF versions
+        if (method_exists($objectTable, 'setCriteria')) {
+            $objectTable->setCriteria($criteria);
+        } elseif (method_exists($objectTable, 'setFilter')) {
+            $objectTable->setFilter($criteria);
+        } else {
+            // fallback: try recreating with criteria as 4th ctor arg (some IPF variants accept this)
+            $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array(), $criteria);
+        }
+
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));
         $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 120));
@@ -91,7 +126,7 @@ switch ($clean_op) {
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');
         $icmsAdminTpl->assign('simplecart_order_table', $objectTable->fetch());
-        $icmsAdminTpl->display('db:simplecart_admin_order.html');
+        $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
         icms_cp_footer();
         break;
 }

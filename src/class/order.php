@@ -20,7 +20,7 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromForm('total_amount');
 
         $this->handler->identifierName = 'order_id';
-        $this->handler->_page = 'order.php';
+        $this->handler->_page = 'admin/order.php';
     }
     public function getStatusActionLinks() {
         $id = (int)$this->getVar('order_id');
