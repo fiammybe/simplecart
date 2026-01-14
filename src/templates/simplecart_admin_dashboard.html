@@ -53,4 +53,34 @@
         </tbody>
     </table>
     <{/if}>
+
+    <!-- Product Sales Breakdown by Shift -->
+    <{if $productSalesBreakdown}>
+    <h2 style="margin-top: 2em;">Product Sales Breakdown by Shift</h2>
+    <{foreach from=$productSalesBreakdown item=shiftData}>
+        <h3 style="margin-top: 1.5em;">Shift: <{$shiftData.shift_name|default:''|escape:'html'}></h3>
+        <{if $shiftData.products|@count > 0}>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product Name</th>
+                <th style="text-align: right;">Total Quantity</th>
+                <th style="text-align: right;">Total Revenue</th>
+            </tr>
+            </thead>
+            <tbody>
+            <{foreach from=$shiftData.products item=product}>
+                <tr>
+                    <td><{$product.product_name|default:''|escape:'html'}></td>
+                    <td style="text-align: right;"><{$product.total_quantity|default:0|escape:'html'}></td>
+                    <td style="text-align: right;"><{$product.total_revenue|default:0|number_format:2:'.':','|escape:'html'}></td>
+                </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+        <{else}>
+        <p>No products sold in this shift.</p>
+        <{/if}>
+    <{/foreach}>
+    <{/if}>
 </div>

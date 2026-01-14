@@ -54,6 +54,56 @@ foreach ($orders as $orderObj) {
 // Convert associative map to indexed array for the template
 $dashboard = array_values($dashboardMap);
 
+// Build product sales breakdown by shift
+$orderItemHandler = icms_getModuleHandler('orderitem', $moduleDir);
+$allOrderItems = $orderItemHandler->getObjects(new icms_db_criteria_Compo(), true);
+
+$productSalesMap = array(); // shift_key => [product_name => {qty, revenue}]
+
+foreach ($allOrderItems as $itemObj) {
+    $orderId = (int)$itemObj->getVar('order_id');
+
+    // Find the order to get its shift
+    $order = $orderHandler->get($orderId);
+    if (!$order || $order->isNew()) {
+        continue;
+    }
+
+    $shiftName = trim((string)$order->getVar('shift'));
+    $shiftName = $shiftName !== '' ? $shiftName : 'Unassigned';
+    $shiftKey = $shiftName;
+
+    $productName = (string)$itemObj->getVar('product_name');
+    $quantity = (int)$itemObj->getVar('quantity');
+    $price = (float)$itemObj->getVar('product_price');
+    $revenue = $quantity * $price;
+
+    if (!isset($productSalesMap[$shiftKey])) {
+        $productSalesMap[$shiftKey] = array();
+    }
+
+    if (!isset($productSalesMap[$shiftKey][$productName])) {
+        $productSalesMap[$shiftKey][$productName] = array(
+            'product_name' => $productName,
+            'total_quantity' => 0,
+            'total_revenue' => 0.0,
+        );
+    }
+
+    $productSalesMap[$shiftKey][$productName]['total_quantity'] += $quantity;
+    $productSalesMap[$shiftKey][$productName]['total_revenue'] += $revenue;
+}
+
+// Convert to indexed array format for template
+$productSalesBreakdown = array();
+foreach ($productSalesMap as $shiftKey => $products) {
+    $productSalesBreakdown[] = array(
+        'shift_key' => $shiftKey,
+        'shift_name' => $shiftKey,
+        'products' => array_values($products),
+    );
+}
+
 // Include template (presentation logic only)
 global $icmsAdminTpl;
 if (!isset($icmsAdminTpl) || !is_object($icmsAdminTpl)) {
@@ -64,6 +114,7 @@ if (!isset($icmsAdminTpl) || !is_object($icmsAdminTpl)) {
     }
 }
 $icmsAdminTpl->assign('dashboard', $dashboard);
+$icmsAdminTpl->assign('productSalesBreakdown', $productSalesBreakdown);
 $icmsAdminTpl->display('db:simplecart_admin_dashboard.html');
 
 icms_cp_footer();
