@@ -14,7 +14,7 @@ switch ($clean_op) {
     case 'view':
         icms_cp_header();
 
-        icms::$module->displayAdminMenu(0, 'SimpleCart');
+        icms::$module->displayAdminMenu(2, 'SimpleCart');
 
         global $icmsAdminTpl;
         $obj = $icms_order_handler->get($order_id);
@@ -79,6 +79,7 @@ switch ($clean_op) {
 
     default:
         icms_cp_header();
+        icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
 
         // Build criteria from request filters so the table honors URL parameters
