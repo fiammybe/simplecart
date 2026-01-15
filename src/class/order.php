@@ -129,18 +129,9 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     }
 
     public function beforeUpdate(&$obj) {
-        // Check edit permission for admin updates
-        // Allow updates from AJAX without permission check (customer order creation)
-        global $icmsUser;
-        
-        // If user is logged in and not a system admin, check permission
-        if (is_object($icmsUser) && !$icmsUser->isAdmin()) {
-            if (!simplecart_hasPermission('simplecart_order_edit')) {
-                return false;
-            }
-        }
-        
-        // Prevent editing orders via admin (enforce read-only by ignoring admin saves)
+        // Note: No permission check here because:
+        // 1. Order creation/update via AJAX is public (for customer orders)
+        // 2. Admin order status updates are already protected by controller permission checks
         return true;
     }
 

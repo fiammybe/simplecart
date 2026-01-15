@@ -3,6 +3,10 @@
 // Uses ImpressCMS handlers to build $dashboard and includes the template.
 
 include_once __DIR__ . '/header.php';
+
+// Check if user has permission to view orders (dashboard displays order data)
+simplecart_checkPermission('simplecart_order_view', '../index.php', _NOPERM);
+
 icms_cp_header();
 
 icms::$module->displayAdminMenu(0, 'SimpleCart');

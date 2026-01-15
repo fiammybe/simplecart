@@ -57,44 +57,38 @@ switch ($clean_op) {
         icms_cp_header();
         icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
-        $objectTable = new icms_ipf_view_Table($icms_product_handler);
-        $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
-        $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
-        $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
-        
-        // Only show create button if user has create permission
-        if (simplecart_hasPermission('simplecart_product_create')) {
-            $objectTable->addIntroButton('addproduct', 'product.php?op=mod', _AM_SIMPLECART_PRODUCT_CREATE);
-        }
-        
-        $objectTable->addQuickSearch(array('name', 'description'));
         
         // Check if user has edit or delete permissions to show action buttons
         $hasEdit = simplecart_hasPermission('simplecart_product_edit');
         $hasDelete = simplecart_hasPermission('simplecart_product_delete');
         
-        // If user doesn't have edit or delete, remove those actions
+        // Determine which actions to exclude
+        $excludeActions = array();
+        if (!$hasEdit) {
+            $excludeActions[] = 'edit';
+        }
+        if (!$hasDelete) {
+            $excludeActions[] = 'delete';
+        }
+        
+        // Create table with appropriate actions
         if (!$hasEdit && !$hasDelete) {
-            // Create table without default actions
+            // No actions at all
             $objectTable = new icms_ipf_view_Table($icms_product_handler, false, array());
-            $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
-            $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
-            $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
-            $objectTable->addQuickSearch(array('name', 'description'));
-        } elseif (!$hasEdit) {
-            // Remove edit action only
-            $objectTable = new icms_ipf_view_Table($icms_product_handler, true, array('edit'));
-            $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
-            $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
-            $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
-            $objectTable->addQuickSearch(array('name', 'description'));
-        } elseif (!$hasDelete) {
-            // Remove delete action only
-            $objectTable = new icms_ipf_view_Table($icms_product_handler, true, array('delete'));
-            $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
-            $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
-            $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
-            $objectTable->addQuickSearch(array('name', 'description'));
+        } else {
+            // Some actions available - exclude specific ones
+            $objectTable = new icms_ipf_view_Table($icms_product_handler, true, $excludeActions);
+        }
+        
+        // Add columns and search (common configuration)
+        $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
+        $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
+        $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
+        $objectTable->addQuickSearch(array('name', 'description'));
+        
+        // Only show create button if user has create permission
+        if (simplecart_hasPermission('simplecart_product_create')) {
+            $objectTable->addIntroButton('addproduct', 'product.php?op=mod', _AM_SIMPLECART_PRODUCT_CREATE);
         }
         
         $icmsAdminTpl->assign('simplecart_product_table', $objectTable->fetch());
