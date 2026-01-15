@@ -36,6 +36,46 @@ $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;
 $modversion['hasNotification'] = 0;
 
+// Permission definitions for granular access control
+$i = 0;
+
+// Product permissions
+$modversion['permissions'][$i]['name'] = 'simplecart_product_view';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_PRODUCT_VIEW';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_PRODUCT_VIEW_DESC';
+$i++;
+
+$modversion['permissions'][$i]['name'] = 'simplecart_product_create';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_PRODUCT_CREATE';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_PRODUCT_CREATE_DESC';
+$i++;
+
+$modversion['permissions'][$i]['name'] = 'simplecart_product_edit';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_PRODUCT_EDIT';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_PRODUCT_EDIT_DESC';
+$i++;
+
+$modversion['permissions'][$i]['name'] = 'simplecart_product_delete';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_PRODUCT_DELETE';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_PRODUCT_DELETE_DESC';
+$i++;
+
+// Order permissions
+$modversion['permissions'][$i]['name'] = 'simplecart_order_view';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_ORDER_VIEW';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_ORDER_VIEW_DESC';
+$i++;
+
+$modversion['permissions'][$i]['name'] = 'simplecart_order_edit';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_ORDER_EDIT';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_ORDER_EDIT_DESC';
+$i++;
+
+$modversion['permissions'][$i]['name'] = 'simplecart_order_delete';
+$modversion['permissions'][$i]['title'] = '_MI_SIMPLECART_PERM_ORDER_DELETE';
+$modversion['permissions'][$i]['description'] = '_MI_SIMPLECART_PERM_ORDER_DELETE_DESC';
+$i++;
+
 // Configuration items for SEPA payment
 $modversion['config'] = array();
 

@@ -112,6 +112,58 @@ function simplecart_getSepaConfig($key = null, $default = null) {
 }
 
 /**
+ * Check if the current user has a specific permission
+ *
+ * @param string $permission Permission name (e.g., 'simplecart_product_view')
+ * @return bool True if user has permission, false otherwise
+ */
+function simplecart_hasPermission($permission) {
+    global $icmsUser, $icmsModule;
+    
+    // System administrators always have all permissions
+    if (is_object($icmsUser) && $icmsUser->isAdmin()) {
+        return true;
+    }
+    
+    // Get module ID
+    if (!is_object($icmsModule) || $icmsModule->getVar('dirname') !== 'simplecart') {
+        $module_handler = icms::handler('icms_module');
+        $icmsModule = $module_handler->getByDirname('simplecart');
+    }
+    
+    if (!is_object($icmsModule)) {
+        return false;
+    }
+    
+    $module_id = $icmsModule->getVar('mid');
+    
+    // Get user groups
+    $groups = is_object($icmsUser) ? $icmsUser->getGroups() : array(ICMS_GROUP_ANONYMOUS);
+    
+    // Check permission using ImpressCMS group permission handler
+    $gperm_handler = icms::handler('icms_member_groupperm');
+    return $gperm_handler->checkRight($permission, 0, $groups, $module_id);
+}
+
+/**
+ * Redirect with error if user doesn't have permission
+ *
+ * @param string $permission Permission name
+ * @param string $redirect_url URL to redirect to (default: admin index)
+ * @param string $message Error message (optional)
+ * @return void
+ */
+function simplecart_checkPermission($permission, $redirect_url = 'index.php', $message = null) {
+    if (!simplecart_hasPermission($permission)) {
+        if ($message === null) {
+            $message = _NOPERM;
+        }
+        redirect_header($redirect_url, 3, $message);
+        exit;
+    }
+}
+
+/**
  * Send order confirmation email to customer
  *
  * @param SimplecartOrder $order The order object

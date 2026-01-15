@@ -40,4 +40,21 @@ define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC', 'SEPA Beneficiary BIC');
 define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC_DESC', 'The BIC (Bank Identifier Code) of the beneficiary. This is optional but recommended. Example: COBADEFFXXX');
 define('_MI_SIMPLECART_SEPA_CURRENCY', 'SEPA Currency Code');
 define('_MI_SIMPLECART_SEPA_CURRENCY_DESC', 'The ISO 4217 currency code for SEPA payments. Default is EUR (Euro). Only EUR is recommended for SEPA transfers.');
+
+// Permission names and descriptions
+define('_MI_SIMPLECART_PERM_PRODUCT_VIEW', 'View Products');
+define('_MI_SIMPLECART_PERM_PRODUCT_VIEW_DESC', 'Can view products in the admin area');
+define('_MI_SIMPLECART_PERM_PRODUCT_CREATE', 'Create Products');
+define('_MI_SIMPLECART_PERM_PRODUCT_CREATE_DESC', 'Can create new products');
+define('_MI_SIMPLECART_PERM_PRODUCT_EDIT', 'Edit Products');
+define('_MI_SIMPLECART_PERM_PRODUCT_EDIT_DESC', 'Can edit existing products');
+define('_MI_SIMPLECART_PERM_PRODUCT_DELETE', 'Delete Products');
+define('_MI_SIMPLECART_PERM_PRODUCT_DELETE_DESC', 'Can delete products');
+
+define('_MI_SIMPLECART_PERM_ORDER_VIEW', 'View Orders');
+define('_MI_SIMPLECART_PERM_ORDER_VIEW_DESC', 'Can view orders in the admin area');
+define('_MI_SIMPLECART_PERM_ORDER_EDIT', 'Edit Orders');
+define('_MI_SIMPLECART_PERM_ORDER_EDIT_DESC', 'Can edit order status');
+define('_MI_SIMPLECART_PERM_ORDER_DELETE', 'Delete Orders');
+define('_MI_SIMPLECART_PERM_ORDER_DELETE_DESC', 'Can delete orders');
 ?>

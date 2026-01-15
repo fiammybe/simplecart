@@ -117,6 +117,7 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     }
 
     public function beforeInsert(&$obj) {
+        // Note: No permission check for insert because orders are created via AJAX by customers
         $obj->setVar('timestamp', time());
         $status = $obj->getVar('status');
         if (!in_array($status, $this->allowedStatus, true)) {
@@ -128,11 +129,27 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     }
 
     public function beforeUpdate(&$obj) {
+        // Check edit permission for admin updates
+        // Allow updates from AJAX without permission check (customer order creation)
+        global $icmsUser;
+        
+        // If user is logged in and not a system admin, check permission
+        if (is_object($icmsUser) && !$icmsUser->isAdmin()) {
+            if (!simplecart_hasPermission('simplecart_order_edit')) {
+                return false;
+            }
+        }
+        
         // Prevent editing orders via admin (enforce read-only by ignoring admin saves)
         return true;
     }
 
     public function beforeDelete(&$obj) {
+        // Check delete permission
+        if (!simplecart_hasPermission('simplecart_order_delete')) {
+            return false;
+        }
+        
         // Delete all order items associated with this order
         $orderId = (int)$obj->getVar('order_id');
         if ($orderId > 0) {
