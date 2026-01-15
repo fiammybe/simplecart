@@ -131,7 +131,7 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     public function beforeUpdate(&$obj) {
         // Note: No permission check here because:
         // 1. Order creation/update via AJAX is public (for customer orders)
-        // 2. Admin order status updates are already protected by controller permission checks
+        // 2. Admin order status updates are protected by controller checks (see admin/order.php:64-67)
         return true;
     }
 

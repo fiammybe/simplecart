@@ -72,13 +72,8 @@ switch ($clean_op) {
         }
         
         // Create table with appropriate actions
-        if (!$hasEdit && !$hasDelete) {
-            // No actions at all
-            $objectTable = new icms_ipf_view_Table($icms_product_handler, false, array());
-        } else {
-            // Some actions available - exclude specific ones
-            $objectTable = new icms_ipf_view_Table($icms_product_handler, true, $excludeActions);
-        }
+        $showActions = ($hasEdit || $hasDelete);
+        $objectTable = new icms_ipf_view_Table($icms_product_handler, $showActions, $excludeActions);
         
         // Add columns and search (common configuration)
         $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
