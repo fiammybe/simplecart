@@ -56,9 +56,9 @@
 
     <!-- Product Sales Breakdown by Shift -->
     <{if $productSalesBreakdown}>
-    <h2 style="margin-top: 2em;">Product Sales Breakdown by Shift</h2>
+    <h2 class="title">Product Sales Breakdown by Shift</h2>
     <{foreach from=$productSalesBreakdown item=shiftData}>
-        <h3 style="margin-top: 1.5em;">Shift: <{$shiftData.shift_name|default:''|escape:'html'}></h3>
+        <h3 class="subtitle">Shift: <{$shiftData.shift_name|default:''|escape:'html'}></h3>
         <{if $shiftData.products|@count > 0}>
         <table class="table">
             <thead>

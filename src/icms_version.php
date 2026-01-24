@@ -30,7 +30,7 @@ $modversion['templates'][] = array('file' => 'simplecart_checkout.html.tpl', 'de
 $modversion['templates'][] = array('file' => 'simplecart_order_confirm.html.tpl', 'description' => 'SimpleCart Order Confirmation');
 $modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl', 'description' => 'Admin - Products');
 $modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
-$modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html', 'description' => 'Admin - Dashboard');
+$modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html.tpl', 'description' => 'Admin - Dashboard');
 
 $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;
