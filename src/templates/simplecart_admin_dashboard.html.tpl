@@ -20,7 +20,7 @@
                 <td><{$row.shift_name|default:''|escape:'html'}></td>
 
                 <td>
-                    <a href="admin/order.php?shift=<{$row.shift_key|escape:'url'}>">
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>">
                         <{$row.total_orders|default:0|escape:'html'}>
                     </a>
                 </td>
@@ -30,7 +30,7 @@
                 </td>
 
                 <td>
-                    <a href="admin/order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=paid">
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=paid">
                         <{$row.paid_orders|default:0|escape:'html'}>
                     </a>
                 </td>
@@ -40,7 +40,7 @@
                 </td>
 
                 <td>
-                    <a href="admin/order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=pending">
+                    <a href="order.php?shift=<{$row.shift_key|escape:'url'}>&amp;status=pending">
                         <{$row.pending_orders|default:0|escape:'html'}>
                     </a>
                 </td>
@@ -56,9 +56,9 @@
 
     <!-- Product Sales Breakdown by Shift -->
     <{if $productSalesBreakdown}>
-    <h2 style="margin-top: 2em;">Product Sales Breakdown by Shift</h2>
+    <h2 class="title">Product Sales Breakdown by Shift</h2>
     <{foreach from=$productSalesBreakdown item=shiftData}>
-        <h3 style="margin-top: 1.5em;">Shift: <{$shiftData.shift_name|default:''|escape:'html'}></h3>
+        <h3 class="subtitle">Shift: <{$shiftData.shift_name|default:''|escape:'html'}></h3>
         <{if $shiftData.products|@count > 0}>
         <table class="table">
             <thead>
@@ -84,4 +84,3 @@
     <{/foreach}>
     <{/if}>
 </div>
-
