@@ -1,0 +1,1054 @@
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Sari Roosen","email":"sari.roosen@hotmail.com","phone":"0495832365"}
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 27
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 27
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 27
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Sari Roosen","email":"sari.roosen@hotmail.com","phone":"0495832365"}
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='sari.roosen@hotmail.com', customer_name='Sari Roosen'
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Customer email extracted: sari.roosen@hotmail.com
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #27
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Email content length: 2219 characters
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: sari.roosen@hotmail.com
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG]   - toEmail: sari.roosen@hotmail.com
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #27
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG]   - textContent length: 2219 characters
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Email validation passed for: sari.roosen@hotmail.com
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-14 11:55:39] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-14 11:55:40] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-14 11:55:40] [SIMPLECART EMAIL DEBUG] Email sent successfully to: sari.roosen@hotmail.com
+[2026-01-14 11:55:40] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-14 11:55:40] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-14 11:55:40] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Julie Desmet","email":"juliedesmet@hotmail.nl","phone":"0479212885","tablePreference":"Roosen Ackerman"}
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 28
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 28
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 28
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Julie Desmet","email":"juliedesmet@hotmail.nl","phone":"0479212885","tablePreference":"Roosen Ackerman"}
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='juliedesmet@hotmail.nl', customer_name='Julie Desmet'
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Customer email extracted: juliedesmet@hotmail.nl
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #28
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Email content length: 2280 characters
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: juliedesmet@hotmail.nl
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG]   - toEmail: juliedesmet@hotmail.nl
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #28
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG]   - textContent length: 2280 characters
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Email validation passed for: juliedesmet@hotmail.nl
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] Email sent successfully to: juliedesmet@hotmail.nl
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-14 12:08:06] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Hanne Vandezande ","email":"hannevandezande@gmail.com","phone":"0495522005","tablePreference":"Joke Collaer"}
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 29
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 29
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 29
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Hanne Vandezande ","email":"hannevandezande@gmail.com","phone":"0495522005","tablePreference":"Joke Collaer"}
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='hannevandezande@gmail.com', customer_name='Hanne Vandezande'
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Customer email extracted: hannevandezande@gmail.com
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #29
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Email content length: 2215 characters
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: hannevandezande@gmail.com
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG]   - toEmail: hannevandezande@gmail.com
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #29
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG]   - textContent length: 2215 characters
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Email validation passed for: hannevandezande@gmail.com
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-14 14:12:01] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-14 14:12:02] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-14 14:12:02] [SIMPLECART EMAIL DEBUG] Email sent successfully to: hannevandezande@gmail.com
+[2026-01-14 14:12:02] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-14 14:12:02] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-14 14:12:02] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Yasmine Verdeyen","email":"verdeyen.yasmine@gmail.com","phone":"0478422247","tablePreference":"Oliver mona steven en Julie Desmet van de kerkhoven"}
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 30
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 30
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 30
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Yasmine Verdeyen","email":"verdeyen.yasmine@gmail.com","phone":"0478422247","tablePreference":"Oliver mona steven en Julie Desmet van de kerkhoven"}
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='verdeyen.yasmine@gmail.com', customer_name='Yasmine Verdeyen'
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Customer email extracted: verdeyen.yasmine@gmail.com
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #30
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Email content length: 2328 characters
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: verdeyen.yasmine@gmail.com
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG]   - toEmail: verdeyen.yasmine@gmail.com
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #30
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG]   - textContent length: 2328 characters
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Email validation passed for: verdeyen.yasmine@gmail.com
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-14 14:40:42] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-14 14:40:43] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-14 14:40:43] [SIMPLECART EMAIL DEBUG] Email sent successfully to: verdeyen.yasmine@gmail.com
+[2026-01-14 14:40:43] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-14 14:40:43] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-14 14:40:43] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Colla Joke ","email":"jokecolla@gmail.com","phone":"0497726787","tablePreference":"Hanne Van de Zande"}
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 31
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 31
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 31
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Colla Joke ","email":"jokecolla@gmail.com","phone":"0497726787","tablePreference":"Hanne Van de Zande"}
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='jokecolla@gmail.com', customer_name='Colla Joke'
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Customer email extracted: jokecolla@gmail.com
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #31
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Email content length: 2203 characters
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: jokecolla@gmail.com
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG]   - toEmail: jokecolla@gmail.com
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #31
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG]   - textContent length: 2203 characters
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Email validation passed for: jokecolla@gmail.com
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-14 20:46:15] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-14 20:46:16] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-14 20:46:16] [SIMPLECART EMAIL DEBUG] Email sent successfully to: jokecolla@gmail.com
+[2026-01-14 20:46:16] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-14 20:46:16] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-14 20:46:16] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Charlotte Merckx","email":"merckx.charlotte@gmail.com","phone":"0493252977"}
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 32
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 32
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 32
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Charlotte Merckx","email":"merckx.charlotte@gmail.com","phone":"0493252977"}
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='merckx.charlotte@gmail.com', customer_name='Charlotte Merckx'
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Customer email extracted: merckx.charlotte@gmail.com
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #32
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Email content length: 2231 characters
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: merckx.charlotte@gmail.com
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG]   - toEmail: merckx.charlotte@gmail.com
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #32
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG]   - textContent length: 2231 characters
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Email validation passed for: merckx.charlotte@gmail.com
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] Email sent successfully to: merckx.charlotte@gmail.com
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-15 09:21:38] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Tim Naets","email":"timnaets@gmail.com","phone":"015276343"}
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 33
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 33
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 33
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Found 1 order items
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Tim Naets","email":"timnaets@gmail.com","phone":"015276343"}
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='timnaets@gmail.com', customer_name='Tim Naets'
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Customer email extracted: timnaets@gmail.com
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #33
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Email content length: 2065 characters
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: timnaets@gmail.com
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG]   - toEmail: timnaets@gmail.com
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #33
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG]   - textContent length: 2065 characters
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Email validation passed for: timnaets@gmail.com
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] Email sent successfully to: timnaets@gmail.com
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-15 12:19:18] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Julie Ennekens","email":"julie.ennekens@gmail.com","phone":"0472"}
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 34
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 34
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 34
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Found 4 order items
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Julie Ennekens","email":"julie.ennekens@gmail.com","phone":"0472"}
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='julie.ennekens@gmail.com', customer_name='Julie Ennekens'
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Customer email extracted: julie.ennekens@gmail.com
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #34
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Email content length: 2289 characters
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: julie.ennekens@gmail.com
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG]   - toEmail: julie.ennekens@gmail.com
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #34
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG]   - textContent length: 2289 characters
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Email validation passed for: julie.ennekens@gmail.com
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] Email sent successfully to: julie.ennekens@gmail.com
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-16 15:50:47] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Simon Vranckx ","email":"stijn_vranckx@hotmail.com","phone":"0485123950","tablePreference":"Verrassende mensen met enthousiaste verhalen"}
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 35
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 35
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 35
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Simon Vranckx ","email":"stijn_vranckx@hotmail.com","phone":"0485123950","tablePreference":"Verrassende mensen met enthousiaste verhalen"}
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='stijn_vranckx@hotmail.com', customer_name='Simon Vranckx'
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Customer email extracted: stijn_vranckx@hotmail.com
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #35
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Email content length: 2215 characters
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: stijn_vranckx@hotmail.com
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG]   - toEmail: stijn_vranckx@hotmail.com
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #35
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG]   - textContent length: 2215 characters
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Email validation passed for: stijn_vranckx@hotmail.com
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] Email sent successfully to: stijn_vranckx@hotmail.com
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-16 20:36:17] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Schelfhout ","email":"toon.schelfhout@gmail.com","phone":"0496784939"}
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 36
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 36
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 36
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Schelfhout ","email":"toon.schelfhout@gmail.com","phone":"0496784939"}
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='toon.schelfhout@gmail.com', customer_name='Schelfhout'
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Customer email extracted: toon.schelfhout@gmail.com
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #36
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Email content length: 2120 characters
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: toon.schelfhout@gmail.com
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG]   - toEmail: toon.schelfhout@gmail.com
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #36
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG]   - textContent length: 2120 characters
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Email validation passed for: toon.schelfhout@gmail.com
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] Email sent successfully to: toon.schelfhout@gmail.com
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-17 17:20:27] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Wim Appelmans","email":"wimappelmans@gmail.com","phone":"0485864799"}
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 37
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 37
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 37
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Wim Appelmans","email":"wimappelmans@gmail.com","phone":"0485864799"}
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='wimappelmans@gmail.com', customer_name='Wim Appelmans'
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Customer email extracted: wimappelmans@gmail.com
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #37
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Email content length: 2221 characters
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: wimappelmans@gmail.com
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG]   - toEmail: wimappelmans@gmail.com
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #37
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG]   - textContent length: 2221 characters
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Email validation passed for: wimappelmans@gmail.com
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] Email sent successfully to: wimappelmans@gmail.com
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 08:52:48] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Ruth Stevens","email":"ruthstevens17@hotmail.com","phone":"0475920029","tablePreference":"(Juf) Inge en eventuele andere vrienden"}
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 38
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 38
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 38
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Ruth Stevens","email":"ruthstevens17@hotmail.com","phone":"0475920029","tablePreference":"(Juf) Inge en eventuele andere vrienden"}
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='ruthstevens17@hotmail.com', customer_name='Ruth Stevens'
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Customer email extracted: ruthstevens17@hotmail.com
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #38
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Email content length: 2235 characters
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: ruthstevens17@hotmail.com
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG]   - toEmail: ruthstevens17@hotmail.com
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #38
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG]   - textContent length: 2235 characters
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Email validation passed for: ruthstevens17@hotmail.com
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] Email sent successfully to: ruthstevens17@hotmail.com
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 09:54:23] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Katrien Guffens","email":"dauwe.guffens@gmail.com","phone":"0465038817","tablePreference":"Nathalie Luyckx en ouders max (klas 2kb)"}
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 39
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 39
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 39
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Katrien Guffens","email":"dauwe.guffens@gmail.com","phone":"0465038817","tablePreference":"Nathalie Luyckx en ouders max (klas 2kb)"}
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='dauwe.guffens@gmail.com', customer_name='Katrien Guffens'
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Customer email extracted: dauwe.guffens@gmail.com
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #39
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Email content length: 2312 characters
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: dauwe.guffens@gmail.com
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG]   - toEmail: dauwe.guffens@gmail.com
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #39
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG]   - textContent length: 2312 characters
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Email validation passed for: dauwe.guffens@gmail.com
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] Email sent successfully to: dauwe.guffens@gmail.com
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 12:37:29] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Fam. Cornelis ","email":"saarmeylemans.mtb@gmail.com","phone":"0479472093"}
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 40
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 40
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 40
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Fam. Cornelis ","email":"saarmeylemans.mtb@gmail.com","phone":"0479472093"}
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='saarmeylemans.mtb@gmail.com', customer_name='Fam. Cornelis'
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Customer email extracted: saarmeylemans.mtb@gmail.com
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #40
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Email content length: 2154 characters
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: saarmeylemans.mtb@gmail.com
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG]   - toEmail: saarmeylemans.mtb@gmail.com
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #40
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG]   - textContent length: 2154 characters
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Email validation passed for: saarmeylemans.mtb@gmail.com
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] Email sent successfully to: saarmeylemans.mtb@gmail.com
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 19:03:36] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Tinne Buelens","email":"buelenstinne@gmail.com","phone":"0479717813"}
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 41
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 41
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 41
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Tinne Buelens","email":"buelenstinne@gmail.com","phone":"0479717813"}
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='buelenstinne@gmail.com', customer_name='Tinne Buelens'
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Customer email extracted: buelenstinne@gmail.com
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #41
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Email content length: 2222 characters
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: buelenstinne@gmail.com
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG]   - toEmail: buelenstinne@gmail.com
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #41
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG]   - textContent length: 2222 characters
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Email validation passed for: buelenstinne@gmail.com
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] Email sent successfully to: buelenstinne@gmail.com
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 22:59:10] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Katleen Vandeput ","email":"katleenvandeput@hotmail.com","tablePreference":"Mil uit klasje van juf Anneleen "}
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 42
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 42
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 42
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Katleen Vandeput ","email":"katleenvandeput@hotmail.com","tablePreference":"Mil uit klasje van juf Anneleen "}
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, tablePreference
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='katleenvandeput@hotmail.com', customer_name='Katleen Vandeput'
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Customer email extracted: katleenvandeput@hotmail.com
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #42
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Email content length: 2288 characters
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: katleenvandeput@hotmail.com
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG]   - toEmail: katleenvandeput@hotmail.com
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #42
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG]   - textContent length: 2288 characters
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Email validation passed for: katleenvandeput@hotmail.com
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-18 23:09:12] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] Email sent successfully to: katleenvandeput@hotmail.com
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-18 23:09:13] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Brechtje Jacobs","email":"brechtje.j@gmail.com"}
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 43
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 43
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 43
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Brechtje Jacobs","email":"brechtje.j@gmail.com"}
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='brechtje.j@gmail.com', customer_name='Brechtje Jacobs'
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Customer email extracted: brechtje.j@gmail.com
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #43
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Email content length: 2105 characters
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: brechtje.j@gmail.com
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG]   - toEmail: brechtje.j@gmail.com
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #43
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG]   - textContent length: 2105 characters
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Email validation passed for: brechtje.j@gmail.com
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-19 09:47:24] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-19 09:47:25] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-19 09:47:25] [SIMPLECART EMAIL DEBUG] Email sent successfully to: brechtje.j@gmail.com
+[2026-01-19 09:47:25] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-19 09:47:25] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-19 09:47:25] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Isabelle Van den Bosch","email":"isabelle_v_d_b@hotmail.com","phone":"0495639141"}
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 44
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 44
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 44
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Isabelle Van den Bosch","email":"isabelle_v_d_b@hotmail.com","phone":"0495639141"}
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='isabelle_v_d_b@hotmail.com', customer_name='Isabelle Van den Bosch'
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Customer email extracted: isabelle_v_d_b@hotmail.com
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #44
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Email content length: 2244 characters
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: isabelle_v_d_b@hotmail.com
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG]   - toEmail: isabelle_v_d_b@hotmail.com
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #44
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG]   - textContent length: 2244 characters
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Email validation passed for: isabelle_v_d_b@hotmail.com
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] Email sent successfully to: isabelle_v_d_b@hotmail.com
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-19 12:38:23] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Karen Van Eycken","email":"karen.vaneycken@hotmail.com","phone":"0498270991","tablePreference":"Graag bij Helena, Hannah en Miel van 2KA"}
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 45
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 45
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 45
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Karen Van Eycken","email":"karen.vaneycken@hotmail.com","phone":"0498270991","tablePreference":"Graag bij Helena, Hannah en Miel van 2KA"}
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='karen.vaneycken@hotmail.com', customer_name='Karen Van Eycken'
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Customer email extracted: karen.vaneycken@hotmail.com
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #45
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Email content length: 2247 characters
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: karen.vaneycken@hotmail.com
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG]   - toEmail: karen.vaneycken@hotmail.com
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #45
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG]   - textContent length: 2247 characters
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Email validation passed for: karen.vaneycken@hotmail.com
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] Email sent successfully to: karen.vaneycken@hotmail.com
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-19 12:46:15] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Juf Kay","email":"kay.taekels@coloma.be","phone":"0499146488"}
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 46
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 46
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 46
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Juf Kay","email":"kay.taekels@coloma.be","phone":"0499146488"}
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='kay.taekels@coloma.be', customer_name='Juf Kay'
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Customer email extracted: kay.taekels@coloma.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #46
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Email content length: 2209 characters
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: kay.taekels@coloma.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG]   - toEmail: kay.taekels@coloma.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #46
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG]   - textContent length: 2209 characters
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Email validation passed for: kay.taekels@coloma.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] Email sent successfully to: kay.taekels@coloma.be
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-19 21:36:35] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Kasper Noten Wouters ","email":"mark.kristien@gmail.com","phone":"0478595409"}
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 47
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 47
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 47
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Kasper Noten Wouters ","email":"mark.kristien@gmail.com","phone":"0478595409"}
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='mark.kristien@gmail.com', customer_name='Kasper Noten Wouters'
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Customer email extracted: mark.kristien@gmail.com
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #47
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Email content length: 2164 characters
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: mark.kristien@gmail.com
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG]   - toEmail: mark.kristien@gmail.com
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #47
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG]   - textContent length: 2164 characters
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Email validation passed for: mark.kristien@gmail.com
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] Email sent successfully to: mark.kristien@gmail.com
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-21 18:58:52] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Marie Jo Vanhove","email":"sofiedebock@hotmail.com","phone":"0483514935","tablePreference":"Maura Dierick"}
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 48
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 48
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 48
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Marie Jo Vanhove","email":"sofiedebock@hotmail.com","phone":"0483514935","tablePreference":"Maura Dierick"}
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='sofiedebock@hotmail.com', customer_name='Marie Jo Vanhove'
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Customer email extracted: sofiedebock@hotmail.com
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #48
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Email content length: 2287 characters
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: sofiedebock@hotmail.com
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG]   - toEmail: sofiedebock@hotmail.com
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #48
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG]   - textContent length: 2287 characters
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Email validation passed for: sofiedebock@hotmail.com
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] Email sent successfully to: sofiedebock@hotmail.com
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-21 21:13:22] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Maura Dierick","email":"maura.dierick@gmail.com","tablePreference":"Marie Jo van Hove "}
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 49
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 49
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 49
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Maura Dierick","email":"maura.dierick@gmail.com","tablePreference":"Marie Jo van Hove "}
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, tablePreference
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='maura.dierick@gmail.com', customer_name='Maura Dierick'
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Customer email extracted: maura.dierick@gmail.com
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #49
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Email content length: 2193 characters
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: maura.dierick@gmail.com
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG]   - toEmail: maura.dierick@gmail.com
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #49
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG]   - textContent length: 2193 characters
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Email validation passed for: maura.dierick@gmail.com
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] Email sent successfully to: maura.dierick@gmail.com
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-21 21:13:39] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Koen De jonckheere","email":"koen@lighthouseinvest.be","phone":"0497655613"}
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 50
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 50
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 50
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Koen De jonckheere","email":"koen@lighthouseinvest.be","phone":"0497655613"}
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='koen@lighthouseinvest.be', customer_name='Koen De jonckheere'
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Customer email extracted: koen@lighthouseinvest.be
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #50
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Email content length: 2162 characters
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: koen@lighthouseinvest.be
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG]   - toEmail: koen@lighthouseinvest.be
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #50
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG]   - textContent length: 2162 characters
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Email validation passed for: koen@lighthouseinvest.be
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-23 18:36:02] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-23 18:36:03] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-23 18:36:03] [SIMPLECART EMAIL DEBUG] Email sent successfully to: koen@lighthouseinvest.be
+[2026-01-23 18:36:03] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-23 18:36:03] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-23 18:36:03] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Wouter Haagen","email":"wouter.chiara@hotmail.com","phone":"0485109497","tablePreference":"Lien Huysmans"}
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 51
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 51
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 51
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Wouter Haagen","email":"wouter.chiara@hotmail.com","phone":"0485109497","tablePreference":"Lien Huysmans"}
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='wouter.chiara@hotmail.com', customer_name='Wouter Haagen'
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Customer email extracted: wouter.chiara@hotmail.com
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #51
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Email content length: 2211 characters
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: wouter.chiara@hotmail.com
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG]   - toEmail: wouter.chiara@hotmail.com
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #51
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG]   - textContent length: 2211 characters
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Email validation passed for: wouter.chiara@hotmail.com
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-24 08:37:26] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-24 08:37:27] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-24 08:37:27] [SIMPLECART EMAIL DEBUG] Email sent successfully to: wouter.chiara@hotmail.com
+[2026-01-24 08:37:27] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-24 08:37:27] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-24 08:37:27] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Nathalie Luyckx","email":"nathalieluyckx2013@gmail.com","phone":"0476843088"}
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 52
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 52
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 52
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Nathalie Luyckx","email":"nathalieluyckx2013@gmail.com","phone":"0476843088"}
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='nathalieluyckx2013@gmail.com', customer_name='Nathalie Luyckx'
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Customer email extracted: nathalieluyckx2013@gmail.com
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #52
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Email content length: 2161 characters
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: nathalieluyckx2013@gmail.com
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG]   - toEmail: nathalieluyckx2013@gmail.com
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #52
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG]   - textContent length: 2161 characters
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Email validation passed for: nathalieluyckx2013@gmail.com
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] Email sent successfully to: nathalieluyckx2013@gmail.com
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-24 09:09:04] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Emy Lamon (Mama v. Max 2KB)","email":"emy.lamon@gmail.com","phone":"0479909278","tablePreference":"Katrien Guffens (Mama August 2KB) & Nathalie (Mama Lucas 2KB)"}
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 53
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 53
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 53
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Emy Lamon (Mama v. Max 2KB)","email":"emy.lamon@gmail.com","phone":"0479909278","tablePreference":"Katrien Guffens (Mama August 2KB) & Nathalie (Mama Lucas 2KB)"}
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='emy.lamon@gmail.com', customer_name='Emy Lamon (Mama v. Max 2KB)'
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Customer email extracted: emy.lamon@gmail.com
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #53
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Email content length: 2282 characters
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: emy.lamon@gmail.com
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG]   - toEmail: emy.lamon@gmail.com
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #53
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG]   - textContent length: 2282 characters
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Email validation passed for: emy.lamon@gmail.com
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] Email sent successfully to: emy.lamon@gmail.com
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-25 13:35:41] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Kyei  Racheal Adjei","email":"radjei64@hotmail.com","phone":"0499880981"}
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 54
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 54
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 54
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Kyei  Racheal Adjei","email":"radjei64@hotmail.com","phone":"0499880981"}
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='radjei64@hotmail.com', customer_name='Kyei  Racheal Adjei'
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Customer email extracted: radjei64@hotmail.com
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #54
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Email content length: 2135 characters
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: radjei64@hotmail.com
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG]   - toEmail: radjei64@hotmail.com
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #54
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG]   - textContent length: 2135 characters
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Email validation passed for: radjei64@hotmail.com
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] Email sent successfully to: radjei64@hotmail.com
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-25 13:53:42] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Yolin ostyn","email":"yolin.ostyn@gmail.com"}
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 55
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 55
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 55
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Yolin ostyn","email":"yolin.ostyn@gmail.com"}
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='yolin.ostyn@gmail.com', customer_name='Yolin ostyn'
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Customer email extracted: yolin.ostyn@gmail.com
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #55
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Email content length: 2097 characters
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: yolin.ostyn@gmail.com
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG]   - toEmail: yolin.ostyn@gmail.com
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #55
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG]   - textContent length: 2097 characters
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Email validation passed for: yolin.ostyn@gmail.com
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] Email sent successfully to: yolin.ostyn@gmail.com
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-28 21:35:55] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Amina Goovaerts","email":"amina.goovaerts@gmail.com","phone":"0498213066","tablePreference":"Wouter Haagen"}
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 56
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 56
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 56
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Found 3 order items
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Amina Goovaerts","email":"amina.goovaerts@gmail.com","phone":"0498213066","tablePreference":"Wouter Haagen"}
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='amina.goovaerts@gmail.com', customer_name='Amina Goovaerts'
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Customer email extracted: amina.goovaerts@gmail.com
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #56
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Email content length: 2287 characters
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: amina.goovaerts@gmail.com
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG]   - toEmail: amina.goovaerts@gmail.com
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #56
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG]   - textContent length: 2287 characters
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Email validation passed for: amina.goovaerts@gmail.com
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] Email sent successfully to: amina.goovaerts@gmail.com
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-29 20:24:11] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] ajax.php: Storing customer_info as JSON: {"name":"Inge Van Humbeeck ","email":"inge.vh@telenet.be","phone":"0485100783","tablePreference":"Fam. Debeuf"}
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] ajax.php: About to call simplecart_sendOrderConfirmationEmail() for order ID: 57
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] === START: simplecart_sendOrderConfirmationEmail() called for order ID: 57
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Loading email classes...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Fetching order items for order ID: 57
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Found 2 order items
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Retrieving SEPA configuration...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] SEPA config retrieved. Currency: EUR
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Creating OrderConfirmationEmail template...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Raw customer_info: {"name":"Inge Van Humbeeck ","email":"inge.vh@telenet.be","phone":"0485100783","tablePreference":"Fam. Debeuf"}
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - JSON decode result: SUCCESS (array)
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] extractCustomerInfo() - Decoded data keys: name, email, phone, tablePreference
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail constructor: customer_email='inge.vh@telenet.be', customer_name='Inge Van Humbeeck'
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] OrderConfirmationEmail template created successfully
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Customer email extracted: inge.vh@telenet.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Generating email subject and content...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Email subject: Bestellingsbevestiging #57
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Email content length: 2211 characters
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Calling EmailSender::sendTextEmail() with recipient: inge.vh@telenet.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() called
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG]   - toEmail: inge.vh@telenet.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG]   - subject: Bestellingsbevestiging #57
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG]   - textContent length: 2211 characters
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG]   - fromEmail: not provided (will use admin email)
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Email validation passed for: inge.vh@telenet.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Using defined email as sender: info@colomaenpa.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Creating icms_messaging_Handler...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Setting email handler properties...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Calling handler->send(false)...
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] handler->send() returned: TRUE
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] Email sent successfully to: inge.vh@telenet.be
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] EmailSender::sendTextEmail() returned: TRUE (success)
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] === END: simplecart_sendOrderConfirmationEmail() - SUCCESS
+[2026-01-30 15:06:27] [SIMPLECART EMAIL DEBUG] ajax.php: simplecart_sendOrderConfirmationEmail() returned: TRUE
