@@ -45,14 +45,14 @@
         <input type="hidden" name="simplecart_token" value="<{$simplecart_order_token}>">
 
         <div class="field">
-          <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}></label>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}> <span class="tag is-info is-light">verplicht</span></label>
           <div class="control">
             <input class="input" type="text" name="customer_name" value="<{$simplecart_customer.name}>" required>
           </div>
         </div>
 
         <div class="field">
-          <label class="label"><{$smarty.const._MD_SIMPLECART_EMAIL}></label>
+          <label class="label"><{$smarty.const._MD_SIMPLECART_EMAIL}> <span class="tag is-info is-light">verplicht</span></label>
           <div class="control">
             <input class="input" type="email" name="customer_email" value="<{$simplecart_customer.email}>" required>
           </div>
