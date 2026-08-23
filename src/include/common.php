@@ -1,6 +1,10 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    require_once dirname(__DIR__) . '/vendor/autoload.php';
+}
+
 if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_DIRNAME', basename(dirname(__DIR__)));
     define('SIMPLECART_URL', ICMS_URL . '/modules/' . SIMPLECART_DIRNAME . '/');
@@ -254,166 +258,182 @@ function simplecart_getCartSummary() {
 }
 
 function simplecart_getOrderPaymentData($orderId) {
-    $orderId = (int)$orderId;
-    if ($orderId <= 0) {
-        return array();
+    try {
+        $orderId = (int)$orderId;
+        if ($orderId <= 0) {
+            throw new InvalidArgumentException('Invalid order ID');
+        }
+
+        $orderHandler = simplecart_getHandler('order');
+        $order = $orderHandler->get($orderId);
+        if (!$order || $order->isNew()) {
+            throw new RuntimeException('Order ' . $orderId . ' was not found');
+        }
+
+        $config = simplecart_getSepaConfig();
+        if (empty($config['beneficiary_iban'])) {
+            throw new RuntimeException('SEPA beneficiary IBAN is not configured');
+        }
+
+        if (!class_exists('SepaQrCodeGenerator')) {
+            require_once SIMPLECART_ROOT_PATH . 'class/SepaQrCodeGenerator.php';
+        }
+        if (!class_exists('SepaQrCodeGenerator')) {
+            throw new RuntimeException('SepaQrCodeGenerator class is not available');
+        }
+
+        $generator = new SepaQrCodeGenerator($config);
+        $amount = (float)$order->getVar('total_amount');
+        $qrData = $generator->generateQrData($orderId, $amount, 'Bestelling ' . $orderId);
+        $qrImage = '';
+
+        if (class_exists('Endroid\\QrCode\\QrCode') && class_exists('Endroid\\QrCode\\Writer\\PngWriter')) {
+            $writer = new Endroid\QrCode\Writer\PngWriter();
+            $qrCode = new Endroid\QrCode\QrCode($qrData);
+            $result = $writer->write($qrCode);
+            $qrImage = 'data:image/png;base64,' . base64_encode($result->getString());
+        }
+
+        return array(
+            'qr_data' => $qrData,
+            'qr_image' => $qrImage,
+            'beneficiary_name' => $config['beneficiary_name'],
+            'beneficiary_iban' => $config['beneficiary_iban'],
+            'amount' => $amount,
+            'currency' => strtoupper($config['currency']),
+        );
+    } catch (Throwable $e) {
+        throw new RuntimeException('Failed to generate payment data for order ' . $orderId . ': ' . $e->getMessage(), 0, $e);
     }
-
-    $orderHandler = simplecart_getHandler('order');
-    $order = $orderHandler->get($orderId);
-    if (!$order || $order->isNew()) {
-        return array();
-    }
-
-    $config = simplecart_getSepaConfig();
-    if (empty($config['beneficiary_iban'])) {
-        return array();
-    }
-
-    if (!class_exists('SepaQrCodeGenerator')) {
-        require_once SIMPLECART_ROOT_PATH . 'class/SepaQrCodeGenerator.php';
-    }
-
-    $generator = new SepaQrCodeGenerator($config);
-    $amount = (float)$order->getVar('total_amount');
-    $qrData = $generator->generateQrData($orderId, $amount, 'Bestelling ' . $orderId);
-    $qrImage = '';
-
-    if (class_exists('Endroid\\QrCode\\QrCode') && class_exists('Endroid\\QrCode\\Writer\\PngWriter')) {
-        $writer = new Endroid\QrCode\Writer\PngWriter();
-        $qrCode = new Endroid\QrCode\QrCode($qrData);
-        $result = $writer->write($qrCode);
-        $qrImage = 'data:image/png;base64,' . base64_encode($result->getString());
-    }
-
-    return array(
-        'qr_data' => $qrData,
-        'qr_image' => $qrImage,
-        'beneficiary_name' => $config['beneficiary_name'],
-        'beneficiary_iban' => $config['beneficiary_iban'],
-        'amount' => $amount,
-        'currency' => strtoupper($config['currency']),
-    );
 }
 
 function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
-    if (!is_array($customer)) {
-        $customer = array();
-    }
-    if (!is_array($items) || empty($items)) {
-        throw new Exception(_MD_SIMPLECART_EMPTY_CART);
-    }
-
-    $requiredFields = array('name', 'email');
-    foreach ($requiredFields as $field) {
-        if (empty($customer[$field])) {
-            throw new Exception('Required field missing: ' . $field);
+    try {
+        if (!is_array($customer)) {
+            $customer = array();
         }
-    }
-
-    if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
-        throw new Exception('Invalid email address format');
-    }
-
-    $maxLengths = array(
-        'name' => 100,
-        'email' => 255,
-        'phone' => 50,
-        'address' => 500,
-        'tablePreference' => 100,
-        'helpendehanden' => 50,
-    );
-    foreach ($maxLengths as $field => $maxLen) {
-        if (isset($customer[$field]) && strlen((string)$customer[$field]) > $maxLen) {
-            throw new Exception("Field '{$field}' exceeds maximum length of {$maxLen} characters");
-        }
-    }
-
-    $productHandler = simplecart_getHandler('product');
-    $orderHandler = simplecart_getHandler('order');
-    $orderItemHandler = simplecart_getHandler('orderitem');
-
-    $order = $orderHandler->create();
-    $order->setVar('status', 'pending');
-    $order->setVar('timestamp', time());
-
-    $customerData = array();
-    foreach (array('name', 'email', 'phone', 'address', 'tablePreference') as $field) {
-        if (!empty($customer[$field])) {
-            $customerData[$field] = $customer[$field];
-        }
-    }
-    $customerInfoJson = json_encode($customerData);
-    $order->setVar('customer_info', $customerInfoJson, 'n');
-    $order->setVar('total_amount', 0.0);
-
-    if (!empty($customer['helpendehanden'])) {
-        $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
-    }
-
-    if (!$orderHandler->insert($order, true)) {
-        $errors = $order->getErrors();
-        $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
-        throw new Exception($errorMsg);
-    }
-
-    $orderId = (int)$order->getVar('order_id');
-    $total = 0.0;
-    $validItemCount = 0;
-    $maxQuantityPerItem = 1000;
-
-    foreach ($items as $item) {
-        $productId = isset($item['product_id']) ? (int)$item['product_id'] : (isset($item['id']) ? (int)$item['id'] : 0);
-        $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 0;
-        if ($productId <= 0 || $quantity <= 0) {
-            continue;
+        if (!is_array($items) || empty($items)) {
+            throw new Exception(_MD_SIMPLECART_EMPTY_CART);
         }
 
-        if ($quantity > $maxQuantityPerItem) {
-            throw new Exception("Quantity for product ID {$productId} exceeds maximum allowed ({$maxQuantityPerItem})");
+        $requiredFields = array('name', 'email');
+        foreach ($requiredFields as $field) {
+            if (empty($customer[$field])) {
+                throw new Exception('Required field missing: ' . $field);
+            }
         }
 
-        $product = $productHandler->get($productId);
-        if (!$product || $product->isNew() || (int)$product->getVar('active') !== 1) {
-            continue;
+        if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new Exception('Invalid email address format');
         }
 
-        $price = (float)$product->getVar('price');
-        $name = (string)$product->getVar('name');
-
-        $orderItem = $orderItemHandler->create();
-        $orderItem->setVar('order_id', $orderId);
-        $orderItem->setVar('product_name', $name);
-        $orderItem->setVar('product_price', $price);
-        $orderItem->setVar('quantity', $quantity);
-        if (!$orderItemHandler->insert($orderItem, true)) {
-            throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
+        $maxLengths = array(
+            'name' => 100,
+            'email' => 255,
+            'phone' => 50,
+            'address' => 500,
+            'tablePreference' => 100,
+            'helpendehanden' => 50,
+        );
+        foreach ($maxLengths as $field => $maxLen) {
+            if (isset($customer[$field]) && strlen((string)$customer[$field]) > $maxLen) {
+                throw new Exception("Field '{$field}' exceeds maximum length of {$maxLen} characters");
+            }
         }
 
-        $total += $quantity * $price;
-        $validItemCount++;
+        $productHandler = simplecart_getHandler('product');
+        $orderHandler = simplecart_getHandler('order');
+        $orderItemHandler = simplecart_getHandler('orderitem');
+
+        $order = $orderHandler->create();
+        $order->setVar('status', 'pending');
+        $order->setVar('timestamp', time());
+
+        $customerData = array();
+        foreach (array('name', 'email', 'phone', 'address', 'tablePreference') as $field) {
+            if (!empty($customer[$field])) {
+                $customerData[$field] = $customer[$field];
+            }
+        }
+        $customerInfoJson = json_encode($customerData);
+        if ($customerInfoJson === false) {
+            throw new RuntimeException('Failed to encode customer information');
+        }
+        $order->setVar('customer_info', $customerInfoJson, 'n');
+        $order->setVar('total_amount', 0.0);
+
+        if (!empty($customer['helpendehanden'])) {
+            $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
+        }
+
+        if (!$orderHandler->insert($order, true)) {
+            $errors = $order->getErrors();
+            $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
+            throw new Exception($errorMsg);
+        }
+
+        $orderId = (int)$order->getVar('order_id');
+        $total = 0.0;
+        $validItemCount = 0;
+        $maxQuantityPerItem = 1000;
+
+        foreach ($items as $item) {
+            $productId = isset($item['product_id']) ? (int)$item['product_id'] : (isset($item['id']) ? (int)$item['id'] : 0);
+            $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+            if ($productId <= 0 || $quantity <= 0) {
+                continue;
+            }
+
+            if ($quantity > $maxQuantityPerItem) {
+                throw new Exception("Quantity for product ID {$productId} exceeds maximum allowed ({$maxQuantityPerItem})");
+            }
+
+            $product = $productHandler->get($productId);
+            if (!$product || $product->isNew() || (int)$product->getVar('active') !== 1) {
+                continue;
+            }
+
+            $price = (float)$product->getVar('price');
+            $name = (string)$product->getVar('name');
+
+            $orderItem = $orderItemHandler->create();
+            $orderItem->setVar('order_id', $orderId);
+            $orderItem->setVar('product_name', $name);
+            $orderItem->setVar('product_price', $price);
+            $orderItem->setVar('quantity', $quantity);
+            if (!$orderItemHandler->insert($orderItem, true)) {
+                throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
+            }
+
+            $total += $quantity * $price;
+            $validItemCount++;
+        }
+
+        if ($validItemCount === 0) {
+            throw new Exception('No valid items in cart. Order cannot be placed.');
+        }
+
+        if ($total <= 0) {
+            throw new Exception('Order total must be greater than zero');
+        }
+
+        $order->setVar('total_amount', $total);
+        $orderHandler->insert($order, true);
+
+        $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
+        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+            simplecart_debugLog("Checkout submission email result for order {$orderId}: " . ($emailResult ? 'TRUE' : 'FALSE'));
+        }
+
+        return array(
+            'order_id' => $orderId,
+            'total' => $total,
+        );
+    } catch (Exception $e) {
+        throw $e;
+    } catch (Throwable $e) {
+        throw new RuntimeException('Failed to place order: ' . $e->getMessage(), 0, $e);
     }
-
-    if ($validItemCount === 0) {
-        throw new Exception('No valid items in cart. Order cannot be placed.');
-    }
-
-    if ($total <= 0) {
-        throw new Exception('Order total must be greater than zero');
-    }
-
-    $order->setVar('total_amount', $total);
-    $orderHandler->insert($order, true);
-
-    $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
-    if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
-        simplecart_debugLog("Checkout submission email result for order {$orderId}: " . ($emailResult ? 'TRUE' : 'FALSE'));
-    }
-
-    return array(
-        'order_id' => $orderId,
-        'total' => $total,
-    );
 }
 
 /**
@@ -422,45 +442,52 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
  * @param string $key Optional specific configuration key to retrieve
  * @param mixed $default Default value if key not found
  * @return array|mixed Configuration array or specific value
+ * @throws RuntimeException If the SEPA configuration cannot be loaded
+ * @throws OutOfBoundsException If a specific key is missing without a fallback value
  */
 function simplecart_getSepaConfig($key = null, $default = null) {
     static $config = null;
 
-    // Load configuration once
     if ($config === null) {
-        // Get module handler and find simplecart module
-        $moduleHandler = icms::handler('icms_module');
-        $module = $moduleHandler->getByDirname('simplecart');
+        try {
+            $moduleHandler = icms::handler('icms_module');
+            $module = $moduleHandler->getByDirname('simplecart');
 
-        if (!$module) {
-            // Fallback to defaults if module not found
-            $config = array(
-                'beneficiary_name' => 'SimpleCart Shop',
-                'beneficiary_iban' => '',
-                'beneficiary_bic' => '',
-                'currency' => 'EUR',
-            );
-        } else {
-            // Get config handler and retrieve module configuration by module ID
-            $configHandler = icms::handler('icms_config');
-            $moduleConfig = $configHandler->getConfigList($module->getVar('mid'), 0);
+            if (!$module) {
+                $config = array(
+                    'beneficiary_name' => 'SimpleCart Shop',
+                    'beneficiary_iban' => '',
+                    'beneficiary_bic' => '',
+                    'currency' => 'EUR',
+                );
+            } else {
+                $configHandler = icms::handler('icms_config');
+                $moduleConfig = $configHandler->getConfigList($module->getVar('mid'), 0);
 
-            // Build config array from module settings
-            $config = array(
-                'beneficiary_name' => isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'SimpleCart Shop',
-                'beneficiary_iban' => isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : '',
-                'beneficiary_bic' => isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : '',
-                'currency' => isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'EUR',
-            );
+                $config = array(
+                    'beneficiary_name' => isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'SimpleCart Shop',
+                    'beneficiary_iban' => isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : '',
+                    'beneficiary_bic' => isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : '',
+                    'currency' => isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'EUR',
+                );
+            }
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to load SEPA configuration: ' . $e->getMessage(), 0, $e);
         }
     }
 
-    // Return specific key or entire config
     if ($key === null) {
         return $config;
     }
 
-    return $config[$key] ?? $default;
+    if (!array_key_exists($key, $config)) {
+        if (func_num_args() > 1) {
+            return $default;
+        }
+        throw new OutOfBoundsException("SEPA config key '{$key}' does not exist.");
+    }
+
+    return $config[$key];
 }
 
 /**
