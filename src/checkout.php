@@ -53,7 +53,11 @@ $orderId = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 if (!empty($_GET['success']) && $orderId > 0) {
     $checkoutSuccess = true;
     $checkoutMessage = _MD_SIMPLECART_ORDER_SUCCESS . ' #' . $orderId;
-    $paymentInfo = simplecart_getOrderPaymentData($orderId);
+    try {
+        $paymentInfo = simplecart_getOrderPaymentData($orderId);
+    } catch (Exception $e) {
+        $paymentInfo = array();
+    }
 }
 
 $cartSummary = simplecart_getCartSummary();
