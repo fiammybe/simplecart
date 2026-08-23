@@ -12,6 +12,9 @@ if ((!isset($_REQUEST['op']) || $clean_op === 'list' || $clean_op === '') && $or
 
 switch ($clean_op) {
     case 'view':
+        // Check view permission
+        simplecart_checkPermission('simplecart_order_view', '../index.php', _NOPERM);
+        
         icms_cp_header();
 
         icms::$module->displayAdminMenu(2, 'SimpleCart');
@@ -46,6 +49,9 @@ switch ($clean_op) {
             }
             $icmsAdminTpl->assign('simplecart_order_items', $rows);
             $icmsAdminTpl->assign('simplecart_order_grand_total_fmt', number_format($grand, 2));
+            
+            // Pass edit permission status to template
+            $icmsAdminTpl->assign('simplecart_can_edit_order', simplecart_hasPermission('simplecart_order_edit'));
         } else {
             $icmsAdminTpl->assign('simplecart_order_error', _AM_SIMPLECART_ORDER_NOT_FOUND);
         }
@@ -54,6 +60,9 @@ switch ($clean_op) {
         break;
 
     case 'changestatus':
+        // Check edit permission
+        simplecart_checkPermission('simplecart_order_edit', 'order.php', _NOPERM);
+        
         // Security: Change order status with CSRF protection via POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             redirect_header('order.php', 3, 'Invalid request method.');
@@ -81,7 +90,33 @@ switch ($clean_op) {
         redirect_header('order.php', 2, 'Order status updated.');
         exit;
 
+    case 'delete':
+        // Check delete permission
+        simplecart_checkPermission('simplecart_order_delete', 'order.php', _NOPERM);
+        
+        // Security: Delete order with CSRF protection via POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect_header('order.php', 3, 'Invalid request method.');
+            exit;
+        }
+        $token = isset($_POST['token']) ? $_POST['token'] : '';
+        if (!icms::$security->check(true, $token, 'simplecart_order_delete')) {
+            redirect_header('order.php', 3, 'Security token invalid.');
+            exit;
+        }
+        $obj = $icms_order_handler->get($order_id);
+        if (!$obj || $obj->isNew()) {
+            redirect_header('order.php', 3, 'Order not found.');
+            exit;
+        }
+        $icms_order_handler->delete($obj);
+        redirect_header('order.php', 2, _AM_SIMPLECART_ORDER_DELETED);
+        exit;
+
     default:
+        // Check view permission
+        simplecart_checkPermission('simplecart_order_view', '../index.php', _NOPERM);
+        
         icms_cp_header();
         icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
@@ -117,7 +152,17 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120));
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
         $objectTable->addCustomAction('getViewItemLink');
-        $objectTable->addCustomAction('getStatusActionLinks');
+        
+        // Only show status action links if user has edit permission
+        if (simplecart_hasPermission('simplecart_order_edit')) {
+            $objectTable->addCustomAction('getStatusActionLinks');
+        }
+        
+        // Only show delete link if user has delete permission
+        if (simplecart_hasPermission('simplecart_order_delete')) {
+            $objectTable->addCustomAction('getDeleteLink');
+        }
+        
         $icmsAdminTpl->assign('simplecart_order_table', $objectTable->fetch());
         $icmsAdminTpl->display('db:simplecart_admin_order.html.tpl');
         icms_cp_footer();

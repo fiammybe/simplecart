@@ -45,3 +45,20 @@ define('_MI_SIMPLECART_SEPA_CURRENCY', 'Munteenheid');
 define('_MI_SIMPLECART_SEPA_CURRENCY_DESC', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');
+
+// Permission names and descriptions
+define('_MI_SIMPLECART_PERM_PRODUCT_VIEW', 'Producten bekijken');
+define('_MI_SIMPLECART_PERM_PRODUCT_VIEW_DESC', 'Kan producten bekijken in het beheerdersgedeelte');
+define('_MI_SIMPLECART_PERM_PRODUCT_CREATE', 'Producten aanmaken');
+define('_MI_SIMPLECART_PERM_PRODUCT_CREATE_DESC', 'Kan nieuwe producten aanmaken');
+define('_MI_SIMPLECART_PERM_PRODUCT_EDIT', 'Producten bewerken');
+define('_MI_SIMPLECART_PERM_PRODUCT_EDIT_DESC', 'Kan bestaande producten bewerken');
+define('_MI_SIMPLECART_PERM_PRODUCT_DELETE', 'Producten verwijderen');
+define('_MI_SIMPLECART_PERM_PRODUCT_DELETE_DESC', 'Kan producten verwijderen');
+
+define('_MI_SIMPLECART_PERM_ORDER_VIEW', 'Bestellingen bekijken');
+define('_MI_SIMPLECART_PERM_ORDER_VIEW_DESC', 'Kan bestellingen bekijken in het beheerdersgedeelte');
+define('_MI_SIMPLECART_PERM_ORDER_EDIT', 'Bestellingen bewerken');
+define('_MI_SIMPLECART_PERM_ORDER_EDIT_DESC', 'Kan bestellingsstatus bewerken');
+define('_MI_SIMPLECART_PERM_ORDER_DELETE', 'Bestellingen verwijderen');
+define('_MI_SIMPLECART_PERM_ORDER_DELETE_DESC', 'Kan bestellingen verwijderen');

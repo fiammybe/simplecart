@@ -31,6 +31,11 @@ class SimplecartProductHandler extends icms_ipf_Handler {
     }
 
     public function beforeInsert(&$obj) {
+        // Check create permission
+        if (!simplecart_hasPermission('simplecart_product_create')) {
+            return false;
+        }
+        
         // Normalize price and basic validation
         $price = (float)$obj->getVar('price');
         if ($price < 0) {
@@ -43,7 +48,21 @@ class SimplecartProductHandler extends icms_ipf_Handler {
     }
 
     public function beforeUpdate(&$obj) {
+        // Check edit permission
+        if (!simplecart_hasPermission('simplecart_product_edit')) {
+            return false;
+        }
+        
         return $this->beforeInsert($obj);
+    }
+    
+    public function beforeDelete(&$obj) {
+        // Check delete permission
+        if (!simplecart_hasPermission('simplecart_product_delete')) {
+            return false;
+        }
+        
+        return true;
     }
 }
 ?>
