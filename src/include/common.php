@@ -332,7 +332,6 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
             'email' => 255,
             'phone' => 50,
             'address' => 500,
-            'tablePreference' => 100,
             'helpendehanden' => 50,
         );
         foreach ($maxLengths as $field => $maxLen) {
@@ -350,7 +349,7 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
         $order->setVar('timestamp', time());
 
         $customerData = array();
-        foreach (array('name', 'email', 'phone', 'address', 'tablePreference') as $field) {
+        foreach (array('name', 'email', 'phone', 'address') as $field) {
             if (!empty($customer[$field])) {
                 $customerData[$field] = $customer[$field];
             }

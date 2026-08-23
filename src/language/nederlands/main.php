@@ -25,8 +25,6 @@ define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
 define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
 
-define('_MD_SIMPLECART_TABLE_PREFERENCE', 'Ik wil graag aan dezelfde tafel zitten als');
-
 define('_MD_SIMPLECART_HELP', 'Hulp nodig');
 define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons tijdens het evenement helpen? Geef hieronder aan hoe je wilt helpen.');
 define('_MD_SIMPLECART_HELP_MAIL', 'Hulpvoorkeur');

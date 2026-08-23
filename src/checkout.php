@@ -10,7 +10,6 @@ $customer = array(
     'email' => '',
     'phone' => '',
     'address' => '',
-    'tablePreference' => '',
     'helpendehanden' => '',
 );
 $checkoutError = '';
@@ -24,12 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         'email' => trim((string)($_POST['customer_email'] ?? '')),
         'phone' => trim((string)($_POST['customer_phone'] ?? '')),
         'address' => trim((string)($_POST['customer_address'] ?? '')),
-        'tablePreference' => trim((string)($_POST['table_preference'] ?? '')),
         'helpendehanden' => trim((string)($_POST['helpendehanden'] ?? '')),
     );
 
     $token = isset($_POST['simplecart_token']) ? (string)$_POST['simplecart_token'] : '';
-    if (empty($token) || !icms::$security->check(true, $token, 'simplecart_checkout')) {
+    if (empty($customer['name']) || empty($customer['email'])) {
+        $checkoutError = 'Name and email are required.';
+    } elseif (empty($token) || !icms::$security->check(true, $token, 'simplecart_checkout')) {
         $checkoutError = _MD_SIMPLECART_CSRF_FAIL;
     } else {
         try {

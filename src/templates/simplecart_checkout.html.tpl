@@ -66,13 +66,6 @@
         </div>
 
         <div class="field">
-          <label class="label">Table preference</label>
-          <div class="control">
-            <input class="input" type="text" name="table_preference" value="<{$simplecart_customer.tablePreference}>">
-          </div>
-        </div>
-
-        <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
           <div class="control">
             <textarea class="textarea" name="customer_address"><{$simplecart_customer.address}></textarea>

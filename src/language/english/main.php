@@ -25,8 +25,6 @@ define('_MD_SIMPLECART_ADDRESS', 'Address');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Place Order');
 define('_MD_SIMPLECART_ORDER_ID', 'Order ID');
 
-define('_MD_SIMPLECART_TABLE_PREFERENCE', 'I would like to sit at the same table as');
-
 define('_MD_SIMPLECART_HELP', 'Help Needed');
 define('_MD_SIMPLECART_HELP_DESC', 'Would you like to help us during the event? Please indicate below how you would like to help.');
 define('_MD_SIMPLECART_HELP_1', 'Yes, I can help');
