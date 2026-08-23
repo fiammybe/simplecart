@@ -13,7 +13,6 @@ class PaymentReceivedEmail {
     private $customerName;
     private $customerPhone;
     private $customerTablePreference;
-    private $customerShift;
     private $customerHelpendehanden;
     private $sepaConfig;
     private $currency;
@@ -49,8 +48,7 @@ class PaymentReceivedEmail {
             $this->customerTablePreference = '';
         }
 
-        // Extract shift and helpende_hand from order fields
-        $this->customerShift = (string)$this->order->getVar('shift');
+        // Extract helpende_hand from order fields
         $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');
     }
 
@@ -99,10 +97,6 @@ class PaymentReceivedEmail {
         }
         if (!empty($this->customerTablePreference)) {
             $text .= _MD_SIMPLECART_TABLE_PREFERENCE . ": " . $this->customerTablePreference . "\n";
-        }
-        if (!empty($this->customerShift)) {
-            $shiftText = $this->getShiftLabel($this->customerShift);
-            $text .= _MD_SIMPLECART_ORDER_SHIFT . ": " . $shiftText . "\n";
         }
         if (!empty($this->customerHelpendehanden)) {
             $helpText = $this->getHelpLabel($this->customerHelpendehanden);
@@ -158,25 +152,6 @@ class PaymentReceivedEmail {
 
     private function formatCurrency($amount) {
         return number_format((float)$amount, 2, '.', ',') . ' ' . $this->currency;
-    }
-
-    /**
-     * Map shift value to translated label
-     *
-     * @param string $shift The shift value (e.g., "Shift 1", "Shift 2")
-     * @return string The translated shift label
-     */
-    private function getShiftLabel($shift) {
-        $shift = trim($shift);
-
-        // Map shift values to language constants
-        if (strpos($shift, '1') !== false) {
-            return defined('_MD_SIMPLECART_ORDER_SHIFT_1') ? _MD_SIMPLECART_ORDER_SHIFT_1 : $shift;
-        } elseif (strpos($shift, '2') !== false) {
-            return defined('_MD_SIMPLECART_ORDER_SHIFT_2') ? _MD_SIMPLECART_ORDER_SHIFT_2 : $shift;
-        }
-
-        return $shift;
     }
 
     /**

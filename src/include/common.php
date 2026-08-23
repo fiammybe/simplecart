@@ -64,6 +64,358 @@ function simplecart_getHandler($name) {
     return $handlers[$name];
 }
 
+function simplecart_sessionStart() {
+    if (function_exists('session_status')) {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+    } elseif (!isset($_SESSION)) {
+        @session_start();
+    }
+}
+
+function simplecart_formatMoney($amount, $currency = 'EUR') {
+    $amount = (float)$amount;
+    $formatted = number_format($amount, 2, ',', '.');
+
+    if (strtoupper($currency) === 'EUR') {
+        return '€ ' . $formatted;
+    }
+
+    return strtoupper($currency) . ' ' . $formatted;
+}
+
+function simplecart_getCart() {
+    simplecart_sessionStart();
+    $cart = isset($_SESSION['simplecart_cart']) && is_array($_SESSION['simplecart_cart']) ? $_SESSION['simplecart_cart'] : array();
+    $normalized = array();
+
+    foreach ($cart as $productId => $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $id = isset($item['product_id']) ? (int)$item['product_id'] : (int)$productId;
+        $quantity = isset($item['quantity']) ? max(1, (int)$item['quantity']) : 1;
+        $normalized[$id] = array(
+            'product_id' => $id,
+            'quantity' => $quantity,
+        );
+    }
+
+    $_SESSION['simplecart_cart'] = $normalized;
+    return $normalized;
+}
+
+function simplecart_saveCart($cart) {
+    simplecart_sessionStart();
+    $normalized = array();
+
+    if (is_array($cart)) {
+        foreach ($cart as $productId => $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $id = isset($item['product_id']) ? (int)$item['product_id'] : (int)$productId;
+            $quantity = isset($item['quantity']) ? max(1, (int)$item['quantity']) : 1;
+            $normalized[$id] = array(
+                'product_id' => $id,
+                'quantity' => $quantity,
+            );
+        }
+    }
+
+    $_SESSION['simplecart_cart'] = $normalized;
+    return $normalized;
+}
+
+function simplecart_emptyCart() {
+    return simplecart_saveCart(array());
+}
+
+function simplecart_addProductToCart($productId, $quantity = 1) {
+    $productId = (int)$productId;
+    $quantity = max(1, (int)$quantity);
+
+    if ($productId <= 0) {
+        return false;
+    }
+
+    $productHandler = simplecart_getHandler('product');
+    $product = $productHandler->get($productId);
+    if (!$product || $product->isNew() || (int)$product->getVar('active') !== 1) {
+        return false;
+    }
+
+    $cart = simplecart_getCart();
+    $existing = isset($cart[$productId]['quantity']) ? (int)$cart[$productId]['quantity'] : 0;
+    $cart[$productId] = array(
+        'product_id' => $productId,
+        'quantity' => min(1000, $existing + $quantity),
+    );
+
+    simplecart_saveCart($cart);
+    return true;
+}
+
+function simplecart_updateCartItemQuantity($productId, $quantity) {
+    $productId = (int)$productId;
+    $quantity = (int)$quantity;
+
+    if ($productId <= 0) {
+        return false;
+    }
+
+    $cart = simplecart_getCart();
+    if ($quantity <= 0) {
+        unset($cart[$productId]);
+        simplecart_saveCart($cart);
+        return true;
+    }
+
+    $cart[$productId] = array(
+        'product_id' => $productId,
+        'quantity' => min(1000, max(1, $quantity)),
+    );
+
+    simplecart_saveCart($cart);
+    return true;
+}
+
+function simplecart_removeFromCart($productId) {
+    $cart = simplecart_getCart();
+    unset($cart[(int)$productId]);
+    simplecart_saveCart($cart);
+    return true;
+}
+
+function simplecart_getProductList($onlyActive = true) {
+    $productHandler = simplecart_getHandler('product');
+    $criteria = new icms_db_criteria_Compo();
+    if ($onlyActive) {
+        $criteria->add(new icms_db_criteria_Item('active', 1));
+    }
+    $criteria->setSort('name');
+    $criteria->setOrder('ASC');
+    $products = $productHandler->getObjects($criteria, false, true);
+    $list = array();
+
+    foreach ($products as $product) {
+        $productId = (int)$product->getVar('product_id');
+        $list[$productId] = array(
+            'product_id' => $productId,
+            'name' => (string)$product->getVar('name'),
+            'price' => (float)$product->getVar('price'),
+            'description' => (string)$product->getVar('description'),
+            'price_formatted' => simplecart_formatMoney((float)$product->getVar('price')),
+        );
+    }
+
+    return $list;
+}
+
+function simplecart_getCartSummary() {
+    $cart = simplecart_getCart();
+    $products = simplecart_getProductList(true);
+    $items = array();
+    $total = 0.0;
+    $count = 0;
+
+    foreach ($cart as $productId => $item) {
+        $productId = isset($item['product_id']) ? (int)$item['product_id'] : (int)$productId;
+        if ($productId <= 0 || !isset($products[$productId])) {
+            continue;
+        }
+
+        $quantity = max(1, (int)($item['quantity'] ?? 1));
+        $product = $products[$productId];
+        $price = (float)$product['price'];
+        $subtotal = $price * $quantity;
+        $total += $subtotal;
+        $count += $quantity;
+
+        $items[] = array(
+            'product_id' => $productId,
+            'name' => $product['name'],
+            'price' => $price,
+            'price_formatted' => simplecart_formatMoney($price),
+            'quantity' => $quantity,
+            'subtotal' => $subtotal,
+            'subtotal_formatted' => simplecart_formatMoney($subtotal),
+        );
+    }
+
+    return array(
+        'items' => $items,
+        'total' => $total,
+        'count' => $count,
+        'total_formatted' => simplecart_formatMoney($total),
+    );
+}
+
+function simplecart_getOrderPaymentData($orderId) {
+    $orderId = (int)$orderId;
+    if ($orderId <= 0) {
+        return array();
+    }
+
+    $orderHandler = simplecart_getHandler('order');
+    $order = $orderHandler->get($orderId);
+    if (!$order || $order->isNew()) {
+        return array();
+    }
+
+    $config = simplecart_getSepaConfig();
+    if (empty($config['beneficiary_iban'])) {
+        return array();
+    }
+
+    if (!class_exists('SepaQrCodeGenerator')) {
+        require_once SIMPLECART_ROOT_PATH . 'class/SepaQrCodeGenerator.php';
+    }
+
+    $generator = new SepaQrCodeGenerator($config);
+    $amount = (float)$order->getVar('total_amount');
+    $qrData = $generator->generateQrData($orderId, $amount, 'Bestelling ' . $orderId);
+    $qrImage = '';
+
+    if (class_exists('Endroid\\QrCode\\QrCode') && class_exists('Endroid\\QrCode\\Writer\\PngWriter')) {
+        $writer = new Endroid\QrCode\Writer\PngWriter();
+        $qrCode = new Endroid\QrCode\QrCode($qrData);
+        $result = $writer->write($qrCode);
+        $qrImage = 'data:image/png;base64,' . base64_encode($result->getString());
+    }
+
+    return array(
+        'qr_data' => $qrData,
+        'qr_image' => $qrImage,
+        'beneficiary_name' => $config['beneficiary_name'],
+        'beneficiary_iban' => $config['beneficiary_iban'],
+        'amount' => $amount,
+        'currency' => strtoupper($config['currency']),
+    );
+}
+
+function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
+    if (!is_array($customer)) {
+        $customer = array();
+    }
+    if (!is_array($items) || empty($items)) {
+        throw new Exception(_MD_SIMPLECART_EMPTY_CART);
+    }
+
+    $requiredFields = array('name', 'email');
+    foreach ($requiredFields as $field) {
+        if (empty($customer[$field])) {
+            throw new Exception('Required field missing: ' . $field);
+        }
+    }
+
+    if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Invalid email address format');
+    }
+
+    $maxLengths = array(
+        'name' => 100,
+        'email' => 255,
+        'phone' => 50,
+        'address' => 500,
+        'tablePreference' => 100,
+        'helpendehanden' => 50,
+    );
+    foreach ($maxLengths as $field => $maxLen) {
+        if (isset($customer[$field]) && strlen((string)$customer[$field]) > $maxLen) {
+            throw new Exception("Field '{$field}' exceeds maximum length of {$maxLen} characters");
+        }
+    }
+
+    $productHandler = simplecart_getHandler('product');
+    $orderHandler = simplecart_getHandler('order');
+    $orderItemHandler = simplecart_getHandler('orderitem');
+
+    $order = $orderHandler->create();
+    $order->setVar('status', 'pending');
+    $order->setVar('timestamp', time());
+
+    $customerData = array();
+    foreach (array('name', 'email', 'phone', 'address', 'tablePreference') as $field) {
+        if (!empty($customer[$field])) {
+            $customerData[$field] = $customer[$field];
+        }
+    }
+    $customerInfoJson = json_encode($customerData);
+    $order->setVar('customer_info', $customerInfoJson, 'n');
+    $order->setVar('total_amount', 0.0);
+
+    if (!empty($customer['helpendehanden'])) {
+        $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
+    }
+
+    if (!$orderHandler->insert($order, true)) {
+        $errors = $order->getErrors();
+        $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
+        throw new Exception($errorMsg);
+    }
+
+    $orderId = (int)$order->getVar('order_id');
+    $total = 0.0;
+    $validItemCount = 0;
+    $maxQuantityPerItem = 1000;
+
+    foreach ($items as $item) {
+        $productId = isset($item['product_id']) ? (int)$item['product_id'] : (isset($item['id']) ? (int)$item['id'] : 0);
+        $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 0;
+        if ($productId <= 0 || $quantity <= 0) {
+            continue;
+        }
+
+        if ($quantity > $maxQuantityPerItem) {
+            throw new Exception("Quantity for product ID {$productId} exceeds maximum allowed ({$maxQuantityPerItem})");
+        }
+
+        $product = $productHandler->get($productId);
+        if (!$product || $product->isNew() || (int)$product->getVar('active') !== 1) {
+            continue;
+        }
+
+        $price = (float)$product->getVar('price');
+        $name = (string)$product->getVar('name');
+
+        $orderItem = $orderItemHandler->create();
+        $orderItem->setVar('order_id', $orderId);
+        $orderItem->setVar('product_name', $name);
+        $orderItem->setVar('product_price', $price);
+        $orderItem->setVar('quantity', $quantity);
+        if (!$orderItemHandler->insert($orderItem, true)) {
+            throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
+        }
+
+        $total += $quantity * $price;
+        $validItemCount++;
+    }
+
+    if ($validItemCount === 0) {
+        throw new Exception('No valid items in cart. Order cannot be placed.');
+    }
+
+    if ($total <= 0) {
+        throw new Exception('Order total must be greater than zero');
+    }
+
+    $order->setVar('total_amount', $total);
+    $orderHandler->insert($order, true);
+
+    $emailResult = simplecart_sendOrderConfirmationEmail($order, $orderId);
+    if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+        simplecart_debugLog("Checkout submission email result for order {$orderId}: " . ($emailResult ? 'TRUE' : 'FALSE'));
+    }
+
+    return array(
+        'order_id' => $orderId,
+        'total' => $total,
+    );
+}
+
 /**
  * Get SEPA configuration from module settings
  *

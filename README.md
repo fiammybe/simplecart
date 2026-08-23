@@ -4,4 +4,4 @@ A simple shopping cart for ImpressCMS. Define products, add to cart, follow orde
 This version does NOT contain a payment solution, so you have to manage that yourself. There is basic status tracking for each order in the backend.
 
 ## Technology
-The first version used Vue.js 3 for its shopping cart management. To minimize the overhead with the integration inside ImpressCMS, the javascript implementation for the shopping cart has now been replaced by AlpineJS.
+The storefront and checkout use standard PHP with ImpressCMS Smarty templates and session-backed cart storage. There is no client-side AJAX or JavaScript cart layer in the current module flow.

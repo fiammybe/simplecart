@@ -89,13 +89,6 @@ switch ($clean_op) {
         // Build criteria from request filters so the table honors URL parameters
         $criteria = new icms_db_criteria_Compo();
 
-        // Filter by shift (accept raw string, fall back to "Unassigned" handling in other places)
-        if (isset($_REQUEST['shift']) && $_REQUEST['shift'] !== '') {
-            $shift = trim((string)$_REQUEST['shift']);
-            // Use equality filter on the 'shift' field
-            $criteria->add(new icms_db_criteria_Item('shift', $shift));
-        }
-
         // Filter by status — only allow 'pending' or 'paid' (empty = no filter)
         $allowed_status = array('pending', 'paid');
         if (isset($_REQUEST['status']) && $_REQUEST['status'] !== '') {

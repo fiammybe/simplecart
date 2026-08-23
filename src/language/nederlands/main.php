@@ -2,7 +2,7 @@
 // Frontend strings
 
 define('_MD_SIMPLECART_SHOP_TITLE', 'Tickets ColoMAenPA ontbijt op 8 februari 2026');
-define('_MD_SIMPLECART_SHOP_DESC', 'Kies de tickets die u wil bestellen. U kan de shift kiezen op de afrekenpagina.');
+define('_MD_SIMPLECART_SHOP_DESC', 'Kies de tickets die u wilt bestellen. Op de afrekenpagina vult u uw gegevens en eventuele hulpvoorkeur in.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Plaats in winkelmandje');
 define('_MD_SIMPLECART_YOUR_CART', 'Winkelmandje');
 define('_MD_SIMPLECART_REMOVE', 'Verwijder');
@@ -24,19 +24,16 @@ define('_MD_SIMPLECART_PHONE', 'Telefoon');
 define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
 define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
-define('_MD_SIMPLECART_ORDER_SHIFT', 'Welke shift');
-define('_MD_SIMPLECART_ORDER_SHIFT_1', 'Shift 1 (8:00 - 9:30)');
-define('_MD_SIMPLECART_ORDER_SHIFT_2', 'Shift 2 (10:00 - 11:30)');
 
 define('_MD_SIMPLECART_TABLE_PREFERENCE', 'Ik wil graag aan dezelfde tafel zitten als');
 
 define('_MD_SIMPLECART_HELP', 'Hulp nodig');
-define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons na je shift helpen met opruimen en afwassen? Het duurt maar 30 minuten en maakt een wereld van verschil! </br>Geef hieronder aan of je beschikbaar bent om te helpen na shift 1 of shift 2.');
+define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons tijdens het evenement helpen? Geef hieronder aan hoe je wilt helpen.');
 define('_MD_SIMPLECART_HELP_MAIL', 'Hulpvoorkeur');
-define('_MD_SIMPLECART_HELP_1', 'Hulp na Shift 1');
-define('_MD_SIMPLECART_HELP_2', 'Hulp na Shift 2');
-define('_MD_SIMPLECART_HELP_3', 'Na shift 1 EN na shift 2 - ik was graag af');
-define('_MD_SIMPLECART_HELP_4', 'Geen hulp, ik kom alleen voor het ontbijt');
+define('_MD_SIMPLECART_HELP_1', 'Ja, ik kan helpen');
+define('_MD_SIMPLECART_HELP_2', 'Ik kan op een ander moment helpen');
+define('_MD_SIMPLECART_HELP_3', 'Ik kan op meerdere manieren helpen');
+define('_MD_SIMPLECART_HELP_4', 'Nee, ik kom alleen voor het ontbijt');
 
 // Besteloverzicht
 define('_MD_SIMPLECART_ORDER_SUMMARY', 'Besteloverzicht');

@@ -3,14 +3,19 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '1.3.0';
+$modversion['version'] = '2.0.1';
 $modversion['description'] = _MI_SIMPLECART_DESC;
-$modversion['author'] = 'Augment Agent';
+$modversion['author'] = 'David Janssens (fiammybe)';
 $modversion['credits'] = 'ImpressCMS, IPF';
 $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
-+
+
+$modversion['status_version'] = "2.0.0 Beta";
+$modversion['status'] = "Beta";
+$modversion['date'] = "Unreleased";
+$modversion['author_word'] = "Move from Ajax to plain old HTML again";
+
 $modversion['hasMain'] = 1;
 $modversion['hasAdmin'] = 1;
 $modversion['system_menu'] = 1;
@@ -18,11 +23,11 @@ $modversion['adminindex'] = 'admin/index.php';
 $modversion['adminmenu'] = 'admin/menu.php';
 
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
-$modversion['tables'] = array(
-    'simplecart_product',
-    'simplecart_order',
-    'simplecart_orderitem'
-);
+//$modversion['object_items'] = array(
+//    'simplecart_product',
+//    'simplecart_order',
+//    'simplecart_orderitem'
+//);
 
 
 $modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');

@@ -1,16 +1,24 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 <link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
-<style>[x-cloak] { display: none !important; }</style>
 
-<section class="section" x-data="checkoutForm('<{$simplecart_ajax_url}>', '<{$csrf_token}>', {
-  empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART|escape:'javascript'}>',
-  order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS|escape:'javascript'}>'
-})">
+<section class="section">
   <div class="container">
     <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></h1>
 
-    <!-- Cart items display -->
-    <div x-show="$store.cart.items.length > 0" x-cloak>
+    <{if $simplecart_order_success}>
+      <div class="notification is-success"><strong><{$simplecart_order_success_message}></strong></div>
+      <{if $simplecart_payment.qr_image}>
+        <div class="box has-text-centered mt-4">
+          <h3 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA}></h3>
+          <img src="<{$simplecart_payment.qr_image}>" alt="SEPA QR Code" style="max-width: 280px;">
+          <p class="help"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY}></p>
+        </div>
+      <{/if}>
+    <{elseif $simplecart_error_message}>
+      <div class="notification is-danger"><{$simplecart_error_message}></div>
+    <{/if}>
+
+    <{if !$simplecart_order_success && $simplecart_cart_items|@count}>
       <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
           <tr>
@@ -19,96 +27,88 @@
           </tr>
         </thead>
         <tbody>
-          <template x-for="item in $store.cart.items" :key="item.product_id">
-            <tr>
-              <td><span x-text="item.name"></span> × <span x-text="item.quantity"></span></td>
-              <td class="has-text-right" x-text="currency(item.price * item.quantity)"></td>
-            </tr>
-          </template>
+          <{foreach from=$simplecart_cart_items item=item}>
+          <tr>
+            <td><{$item.name}> × <{$item.quantity}></td>
+            <td class="has-text-right"><{$item.subtotal_formatted}></td>
+          </tr>
+          <{/foreach}>
         </tbody>
       </table>
 
       <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">
-        <{$smarty.const._MD_SIMPLECART_TOTAL}>: <span x-text="currency($store.cart.total)"></span>
+        <{$smarty.const._MD_SIMPLECART_TOTAL}>: <{$simplecart_cart_total_formatted}>
       </div>
 
-      <!-- Checkout form -->
-      <form @submit.prevent="placeOrder">
-          <div class="field">
-              <label class="label"><{$smarty.const._MD_SIMPLECART_SHIFT}></label>
-              <div class="control">
-                  <label class="radio">
-                      <input type="radio" name="shift" value="morning" x-model="customer.shift" required>
-                      Morning
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="shift" value="evening" x-model="customer.shift" required>
-                      Evening
-                  </label>
-              </div>
-          </div>
+      <form method="post" action="<{$simplecart_module_url}>checkout.php">
+        <input type="hidden" name="action" value="place_order">
+        <input type="hidden" name="simplecart_token" value="<{$simplecart_order_token}>">
+
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}></label>
-          <div class="control"><input class="input" x-model="customer.name" required></div>
+          <div class="control">
+            <input class="input" type="text" name="customer_name" value="<{$simplecart_customer.name}>" required>
+          </div>
         </div>
+
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_EMAIL}></label>
-          <div class="control"><input class="input" type="email" x-model="customer.email" required></div>
+          <div class="control">
+            <input class="input" type="email" name="customer_email" value="<{$simplecart_customer.email}>" required>
+          </div>
         </div>
+
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_PHONE}></label>
-          <div class="control"><input class="input" x-model="customer.phone"></div>
+          <div class="control">
+            <input class="input" type="tel" name="customer_phone" value="<{$simplecart_customer.phone}>">
+          </div>
         </div>
+
+        <div class="field">
+          <label class="label">Table preference</label>
+          <div class="control">
+            <input class="input" type="text" name="table_preference" value="<{$simplecart_customer.tablePreference}>">
+          </div>
+        </div>
+
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
-          <div class="control"><textarea class="textarea" x-model="customer.address"></textarea></div>
-        </div>
-          <div class="field">
-              <label class="label"><{$smarty.const._MD_SIMPLECART_HELP}></label>
-              <div class="control">
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="tussen_de_2_shifts" x-model="customer.helpendehanden" required>
-                      Tussen de 2 shifts
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="na_de_2de_shift" x-model="customer.helpendehanden" required>
-                      Na de 2de shift
-                  </label>
-                  <label class="radio">
-                      <input type="radio" name="helpendehanden" value="liever_niet" x-model="customer.helpendehanden" required>
-                      Liever niet
-                  </label>
-              </div>
-          </div>
-
-          <div class="field">
           <div class="control">
-            <button :disabled="submitting" class="button is-primary">
-              <span x-show="!submitting"><{$smarty.const._MD_SIMPLECART_PLACE_ORDER}></span>
-              <span x-show="submitting">Processing...</span>
-            </button>
+            <textarea class="textarea" name="customer_address"><{$simplecart_customer.address}></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_HELP}></label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="helpendehanden" value="help_1" <{if $simplecart_customer.helpendehanden == 'help_1'}>checked="checked"<{/if}> required>
+              <{$smarty.const._MD_SIMPLECART_HELP_1}>
+            </label>
+            <label class="radio">
+              <input type="radio" name="helpendehanden" value="help_2" <{if $simplecart_customer.helpendehanden == 'help_2'}>checked="checked"<{/if}> required>
+              <{$smarty.const._MD_SIMPLECART_HELP_2}>
+            </label>
+            <label class="radio">
+              <input type="radio" name="helpendehanden" value="help_3" <{if $simplecart_customer.helpendehanden == 'help_3'}>checked="checked"<{/if}> required>
+              <{$smarty.const._MD_SIMPLECART_HELP_3}>
+            </label>
+            <label class="radio">
+              <input type="radio" name="helpendehanden" value="help_4" <{if $simplecart_customer.helpendehanden == 'help_4'}>checked="checked"<{/if}> required>
+              <{$smarty.const._MD_SIMPLECART_HELP_4}>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button type="submit" class="button is-primary"><{$smarty.const._MD_SIMPLECART_PLACE_ORDER}></button>
           </div>
         </div>
       </form>
-
-      <!-- Success/Error message -->
-      <div x-show="message" x-cloak class="notification is-info mt-4" x-text="message"></div>
-
-      <!-- SEPA QR Code -->
-      <div x-show="qrCode" x-cloak class="box has-text-centered mt-4">
-        <h3 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA}></h3>
-        <img :src="qrCode" alt="SEPA QR Code" />
-        <p class="help"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY}></p>
-      </div>
-    </div>
-
-    <!-- Empty cart message -->
-    <div x-show="$store.cart.items.length === 0" class="notification is-light">
-      <{$smarty.const._MD_SIMPLECART_EMPTY_CART}>
-    </div>
+    <{elseif !$simplecart_order_success}>
+      <div class="notification is-light"><{$smarty.const._MD_SIMPLECART_EMPTY_CART}></div>
+    <{/if}>
   </div>
 </section>
-
-<!-- Load cart.js first to register Alpine store and checkoutForm, then Alpine.js -->
-<script src="<{$simplecart_module_url}>assets/js/cart.js?v=4"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

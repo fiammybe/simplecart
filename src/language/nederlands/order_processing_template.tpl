@@ -17,7 +17,6 @@
 <{if $customerEmail}><{$email_label}>: <{$customerEmail}><{/if}>
 <{if $customerPhone}><{$phone_label}>: <{$customerPhone}><{/if}>
 <{if $customerTablePreference}><{$table_pref_label}>: <{$customerTablePreference}><{/if}>
-<{if $customerShift}><{$shift_label}>: <{$customerShift}><{/if}>
 <{if $customerHelpendehanden}><{$help_label}>: <{$customerHelpendehanden}><{/if}>
 
 ----------------------------------------------------------------------
