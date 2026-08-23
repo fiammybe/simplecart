@@ -1,6 +1,6 @@
 # Security Verification – SimpleCart (ImpressCMS 2.0.1)
 
-Context: PHP8+ host, module directory `src/`, public AJAX endpoints in `ajax.php`, admin pages under `src/admin/`. Security audit and hardening completed on 2026-01-14.
+Context: PHP8+ host, module directory `src/`, standard PHP + ImpressCMS Smarty storefront flow, admin pages under `src/admin/`. The earlier AJAX-based frontend was removed and replaced with form-driven server-side processing. Security audit and hardening completed on 2026-01-14.
 
 ## Executive Summary
 

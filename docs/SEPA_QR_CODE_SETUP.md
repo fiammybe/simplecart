@@ -17,16 +17,14 @@ This implementation adds SEPA QR code generation functionality to the SimpleCart
 - **Purpose**: Wrapper class that uses SepaQrData to generate QR codes for orders
 - **Configuration**: Accepts beneficiary name, IBAN, BIC, and currency
 
-### 3. AJAX Endpoint
-- **Action**: `sepa_qr_data`
-- **Location**: `src/ajax.php`
-- **Parameters**: `order_id` (required)
-- **Response**: JSON with `qr_data` field containing EPC-formatted SEPA data
+### 3. Server-side checkout flow
+- **Order processing**: `src/checkout.php` and `src/include/common.php`
+- **Parameters**: the order ID from the successful checkout response
+- **Output**: QR data is generated in PHP and rendered in the Smarty template after the order is saved
 
-### 4. Frontend Implementation
-- **QR Code Library**: qrcode.js (CDN-based, no server dependencies)
-- **Location**: `src/assets/js/cart.js`
-- **Template**: `src/templates/simplecart_checkout.html`
+### 4. Frontend output
+- **Template**: `src/templates/simplecart_checkout.html.tpl`
+- **Rendering**: standard HTML form + Smarty output, no AJAX or JavaScript-driven QR generation is used
 
 ## Configuration
 
@@ -41,14 +39,14 @@ $config = array(
 );
 ```
 
-Update `src/ajax.php` line ~105 with your actual SEPA payment details.
+Update the SEPA payment settings in the module configuration (or the default values in `src/include/common.php`) with your actual payment details.
 
 ## How It Works
 
-1. **Order Placement**: User completes checkout and places order
-2. **QR Data Generation**: Server generates SEPA-compliant QR data via AJAX
-3. **QR Code Rendering**: Client-side JavaScript renders QR code using qrcode.js
-4. **Display**: QR code shown to user with payment instructions
+1. **Order Placement**: User completes the standard PHP checkout form and submits it.
+2. **QR Data Generation**: The server generates SEPA-compliant QR data as part of the order success page.
+3. **QR Code Rendering**: The QR image is rendered by the Smarty template as a standard `<img>` tag.
+4. **Display**: QR code shown to user with payment instructions.
 
 ## SEPA QR Code Data Format
 
@@ -83,23 +81,23 @@ Added language constants:
 
 ## Browser Compatibility
 
-- Works in all modern browsers (Chrome, Firefox, Safari, Edge)
-- Requires JavaScript enabled
-- QR code library (qrcode.js) is loaded from CDN
+- Works in all modern browsers with standard HTML rendering
+- Does not depend on client-side JavaScript for payment details
+- Uses server-rendered QR image data for checkout confirmation
 
 ## Security Notes
 
 - SEPA data is generated server-side and validated
 - Order ID is verified before generating QR code
-- CSRF protection is maintained through existing token system
+- CSRF protection is maintained through the form token system
 - No sensitive data is exposed in QR code beyond payment details
 
 ## Files Modified
 
-1. `src/ajax.php` - Added sepa_qr_data action
-2. `src/assets/js/cart.js` - Added QR code generation logic
-3. `src/templates/simplecart_checkout.html` - Added QR code display section
-4. `src/language/english/main.php` - Added language strings
+1. `src/checkout.php` - Handles successful checkout and payment data display
+2. `src/include/common.php` - Generates the PHP-side SEPA data for the order
+3. `src/templates/simplecart_checkout.html.tpl` - Renders the QR image in the Smarty template
+4. `src/language/english/main.php` - Contains the language strings
 
 ## Files Added
 
