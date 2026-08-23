@@ -15,7 +15,7 @@
         <div class="card">
           <div class="card-content">
             <p class="title is-5"><{$product.name}></p>
-            <p class="subtitle is-6 sc-card-price"><{$product.price_formatted}></p>
+            <p class="title sc-card-price"><{$product.price_formatted}></p>
             <{if $product.description}>
               <p class="content"><{$product.description}></p>
             <{/if}>
