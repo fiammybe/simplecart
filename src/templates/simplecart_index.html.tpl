@@ -52,7 +52,7 @@
                 <form method="post" action="<{$simplecart_module_url}>index.php" class="is-inline-block">
                   <input type="hidden" name="action" value="update_quantity">
                   <input type="hidden" name="product_id" value="<{$item.product_id}>">
-                  <input class="input is-small" type="number" min="1" max="1000" name="quantity" value="<{$item.quantity}>" style="width: 72px;">
+                  <input class="input is-small" type="number" min="1" max="1000" name="quantity" value="<{$item.quantity}>" style="width: 72px;" onchange="this.form.submit();">
                   <button type="submit" class="button is-small is-light">Update</button>
                 </form>
               </td>
