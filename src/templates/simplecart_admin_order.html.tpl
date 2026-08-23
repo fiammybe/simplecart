@@ -19,9 +19,9 @@
         <thead>
           <tr class="head">
             <th>Product</th>
-            <th style="text-align:right;">Unit price</th>
-            <th style="text-align:right;">Qty</th>
-            <th style="text-align:right;">Subtotal</th>
+            <th style="text-align:right;">Eenheidsprijs</th>
+            <th style="text-align:right;">Aantal</th>
+            <th style="text-align:right;">Subtotaal</th>
           </tr>
         </thead>
         <tbody>
@@ -36,13 +36,13 @@
         </tbody>
         <tfoot>
           <tr class="foot">
-            <td colspan="3" style="text-align:right;"><strong>Grand total</strong></td>
+            <td colspan="3" style="text-align:right;"><strong>Totaal</strong></td>
             <td style="text-align:right;"><strong>$<{$simplecart_order_grand_total_fmt|default:'0.00'}></strong></td>
           </tr>
         </tfoot>
       </table>
     <{else}>
-      <div class="resultMsg warnMsg">No items found for this order.</div>
+      <div class="resultMsg warnMsg">Geen elementen gevonden in deze bestelling.</div>
     <{/if}>
   <{/if}>
 
