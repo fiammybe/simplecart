@@ -5,11 +5,11 @@ class SimplecartOrderitem extends icms_ipf_Object {
     public function __construct(&$handler) {
         parent::__construct($handler);
         $this->initVar('orderitem_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('order_id', XOBJ_DTYPE_INT, 0, true, null, '', false, _MI_PLAYLISTBUILDER_ORDERITEM_ORDER_ID);
-        $this->initVar('product_name', XOBJ_DTYPE_TXTBOX, '', true, 255, '', false, _MI_PLAYLISTBUILDER_ORDERITEM_PRODUCT_NAME);
-        $this->initVar('product_price', XOBJ_DTYPE_FLOAT, 0.00, true, null, '', false, _MI_PLAYLISTBUILDER_ORDERITEM_PRODUCT_PRICE);
-        $this->initVar('quantity', XOBJ_DTYPE_INT, 1, true, null, '', false, _MI_PLAYLISTBUILDER_ORDERITEM_QUANTITY);
-        $this->initVar('subtotal', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_PLAYLISTBUILDER_ORDERITEM_SUBTOTAL);
+        $this->initVar('order_id', XOBJ_DTYPE_INT, 0, true, null, '', false, _MI_SIMPLECART_ORDERITEM_ORDER_ID);
+        $this->initVar('product_name', XOBJ_DTYPE_TXTBOX, '', true, 255, '', false, _MI_SIMPLECART_ORDERITEM_PRODUCT_NAME);
+        $this->initVar('product_price', XOBJ_DTYPE_FLOAT, 0.00, true, null, '', false, _MI_SIMPLECART_ORDERITEM_PRODUCT_PRICE);
+        $this->initVar('quantity', XOBJ_DTYPE_INT, 1, true, null, '', false, _MI_SIMPLECART_ORDERITEM_QUANTITY);
+        $this->initVar('subtotal', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDERITEM_SUBTOTAL);
 
         $this->hideFieldFromForm('orderitem_id');
         $this->setControl('quantity', 'text');

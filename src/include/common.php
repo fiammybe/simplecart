@@ -313,7 +313,7 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
             $customer = array();
         }
         if (!is_array($items) || empty($items)) {
-            throw new Exception(_MD_PLAYLISTBUILDER_EMPTY_CART);
+            throw new Exception(_MD_SIMPLECART_EMPTY_CART);
         }
 
         $requiredFields = array('name', 'email');
@@ -367,7 +367,7 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
 
         if (!$orderHandler->insert($order, true)) {
             $errors = $order->getErrors();
-            $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_PLAYLISTBUILDER_ORDER_CREATE_FAIL;
+            $errorMsg = !empty($errors) ? implode(', ', $errors) : _MD_SIMPLECART_ORDER_CREATE_FAIL;
             throw new Exception($errorMsg);
         }
 
@@ -401,7 +401,7 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
             $orderItem->setVar('product_price', $price);
             $orderItem->setVar('quantity', $quantity);
             if (!$orderItemHandler->insert($orderItem, true)) {
-                throw new Exception(_MD_PLAYLISTBUILDER_ORDERITEM_CREATE_FAIL);
+                throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
             }
 
             $total += $quantity * $price;

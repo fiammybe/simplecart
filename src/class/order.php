@@ -5,12 +5,12 @@ class SimplecartOrder extends icms_ipf_Object {
     public function __construct(&$handler) {
         parent::__construct($handler);
         $this->initVar('order_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('timestamp', XOBJ_DTYPE_LTIME, time(), false, null, '', false, _MI_PLAYLISTBUILDER_ORDER_TIMESTAMP, '', false, true, false);
-        $this->initVar('total_amount', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_PLAYLISTBUILDER_ORDER_TOTAL);
-        $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_PLAYLISTBUILDER_ORDER_STATUS);
-        $this->initVar('customer_info', XOBJ_DTYPE_TXTBOX, '', false, 500, '', false, _MI_PLAYLISTBUILDER_ORDER_CUSTOMER_INFO);
-        $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_PLAYLISTBUILDER_ORDER_CUSTOMER_INFO);
-        $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_PLAYLISTBUILDER_ORDER_HELPENDE_HAND);
+        $this->initVar('timestamp', XOBJ_DTYPE_LTIME, time(), false, null, '', false, _MI_SIMPLECART_ORDER_TIMESTAMP, '', false, true, false);
+        $this->initVar('total_amount', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDER_TOTAL);
+        $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_SIMPLECART_ORDER_STATUS);
+        $this->initVar('customer_info', XOBJ_DTYPE_TXTBOX, '', false, 500, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
+        $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
+        $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_HELPENDE_HAND);
 
         $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
 
@@ -57,7 +57,7 @@ class SimplecartOrder extends icms_ipf_Object {
                '<input type="hidden" name="op" value="delete">' .
                '<input type="hidden" name="order_id" value="' . $id . '">' .
                '<input type="hidden" name="token" value="' . htmlspecialchars($token, ENT_QUOTES) . '">' .
-               '<a href="#" onclick="if(confirm(\'' . addslashes(_AM_PLAYLISTBUILDER_ORDER_DELETE_CONFIRM) . '\')) { document.getElementById(\'' . $formId . '\').submit(); } return false;" class="icms_actionlink">Delete</a>' .
+               '<a href="#" onclick="if(confirm(\'' . addslashes(_AM_SIMPLECART_ORDER_DELETE_CONFIRM) . '\')) { document.getElementById(\'' . $formId . '\').submit(); } return false;" class="icms_actionlink">Delete</a>' .
                '</form>';
     }
 

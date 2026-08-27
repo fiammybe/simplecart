@@ -3,7 +3,7 @@
 
 <section class="section">
   <div class="container">
-    <h1 class="title is-4"><{$smarty.const._MD_PLAYLISTBUILDER_SHOP_TITLE}></h1>
+    <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_SHOP_TITLE}></h1>
 
     <{if $simplecart_message}>
       <div class="notification is-info"><{$simplecart_message}></div>
@@ -23,7 +23,7 @@
               <input type="hidden" name="action" value="add_to_cart">
               <input type="hidden" name="product_id" value="<{$product.product_id}>">
               <input type="hidden" name="quantity" value="1">
-              <button type="submit" class="button is-primary is-small"><{$smarty.const._MD_PLAYLISTBUILDER_ADD_TO_CART}></button>
+              <button type="submit" class="button is-primary is-small"><{$smarty.const._MD_SIMPLECART_ADD_TO_CART}></button>
             </form>
           </div>
         </div>
@@ -33,12 +33,12 @@
 
     <{if $simplecart_cart_items|@count}>
       <div class="box">
-        <h2 class="title is-5"><{$smarty.const._MD_PLAYLISTBUILDER_YOUR_CART}></h2>
+        <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_YOUR_CART}></h2>
         <table class="table is-fullwidth is-striped is-hoverable">
           <thead>
             <tr>
-              <th><{$smarty.const._MD_PLAYLISTBUILDER_NAME}></th>
-              <th class="has-text-right"><{$smarty.const._MD_PLAYLISTBUILDER_TOTAL}></th>
+              <th><{$smarty.const._MD_SIMPLECART_NAME}></th>
+              <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_TOTAL}></th>
               <th class="has-text-centered">Qty</th>
               <th></th>
             </tr>
@@ -60,7 +60,7 @@
                 <form method="post" action="<{$simplecart_module_url}>index.php">
                   <input type="hidden" name="action" value="remove_from_cart">
                   <input type="hidden" name="product_id" value="<{$item.product_id}>">
-                  <button type="submit" class="button is-text is-small"><{$smarty.const._MD_PLAYLISTBUILDER_REMOVE}></button>
+                  <button type="submit" class="button is-text is-small"><{$smarty.const._MD_SIMPLECART_REMOVE}></button>
                 </form>
               </td>
             </tr>
@@ -68,18 +68,18 @@
           </tbody>
         </table>
         <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">
-          <{$smarty.const._MD_PLAYLISTBUILDER_TOTAL}>: <{$simplecart_cart_total_formatted}>
+          <{$smarty.const._MD_SIMPLECART_TOTAL}>: <{$simplecart_cart_total_formatted}>
         </div>
         <div class="buttons is-justify-content-flex-end">
           <form method="post" action="<{$simplecart_module_url}>index.php">
             <input type="hidden" name="action" value="empty_cart">
-            <button type="submit" class="button is-light"><{$smarty.const._MD_PLAYLISTBUILDER_EMPTY_CART}></button>
+            <button type="submit" class="button is-light"><{$smarty.const._MD_SIMPLECART_EMPTY_CART}></button>
           </form>
-          <a href="<{$simplecart_module_url}>checkout.php" class="button is-link"><{$smarty.const._MD_PLAYLISTBUILDER_CHECKOUT}></a>
+          <a href="<{$simplecart_module_url}>checkout.php" class="button is-link"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></a>
         </div>
       </div>
     <{else}>
-      <div class="notification is-light"><{$smarty.const._MD_PLAYLISTBUILDER_EMPTY_CART}></div>
+      <div class="notification is-light"><{$smarty.const._MD_SIMPLECART_EMPTY_CART}></div>
     <{/if}>
   </div>
 </section>
