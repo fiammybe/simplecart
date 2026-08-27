@@ -13,8 +13,8 @@ $modversion['image'] = 'assets/images/module_logo.png';
 
 $modversion['status_version'] = "2.0.0";
 $modversion['status'] = "Final";
-$modversion['date'] = "27 Aug 2026";
-$modversion['author_word'] = "Move from Ajax to plain old HTML again";
+$modversion['date'] = "28 Aug 2026";
+$modversion['author_word'] = "Move from Ajax to plain old PHP/Smarty again";
 
 $modversion['hasMain'] = 1;
 $modversion['hasAdmin'] = 1;
@@ -99,4 +99,3 @@ $modversion['config'][] = array(
     'weight' => 5
 );
 
-?>
