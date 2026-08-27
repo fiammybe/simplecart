@@ -14,4 +14,3 @@ define('_AM_SIMPLECART_ORDER_VIEW', 'Order');
 define('_AM_SIMPLECART_ORDER_NOT_FOUND', 'Order not found');
 define('_AM_SIMPLECART_ORDER_DELETE_CONFIRM', 'Are you sure you want to delete this order and all its items?');
 define('_AM_SIMPLECART_ORDER_DELETED', 'Order and related items deleted successfully');
-?>

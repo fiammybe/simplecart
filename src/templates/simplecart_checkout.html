@@ -1,0 +1,254 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<link rel="stylesheet" href="<{$simplecart_module_url}>assets/css/simplecart.css">
+
+<section id="simplecart-checkout" class="section">
+  <div class="container">
+    <h1 class="title is-4">{{ t('checkout') }}</h1>
+
+    <!-- SEPA QR Code Section (shown after successful order) -->
+    <div v-if="showSepaQr" class="box mt-5">
+      <div v-if="message" class="notification is-success mb-5">{{ message }}</div>
+
+      <!-- Order Summary Section -->
+      <div class="mb-6">
+        <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY|escape}></h2>
+
+        <!-- Customer & Event Information Section -->
+        <div class="mb-5">
+          <h3 class="subtitle is-6"><{$smarty.const._MD_SIMPLECART_CUSTOMER_INFO|escape}></h3>
+          <table class="table is-fullwidth is-narrow">
+            <tbody>
+              <tr v-if="orderSummary.name">
+                <td><strong><{$smarty.const._MD_SIMPLECART_NAME|escape}></strong></td>
+                <td>{{ orderSummary.name }}</td>
+              </tr>
+              <tr v-if="orderSummary.email">
+                <td><strong><{$smarty.const._MD_SIMPLECART_EMAIL|escape}></strong></td>
+                <td>{{ orderSummary.email }}</td>
+              </tr>
+              <tr v-if="orderSummary.phone">
+                <td><strong><{$smarty.const._MD_SIMPLECART_PHONE|escape}></strong></td>
+                <td>{{ orderSummary.phone }}</td>
+              </tr>
+              <tr v-if="orderSummary.tablePreference">
+                <td><strong><{$smarty.const._MD_SIMPLECART_TABLE_PREFERENCE|escape}></strong></td>
+                <td>{{ orderSummary.tablePreference }}</td>
+              </tr>
+              <tr v-if="orderSummary.shift">
+                <td><strong><{$smarty.const._MD_SIMPLECART_ORDER_SHIFT|escape}></strong></td>
+                <td>{{ translateShift(orderSummary.shift) }}</td>
+              </tr>
+              <tr v-if="orderSummary.helpendehanden">
+                <td><strong><{$smarty.const._MD_SIMPLECART_HELP|escape}></strong></td>
+                <td>{{ translateHelp(orderSummary.helpendehanden) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cart Items Section -->
+        <div class="mb-5">
+          <h3 class="subtitle is-6"><{$smarty.const._MD_SIMPLECART_CART_ITEMS|escape}></h3>
+          <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th><{$smarty.const._MD_SIMPLECART_PRODUCT_NAME|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_QUANTITY|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_UNIT_PRICE|escape}></th>
+                <th class="has-text-right"><{$smarty.const._MD_SIMPLECART_SUBTOTAL|escape}></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in orderSummary.items" :key="item.product_id">
+                <td>{{ item.name }}</td>
+                <td class="has-text-right">{{ item.quantity }}</td>
+                <td class="has-text-right">{{ currency(item.price) }}</td>
+                <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="has-text-right"><strong><{$smarty.const._MD_SIMPLECART_GRAND_TOTAL|escape}></strong></td>
+                <td class="has-text-right"><strong>{{ currency(orderSummary.total) }}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <h2 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA|escape}></h2>
+      <p class="mb-4"><{$smarty.const._MD_SIMPLECART_SCAN_TO_PAY|escape}></p>
+      <div class="has-text-centered">
+        <div id="sepa-qr-code" class="mb-5"></div>
+
+        <!-- Payment Information -->
+        <div class="box has-background-light">
+          <div class="content">
+            <p><strong><{$smarty.const._MD_SIMPLECART_PAYMENT_INFO|escape}></strong></p>
+            <table class="table is-fullwidth is-narrow">
+              <tbody>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_BENEFICIARY|escape}></strong></td>
+                  <td>{{ sepaInfo.beneficiary_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_IBAN|escape}></strong></td>
+                  <td class="is-family-monospace">{{ sepaInfo.beneficiary_iban }}</td>
+                </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_AMOUNT|escape}></strong></td>
+                  <td>{{ currency(sepaInfo.amount) }}</td>
+                </tr>
+                <tr>
+                  <td><strong><{$smarty.const._MD_SIMPLECART_MSG|escape}></strong></td>
+                  <td>{{ t('order_id') }} {{ lastOrderId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout form (shown before order placement) -->
+    <div v-else-if="cartItems.length">
+      <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th>{{ t('name') }}</th>
+            <th class="has-text-right">{{ t('total') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in cartItems" :key="item.product_id">
+            <td>{{ item.name }} × {{ item.quantity }}</td>
+            <td class="has-text-right">{{ currency(item.price * item.quantity) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="has-text-right is-size-5 has-text-weight-semibold sc-total">{{ t('total') }}: {{ currency(total) }}</div>
+
+      <form @submit.prevent="placeOrder">
+        <!-- Shift Radio Button Group -->
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_ORDER_SHIFT|escape}></label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.shift" value="Shift 1" required>
+              <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_1|escape}>
+            </label>
+          </div>
+	        <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.shift" value="Shift 2" required>
+              <{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_2|escape}>
+            </label>
+            <p v-if="errors.shift" class="help is-danger">{{ errors.shift }}</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">{{ t('name') }}</label>
+          <div class="control"><input class="input" v-model="customer.name" required></div>
+        </div>
+        <div class="field">
+          <label class="label">{{ t('email') }}</label>
+          <div class="control"><input class="input" :class="{ 'is-danger': errors.email }" type="email" v-model="customer.email" required></div>
+          <p v-if="errors.email" class="help is-danger">{{ errors.email }}</p>
+        </div>
+        <div class="field">
+          <label class="label">{{ t('phone') }}</label>
+          <div class="control"><input class="input" v-model="customer.phone"></div>
+        </div>
+
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_TABLE_PREFERENCE|escape}></label>
+          <div class="control"><input class="input" v-model="customer.tablePreference" placeholder="e.g., John Smith"></div>
+        </div>
+
+        <!-- Helpende Hand Radio Button Group -->
+        <div class="field">
+          <label class="label"><{$smarty.const._MD_SIMPLECART_HELP|escape}></label>
+	        <p><{$smarty.const._MD_SIMPLECART_HELP_DESC}></p>"
+          <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 1" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_1|escape}>
+            </label>
+</div>
+	        <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 2" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_2|escape}>
+            </label>
+	        </div>
+	        <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 3" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_3|escape}>
+            </label>
+	        </div>
+	        <div class="control">
+            <label class="radio">
+              <input type="radio" v-model="customer.helpendehanden" value="Help 4" required>
+              <{$smarty.const._MD_SIMPLECART_HELP_4|escape}>
+            </label>
+            <p v-if="errors.helpendehanden" class="help is-danger">{{ errors.helpendehanden }}</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button :disabled="submitting" class="button is-primary">{{ t('place_order') }}</button>
+          </div>
+        </div>
+      </form>
+
+      <div v-if="message" class="notification is-info">{{ message }}</div>
+    </div>
+
+    <!-- Empty cart message (shown when no items) -->
+    <div v-else class="notification is-light">{{ t('empty_cart') }}</div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<!-- QR Code Library (qrcode.js) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="<{$simplecart_module_url}>assets/js/cart.js"></script>
+<script>
+window.SIMPLECART_BOOT && window.SIMPLECART_BOOT({
+  mount: '#simplecart-checkout',
+  ajaxUrl: '<{$simplecart_ajax_url}>',
+  currency: '<{$simplecart_currency|default:"EUR"}>',
+  i18n: {
+    checkout: '<{$smarty.const._MD_SIMPLECART_CHECKOUT}>',
+    total: '<{$smarty.const._MD_SIMPLECART_TOTAL}>',
+    name: '<{$smarty.const._MD_SIMPLECART_NAME}>',
+    email: '<{$smarty.const._MD_SIMPLECART_EMAIL}>',
+    phone: '<{$smarty.const._MD_SIMPLECART_PHONE}>',
+    address: '<{$smarty.const._MD_SIMPLECART_ADDRESS}>',
+    place_order: '<{$smarty.const._MD_SIMPLECART_PLACE_ORDER}>',
+    empty_cart: '<{$smarty.const._MD_SIMPLECART_EMPTY_CART}>',
+    order_success: '<{$smarty.const._MD_SIMPLECART_ORDER_SUCCESS}>',
+    order_id: '<{$smarty.const._MD_SIMPLECART_ORDER_ID}>',
+    shift_1: '<{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_1}>',
+    shift_2: '<{$smarty.const._MD_SIMPLECART_ORDER_SHIFT_2}>',
+    help_1: '<{$smarty.const._MD_SIMPLECART_HELP_1}>',
+    help_2: '<{$smarty.const._MD_SIMPLECART_HELP_2}>',
+    help_3: '<{$smarty.const._MD_SIMPLECART_HELP_3}>',
+    help_4: '<{$smarty.const._MD_SIMPLECART_HELP_4}>'
+  },
+  orderSummary: {
+    title: '<{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY}>',
+    customerInfo: '<{$smarty.const._MD_SIMPLECART_CUSTOMER_INFO}>',
+    cartItems: '<{$smarty.const._MD_SIMPLECART_CART_ITEMS}>',
+    productName: '<{$smarty.const._MD_SIMPLECART_PRODUCT_NAME}>',
+    quantity: '<{$smarty.const._MD_SIMPLECART_QUANTITY}>',
+    unitPrice: '<{$smarty.const._MD_SIMPLECART_UNIT_PRICE}>',
+    subtotal: '<{$smarty.const._MD_SIMPLECART_SUBTOTAL}>',
+    grandTotal: '<{$smarty.const._MD_SIMPLECART_GRAND_TOTAL}>'
+  }
+});
+</script>

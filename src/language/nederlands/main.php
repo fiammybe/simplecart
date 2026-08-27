@@ -1,14 +1,14 @@
 <?php
 // Frontend strings
 
-define('_MD_SIMPLECART_SHOP_TITLE', 'Tickets ColoMAenPA ontbijt op 8 februari 2026');
+define('_MD_SIMPLECART_SHOP_TITLE', 'Tickets ColoMAenPA Vredestraat Fuif op 11 september 2026');
 define('_MD_SIMPLECART_SHOP_DESC', 'Kies de tickets die u wilt bestellen. Op de afrekenpagina vult u uw gegevens en eventuele hulpvoorkeur in.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Plaats in winkelmandje');
 define('_MD_SIMPLECART_YOUR_CART', 'Winkelmandje');
 define('_MD_SIMPLECART_REMOVE', 'Verwijder');
 define('_MD_SIMPLECART_TOTAL', 'Totaal');
 define('_MD_SIMPLECART_CHECKOUT', 'Afrekenen');
-define('_MD_SIMPLECART_EMPTY_CART', 'Het winkelmandje is leeg');
+define('_MD_SIMPLECART_EMPTY_CART', 'Het winkelmandje leegmaken');
 
 define('_MD_SIMPLECART_CSRF_FAIL', 'Security check gefaald. Herlaad de pagina en probeer het opnieuw.');
 define('_MD_SIMPLECART_ORDER_CREATE_FAIL', 'De bestelling kon niet aangemaakt worden');
@@ -25,13 +25,13 @@ define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
 define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
 
-define('_MD_SIMPLECART_HELP', 'Hulp nodig');
+define('_MD_SIMPLECART_HELP', 'Kan je komen helpen?');
 define('_MD_SIMPLECART_HELP_DESC', 'Wil je ons tijdens het evenement helpen? Geef hieronder aan hoe je wilt helpen.');
 define('_MD_SIMPLECART_HELP_MAIL', 'Hulpvoorkeur');
-define('_MD_SIMPLECART_HELP_1', 'Ja, ik kan helpen');
-define('_MD_SIMPLECART_HELP_2', 'Ik kan op een ander moment helpen');
-define('_MD_SIMPLECART_HELP_3', 'Ik kan op meerdere manieren helpen');
-define('_MD_SIMPLECART_HELP_4', 'Nee, ik kom alleen voor het ontbijt');
+define('_MD_SIMPLECART_HELP_1', 'Ja, ik kan helpen bij de opbouw op vrijdag na school');
+define('_MD_SIMPLECART_HELP_2', 'Ik kan helpen tijdens de fuif');
+define('_MD_SIMPLECART_HELP_3', 'Ja, ik kan helpen bij de afbraak op vrijdag na de fuif');
+define('_MD_SIMPLECART_HELP_4', 'Nee, ik kom alleen voor het bar');
 
 // Besteloverzicht
 define('_MD_SIMPLECART_ORDER_SUMMARY', 'Besteloverzicht');
@@ -53,7 +53,7 @@ define('_MD_SIMPLECART_AMOUNT', 'Bedrag');
 define('_MD_SIMPLECART_MSG', 'Mededeling');
 
 // Email Confirmation
-define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging #%d');
+define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging Vredestraat Fuif #%d');
 define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Dank u voor uw bestelling!');
 define('_MD_SIMPLECART_EMAIL_GREETING', 'Beste');
 define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Bestelgegevens');
