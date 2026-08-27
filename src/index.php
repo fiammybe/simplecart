@@ -14,24 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($action) {
         case 'add_to_cart':
             if ($productId > 0 && simplecart_addProductToCart($productId, $quantity)) {
-                $cartMessage = _MD_SIMPLECART_ADD_TO_CART;
+                $cartMessage = _MD_PLAYLISTBUILDER_ADD_TO_CART;
             }
             break;
         case 'update_quantity':
             if ($productId > 0) {
                 simplecart_updateCartItemQuantity($productId, $quantity);
-                $cartMessage = _MD_SIMPLECART_TOTAL;
+                $cartMessage = _MD_PLAYLISTBUILDER_TOTAL;
             }
             break;
         case 'remove_from_cart':
             if ($productId > 0) {
                 simplecart_removeFromCart($productId);
-                $cartMessage = _MD_SIMPLECART_REMOVE;
+                $cartMessage = _MD_PLAYLISTBUILDER_REMOVE;
             }
             break;
         case 'empty_cart':
             simplecart_emptyCart();
-            $cartMessage = _MD_SIMPLECART_EMPTY_CART;
+            $cartMessage = _MD_PLAYLISTBUILDER_EMPTY_CART;
             break;
     }
 }

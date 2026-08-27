@@ -9,10 +9,10 @@ class SimplecartProduct extends icms_ipf_Object {
 
     protected function quickInit() {
         $this->initVar('product_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('name', XOBJ_DTYPE_TXTBOX, '', true, 255, '', false, _MI_SIMPLECART_PRODUCT_NAME);
-        $this->initVar('price', XOBJ_DTYPE_FLOAT, 0.00, true, null, '', false, _MI_SIMPLECART_PRODUCT_PRICE);
-        $this->initVar('description', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_PRODUCT_DESC);
-        $this->initVar('active', XOBJ_DTYPE_INT, 1, false, null, '', false, _MI_SIMPLECART_PRODUCT_ACTIVE);
+        $this->initVar('name', XOBJ_DTYPE_TXTBOX, '', true, 255, '', false, _MI_PLAYLISTBUILDER_PRODUCT_NAME);
+        $this->initVar('price', XOBJ_DTYPE_FLOAT, 0.00, true, null, '', false, _MI_PLAYLISTBUILDER_PRODUCT_PRICE);
+        $this->initVar('description', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_PLAYLISTBUILDER_PRODUCT_DESC);
+        $this->initVar('active', XOBJ_DTYPE_INT, 1, false, null, '', false, _MI_PLAYLISTBUILDER_PRODUCT_ACTIVE);
 
         $this->setControl('description', array('name' => 'textarea'));
         $this->setControl('active', 'yesno');

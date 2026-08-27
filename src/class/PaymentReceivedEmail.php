@@ -55,7 +55,7 @@ class PaymentReceivedEmail {
 
     public function getSubject() {
         $orderId = (int)$this->order->getVar('order_id');
-        return sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT, $orderId);
+        return sprintf(_MD_PLAYLISTBUILDER_PAYMENT_RECEIVED_SUBJECT, $orderId);
     }
 
     public function getTextContent() {
@@ -66,49 +66,49 @@ class PaymentReceivedEmail {
 
         $text = '';
         $text .= str_repeat('=', 70) . "\n";
-        $text .= _MD_SIMPLECART_PAYMENT_RECEIVED_HEADING . "\n";
+        $text .= _MD_PLAYLISTBUILDER_PAYMENT_RECEIVED_HEADING . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
-        $text .= _MD_SIMPLECART_EMAIL_GREETING . " " . $this->customerName . "\n\n";
-        $text .= sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE, $orderId) . "\n\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_GREETING . " " . $this->customerName . "\n\n";
+        $text .= sprintf(_MD_PLAYLISTBUILDER_PAYMENT_RECEIVED_MESSAGE, $orderId) . "\n\n";
 
         // Order Details Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DETAILS . "\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_ORDER_DETAILS . "\n";
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_ORDER_ID . ": #" . $orderId . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
+        $text .= _MD_PLAYLISTBUILDER_ORDER_ID . ": #" . $orderId . "\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
 
         // Customer Information Section
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_CUSTOMER_INFO . "\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_CUSTOMER_INFO . "\n";
         $text .= str_repeat('-', 70) . "\n";
         if (!empty($this->customerName)) {
-            $text .= _MD_SIMPLECART_NAME . ": " . $this->customerName . "\n";
+            $text .= _MD_PLAYLISTBUILDER_NAME . ": " . $this->customerName . "\n";
         }
         if (!empty($this->customerEmail)) {
-            $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+            $text .= _MD_PLAYLISTBUILDER_EMAIL . ": " . $this->customerEmail . "\n";
         }
         if (!empty($this->customerPhone)) {
-            $text .= _MD_SIMPLECART_PHONE . ": " . $this->customerPhone . "\n";
+            $text .= _MD_PLAYLISTBUILDER_PHONE . ": " . $this->customerPhone . "\n";
         }
         if (!empty($this->customerHelpendehanden)) {
             $helpText = $this->getHelpLabel($this->customerHelpendehanden);
-            $text .= _MD_SIMPLECART_HELP_MAIL . ": " . $helpText . "\n";
+            $text .= _MD_PLAYLISTBUILDER_HELP_MAIL . ": " . $helpText . "\n";
         }
         $text .= "\n";
 
         // Items Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ITEMS . "\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_ITEMS . "\n";
         $text .= str_repeat('-', 70) . "\n";
 
         // Column headers
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_NAME,
-            _MD_SIMPLECART_EMAIL_UNIT_PRICE,
-            _MD_SIMPLECART_EMAIL_QUANTITY,
-            _MD_SIMPLECART_EMAIL_SUBTOTAL
+            _MD_PLAYLISTBUILDER_NAME,
+            _MD_PLAYLISTBUILDER_EMAIL_UNIT_PRICE,
+            _MD_PLAYLISTBUILDER_EMAIL_QUANTITY,
+            _MD_PLAYLISTBUILDER_EMAIL_SUBTOTAL
         );
         $text .= str_repeat('-', 70) . "\n";
 
@@ -130,7 +130,7 @@ class PaymentReceivedEmail {
         // Total
         $text .= str_repeat('-', 70) . "\n";
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_TOTAL . ":",
+            _MD_PLAYLISTBUILDER_TOTAL . ":",
             "",
             "",
             $this->formatCurrency($totalAmount)
@@ -138,7 +138,7 @@ class PaymentReceivedEmail {
         $text .= str_repeat('=', 70) . "\n\n";
 
         // Footer
-        $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
+        $text .= _MD_PLAYLISTBUILDER_EMAIL_FOOTER . "\n\n";
         $text .= str_repeat('=', 70) . "\n";
 
         return $text;
@@ -159,13 +159,13 @@ class PaymentReceivedEmail {
 
         // Map help values to language constants
         if (strpos($help, '1') !== false) {
-            return defined('_MD_SIMPLECART_HELP_1') ? _MD_SIMPLECART_HELP_1 : $help;
+            return defined('_MD_PLAYLISTBUILDER_HELP_1') ? _MD_PLAYLISTBUILDER_HELP_1 : $help;
         } elseif (strpos($help, '2') !== false) {
-            return defined('_MD_SIMPLECART_HELP_2') ? _MD_SIMPLECART_HELP_2 : $help;
+            return defined('_MD_PLAYLISTBUILDER_HELP_2') ? _MD_PLAYLISTBUILDER_HELP_2 : $help;
         } elseif (strpos($help, '3') !== false) {
-            return defined('_MD_SIMPLECART_HELP_3') ? _MD_SIMPLECART_HELP_3 : $help;
+            return defined('_MD_PLAYLISTBUILDER_HELP_3') ? _MD_PLAYLISTBUILDER_HELP_3 : $help;
         } elseif (strpos($help, '4') !== false) {
-            return defined('_MD_SIMPLECART_HELP_4') ? _MD_SIMPLECART_HELP_4 : $help;
+            return defined('_MD_PLAYLISTBUILDER_HELP_4') ? _MD_PLAYLISTBUILDER_HELP_4 : $help;
         }
 
         return $help;
