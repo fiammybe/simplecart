@@ -6,7 +6,7 @@
     <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></h1>
 
     <{if $simplecart_order_success}>
-      <div class="notification is-success"><strong><{$simplecart_order_success_message}></strong></div>
+      <div class="notification is-success"><strong><{$simplecart_order_success_message|escape:html}></strong></div>
       <{if $simplecart_payment.qr_image}>
         <div class="box has-text-centered mt-4">
           <h3 class="title is-5"><{$smarty.const._MD_SIMPLECART_PAY_WITH_SEPA}></h3>
@@ -15,7 +15,7 @@
         </div>
       <{/if}>
     <{elseif $simplecart_error_message}>
-      <div class="notification is-danger"><{$simplecart_error_message}></div>
+      <div class="notification is-danger"><{$simplecart_error_message|escape:html}></div>
     <{/if}>
 
     <{if !$simplecart_order_success && $simplecart_cart_items|@count}>
@@ -29,7 +29,7 @@
         <tbody>
           <{foreach from=$simplecart_cart_items item=item}>
           <tr>
-            <td><{$item.name}> × <{$item.quantity}></td>
+            <td><{$item.name|escape:html}> × <{$item.quantity}></td>
             <td class="has-text-right"><{$item.subtotal_formatted}></td>
           </tr>
           <{/foreach}>
@@ -47,7 +47,7 @@
         <div class="field">
           <label class="label"><{$smarty.const._MD_SIMPLECART_NAME}> <span class="tag is-info is-light">verplicht</span></label>
           <div class="control">
-            <input class="input" type="text" name="customer_name" value="<{$simplecart_customer.name}>" required>
+            <input class="input" type="text" name="customer_name" value="<{$simplecart_customer.name|escape:html}>" required>
           </div>
         </div>
 
