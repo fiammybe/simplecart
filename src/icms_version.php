@@ -88,4 +88,15 @@ $modversion['config'][] = array(
     'weight' => 4
 );
 
+// Duplicate order confirmation email address
+$modversion['config'][] = array(
+    'name' => 'duplicate_order_email_to',
+    'title' => '_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO',
+    'description' => '_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO_DESC',
+    'formtype' => 'text',
+    'valuetype' => 'text',
+    'default' => '',
+    'weight' => 5
+);
+
 ?>

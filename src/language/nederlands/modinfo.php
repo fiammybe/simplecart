@@ -45,3 +45,5 @@ define('_MI_SIMPLECART_SEPA_CURRENCY', 'Munteenheid');
 define('_MI_SIMPLECART_SEPA_CURRENCY_DESC', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');
+define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO', 'Kopie van orderbevestiging naar');
+define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO_DESC', 'Optioneel e-mailadres dat een extra kopie van elke orderbevestiging ontvangt. Gebruik een komma- of puntkomma-gescheiden lijst indien nodig.');

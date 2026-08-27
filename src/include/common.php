@@ -444,7 +444,7 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
  * @throws RuntimeException If the SEPA configuration cannot be loaded
  * @throws OutOfBoundsException If a specific key is missing without a fallback value
  */
-function simplecart_getSepaConfig($key = null, $default = null) {
+function simplecart_getModuleConfig($key = null, $default = null) {
     static $config = null;
 
     if ($config === null) {
@@ -452,27 +452,74 @@ function simplecart_getSepaConfig($key = null, $default = null) {
             $moduleHandler = icms::handler('icms_module');
             $module = $moduleHandler->getByDirname('simplecart');
 
-            if (!$module) {
-                $config = array(
-                    'beneficiary_name' => 'SimpleCart Shop',
-                    'beneficiary_iban' => '',
-                    'beneficiary_bic' => '',
-                    'currency' => 'EUR',
-                );
-            } else {
+            $config = array(
+                'duplicate_order_email_to' => '',
+                'sepa_beneficiary_name' => 'SimpleCart Shop',
+                'sepa_beneficiary_iban' => '',
+                'sepa_beneficiary_bic' => '',
+                'sepa_currency' => 'EUR',
+            );
+
+            if ($module) {
                 $configHandler = icms::handler('icms_config');
                 $moduleConfig = $configHandler->getConfigList($module->getVar('mid'), 0);
 
-                $config = array(
-                    'beneficiary_name' => isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'SimpleCart Shop',
-                    'beneficiary_iban' => isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : '',
-                    'beneficiary_bic' => isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : '',
-                    'currency' => isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'EUR',
-                );
+                foreach ($config as $configKey => $defaultValue) {
+                    if (isset($moduleConfig[$configKey])) {
+                        $config[$configKey] = $moduleConfig[$configKey];
+                    }
+                }
             }
         } catch (Throwable $e) {
-            throw new RuntimeException('Unable to load SEPA configuration: ' . $e->getMessage(), 0, $e);
+            throw new RuntimeException('Unable to load module configuration: ' . $e->getMessage(), 0, $e);
         }
+    }
+
+    if ($key === null) {
+        return $config;
+    }
+
+    if (!array_key_exists($key, $config)) {
+        if (func_num_args() > 1) {
+            return $default;
+        }
+        throw new OutOfBoundsException("Module config key '{$key}' does not exist.");
+    }
+
+    return $config[$key];
+}
+
+function simplecart_getDuplicateOrderEmailRecipients() {
+    $configuredValue = (string)simplecart_getModuleConfig('duplicate_order_email_to', '');
+    $emails = preg_split('/[\s,;]+/', trim($configuredValue), -1, PREG_SPLIT_NO_EMPTY);
+
+    if (empty($emails)) {
+        return array();
+    }
+
+    $normalized = array();
+    foreach ($emails as $email) {
+        $email = trim($email);
+        if ($email === '') {
+            continue;
+        }
+        $normalized[] = $email;
+    }
+
+    return array_values(array_unique($normalized));
+}
+
+function simplecart_getSepaConfig($key = null, $default = null) {
+    static $config = null;
+
+    if ($config === null) {
+        $moduleConfig = simplecart_getModuleConfig();
+        $config = array(
+            'beneficiary_name' => isset($moduleConfig['sepa_beneficiary_name']) ? $moduleConfig['sepa_beneficiary_name'] : 'SimpleCart Shop',
+            'beneficiary_iban' => isset($moduleConfig['sepa_beneficiary_iban']) ? $moduleConfig['sepa_beneficiary_iban'] : '',
+            'beneficiary_bic' => isset($moduleConfig['sepa_beneficiary_bic']) ? $moduleConfig['sepa_beneficiary_bic'] : '',
+            'currency' => isset($moduleConfig['sepa_currency']) ? $moduleConfig['sepa_currency'] : 'EUR',
+        );
     }
 
     if ($key === null) {
@@ -588,6 +635,25 @@ function simplecart_sendOrderConfirmationEmail($order, $orderId) {
 
         simplecart_debugLog("Calling EmailSender::sendTextEmail() with recipient: {$customerEmail}");
         $result = EmailSender::sendTextEmail($customerEmail, $subject, $textContent);
+
+        $duplicateRecipients = simplecart_getDuplicateOrderEmailRecipients();
+        $duplicateRecipients = array_values(array_filter(array_map('trim', $duplicateRecipients), function ($email) use ($customerEmail) {
+            return $email !== '' && strtolower($email) !== strtolower($customerEmail);
+        }));
+
+        foreach ($duplicateRecipients as $duplicateRecipient) {
+            if (!filter_var($duplicateRecipient, FILTER_VALIDATE_EMAIL)) {
+                if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                    simplecart_debugLog("Skipping invalid duplicate email recipient for order {$orderId}: {$duplicateRecipient}");
+                }
+                continue;
+            }
+
+            $duplicateResult = EmailSender::sendTextEmail($duplicateRecipient, $subject, $textContent);
+            if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
+                simplecart_debugLog("Duplicate email result for order {$orderId} to {$duplicateRecipient}: " . ($duplicateResult ? 'TRUE (success)' : 'FALSE (failed)'));
+            }
+        }
 
         simplecart_debugLog("EmailSender::sendTextEmail() returned: " . ($result ? "TRUE (success)" : "FALSE (failed)"));
         simplecart_debugLog("=== END: simplecart_sendOrderConfirmationEmail() - " . ($result ? "SUCCESS" : "FAILED"));
