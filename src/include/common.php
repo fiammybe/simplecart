@@ -9,9 +9,9 @@ if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_DIRNAME', basename(dirname(__DIR__)));
     define('SIMPLECART_URL', ICMS_URL . '/modules/' . SIMPLECART_DIRNAME . '/');
     define('SIMPLECART_ROOT_PATH', ICMS_ROOT_PATH . '/modules/' . SIMPLECART_DIRNAME . '/');
-    define('SIMPLECART_VERSION', '0.08'); // Module version for cache busting
-    define('SIMPLECART_DEBUG_EMAIL', true); // Set to false to disable email debug logging
-    define('SIMPLECART_DEBUG_LOG_FILE', SIMPLECART_ROOT_PATH . 'debug_email.log');
+//    define('SIMPLECART_VERSION', '0.08'); // Module version for cache busting
+    define('SIMPLECART_DEBUG_EMAIL', false); // Set to true to enable email debug logging
+    define('SIMPLECART_DEBUG_LOG_FILE', ICMS_TRUST_PATH . '/logs/debug_email.log');
 }
 
 icms_loadLanguageFile('simplecart', 'main');
