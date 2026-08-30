@@ -15,10 +15,10 @@ class SepaQrCodeGenerator
      * Configuration for SEPA payment
      */
     private $config = array(
-        'beneficiary_name' => 'Janssens David',
-        'beneficiary_iban' => 'BE11063793878448',
-        'beneficiary_bic' => 'GKCCBEBB',
-        'currency' => 'EUR'
+        'beneficiary_name' => '',
+        'beneficiary_iban' => '',
+        'beneficiary_bic' => '',
+        'currency' => ''
     );
 
     public function __construct($config = array())
