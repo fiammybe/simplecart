@@ -106,6 +106,72 @@ class EmailSender {
     }
 
     /**
+     * Send an HTML email with a plain text alternative and inline images
+     *
+     * Uses the ImpressCMS mailer (PHPMailer subclass) directly, because icms_messaging_Handler
+     * only supports plain text bodies. The site's configured mail method is respected.
+     *
+     * @param string $toEmail
+     * @param string $subject
+     * @param string $htmlContent
+     * @param string $textContent
+     * @param array<string, string> $embeddedImages PNG binary data keyed by content id
+     * @return bool
+     */
+    public static function sendHtmlEmail(string $toEmail, string $subject, string $htmlContent, string $textContent, array $embeddedImages = []): bool
+    {
+        global $icmsConfig;
+
+        if (!function_exists('simplecart_debugLog')) {
+            require_once dirname(__DIR__) . '/include/common.php';
+        }
+
+        simplecart_debugLog("EmailSender::sendHtmlEmail() called for {$toEmail} with " . count($embeddedImages) . " embedded image(s)");
+
+        if (!self::isValidEmail($toEmail)) {
+            simplecart_debugLog("ERROR: Email validation failed for: {$toEmail}");
+
+            return false;
+        }
+
+        try {
+            $mailer = self::createMailer();
+            $mailer->From = 'info@colomaenpa.be';
+            $mailer->Sender = $mailer->From;
+            $mailer->FromName = $mailer->encodeFromName($icmsConfig['sitename']);
+            $mailer->Subject = $mailer->encodeSubject($subject);
+            $mailer->CharSet = 'utf-8';
+            $mailer->isHTML(true);
+            $mailer->Body = $htmlContent;
+            $mailer->AltBody = $textContent;
+            $mailer->addAddress($toEmail);
+
+            foreach ($embeddedImages as $contentId => $pngData) {
+                $mailer->addStringEmbeddedImage($pngData, $contentId, "{$contentId}.png", 'base64', 'image/png');
+            }
+
+            $result = (bool)$mailer->send();
+
+            simplecart_debugLog("sendHtmlEmail() to {$toEmail} returned " . ($result ? 'TRUE' : "FALSE: {$mailer->ErrorInfo}"));
+
+            return $result;
+        } catch (Throwable $e) {
+            simplecart_debugLog("EXCEPTION in EmailSender::sendHtmlEmail(): {$e->getMessage()}");
+
+            return false;
+        }
+    }
+
+    private static function createMailer(): icms_messaging_EmailHandler
+    {
+        icms_loadLanguageFile('core', 'xoopsmailerlocal');
+
+        return class_exists('XoopsMailerLocal')
+            ? new XoopsMailerLocal()
+            : new icms_messaging_EmailHandler();
+    }
+
+    /**
      * Validate email address format
      *
      * @param string $email Email address to validate

@@ -6,6 +6,9 @@
   <{if isset($simplecart_order_error)}>
     <div class="error"><{$simplecart_order_error}></div>
   <{/if}>
+  <{if isset($simplecart_order_scan_info)}>
+    <div class="resultMsg warnMsg"><{$simplecart_order_scan_info|escape}></div>
+  <{/if}>
   <{if isset($simplecart_order_single)}>
     <{$simplecart_order_single}>
   <{/if}>

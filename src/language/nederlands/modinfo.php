@@ -11,13 +11,17 @@ define('_MI_SIMPLECART_MENU_ORDERS', 'Bestellingen');
 define('_MI_SIMPLECART_PRODUCT_NAME', 'Naam');
 define('_MI_SIMPLECART_PRODUCT_PRICE', 'Prijs');
 define('_MI_SIMPLECART_PRODUCT_DESC', 'Beschrijving');
+define('_MI_SIMPLECART_PRODUCT_IMAGE', 'Afbeelding');
 define('_MI_SIMPLECART_PRODUCT_ACTIVE', 'Actief');
 
 // Order fields
 define('_MI_SIMPLECART_ORDER_TIMESTAMP', 'Datum');
 define('_MI_SIMPLECART_ORDER_TOTAL', 'Totaal');
 define('_MI_SIMPLECART_ORDER_STATUS', 'Status');
-define('_MI_SIMPLECART_ORDER_CUSTOMER_INFO', 'Klant info');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_NAME', 'Naam klant');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_EMAIL', 'E-mail klant');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_PHONE', 'Telefoon klant');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_ADDRESS', 'Adres klant');
 define('_MI_SIMPLECART_ORDER_PAYMENT_REF', 'Betalingsreferentie');
 define('_MI_SIMPLECART_ORDER_SHIFT', 'Shift');
 define('_MI_SIMPLECART_ORDER_HELPENDE_HAND', 'Helpende hand');

@@ -210,6 +210,7 @@ function simplecart_getProductList($onlyActive = true) {
             'name' => (string)$product->getVar('name'),
             'price' => (float)$product->getVar('price'),
             'description' => (string)$product->getVar('description'),
+            'image_url' => $product->getImageUrl(),
             'price_formatted' => simplecart_formatMoney((float)$product->getVar('price')),
         );
     }
@@ -347,17 +348,9 @@ function simplecart_placeOrderFromCustomerAndItems($customer, $items) {
         $order->setVar('status', 'pending');
         $order->setVar('timestamp', time());
 
-        $customerData = array();
         foreach (array('name', 'email', 'phone', 'address') as $field) {
-            if (!empty($customer[$field])) {
-                $customerData[$field] = $customer[$field];
-            }
+            $order->setVar("customer_{$field}", trim((string)($customer[$field] ?? '')));
         }
-        $customerInfoJson = json_encode($customerData);
-        if ($customerInfoJson === false) {
-            throw new RuntimeException('Failed to encode customer information');
-        }
-        $order->setVar('customer_info', $customerInfoJson, 'n');
         $order->setVar('total_amount', 0.0);
 
         if (!empty($customer['helpendehanden'])) {
@@ -722,10 +715,67 @@ function simplecart_sendPaymentReceivedEmail($order, $orderId) {
         $subject = $emailTemplate->getSubject();
         $textContent = $emailTemplate->getTextContent();
 
-        $result = EmailSender::sendTextEmail($customerEmail, $subject, $textContent);
+        if (!class_exists('OrderScanQrCode')) {
+            require_once SIMPLECART_ROOT_PATH . 'class/OrderScanQrCode.php';
+        }
 
-        return $result;
-    } catch (Exception $e) {
+        try {
+            $qrPng = OrderScanQrCode::pngFor($order->getScanUrl());
+        } catch (Throwable $e) {
+            simplecart_debugLog("Order scan QR generation failed for order {$orderId}, falling back to text email: {$e->getMessage()}");
+
+            return EmailSender::sendTextEmail($customerEmail, $subject, $textContent);
+        }
+
+        return EmailSender::sendHtmlEmail(
+            $customerEmail,
+            $subject,
+            $emailTemplate->getHtmlContent(OrderScanQrCode::CONTENT_ID),
+            $textContent,
+            [OrderScanQrCode::CONTENT_ID => $qrPng]
+        );
+    } catch (Throwable $e) {
+        simplecart_debugLog("EXCEPTION in simplecart_sendPaymentReceivedEmail(): {$e->getMessage()}");
+
         return false;
     }
+}
+
+/**
+ * Builds the item rows and grand total of an order for display
+ *
+ * @return array{
+ *     items: array<int, array{product_name: string, product_price_fmt: string, quantity: int, subtotal_fmt: string}>,
+ *     grand_total_fmt: string
+ * }
+ */
+function simplecart_getOrderItemRows(int $orderId): array
+{
+    $orderItemHandler = simplecart_getHandler('orderitem');
+    $criteria = new icms_db_criteria_Compo();
+    $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+    $criteria->setSort('orderitem_id');
+    $criteria->setOrder('ASC');
+
+    $rows = [];
+    $grandTotal = 0.0;
+
+    foreach ($orderItemHandler->getObjects($criteria, false, true) as $item) {
+        $quantity = (int)$item->getVar('quantity');
+        $price = (float)$item->getVar('product_price');
+        $subtotal = $quantity * $price;
+        $grandTotal += $subtotal;
+
+        $rows[] = [
+            'product_name' => (string)$item->getVar('product_name'),
+            'product_price_fmt' => number_format($price, 2),
+            'quantity' => $quantity,
+            'subtotal_fmt' => number_format($subtotal, 2),
+        ];
+    }
+
+    return [
+        'items' => $rows,
+        'grand_total_fmt' => number_format($grandTotal, 2),
+    ];
 }

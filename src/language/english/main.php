@@ -51,6 +51,7 @@ define('_MD_SIMPLECART_BENEFICIARY', 'Beneficiary');
 define('_MD_SIMPLECART_IBAN', 'IBAN');
 define('_MD_SIMPLECART_AMOUNT', 'Amount');
 // UNUSED: define('_MD_SIMPLECART_BIC', 'BIC');
+define('_MD_SIMPLECART_MSG', 'Payment reference');
 
 // Email Confirmation
 define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Order Confirmation #%d');
@@ -70,4 +71,17 @@ define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Please use the above information to p
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT', 'Payment Received - Order #%d');
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING', 'Payment Received!');
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We have received your payment for order #%d. Thank you!');
+
+// Order scan QR code
+define('_MD_SIMPLECART_SCAN_EMAIL_HEADING', 'Your pickup QR code');
+define('_MD_SIMPLECART_SCAN_EMAIL_TEXT', 'Show this QR code when you collect your order. We will scan it to find your order.');
+define('_MD_SIMPLECART_SCAN_TITLE', 'Order scan');
+define('_MD_SIMPLECART_SCAN_PROCESSED', 'Order processed. This is the first scan of this order.');
+define('_MD_SIMPLECART_SCAN_ALREADY_PROCESSED', 'This order was already processed on %s by %s.');
+define('_MD_SIMPLECART_SCAN_NOT_PAID', 'Warning: this order is not marked as paid.');
+define('_MD_SIMPLECART_SCAN_LOGIN_REQUIRED', 'Please log in as an administrator to view this order.');
+define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'You do not have access to this order.');
+define('_MD_SIMPLECART_SCAN_INVALID', 'This order link is invalid or the order no longer exists.');
+define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
+define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Open order in administration');
 

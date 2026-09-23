@@ -22,30 +22,13 @@ switch ($clean_op) {
             $icmsAdminTpl->assign('simplecart_order_heading', _AM_SIMPLECART_ORDER_VIEW . ' #' . (int)$obj->getVar('order_id'));
             $icmsAdminTpl->assign('simplecart_order_single', $obj->displaySingleObject(true, false, array(), true));
 
-            // Fetch order items for this order
-            $orderItemHandler = simplecart_getHandler('orderitem');
-            $criteria = new icms_db_criteria_Compo();
-            $criteria->add(new icms_db_criteria_Item('order_id', (int)$obj->getVar('order_id')));
-            $criteria->setSort('orderitem_id');
-            $criteria->setOrder('ASC');
-            $items = $orderItemHandler->getObjects($criteria, false, true);
-
-            $rows = array();
-            $grand = 0.0;
-            foreach ($items as $it) {
-                $qty = (int)$it->getVar('quantity');
-                $price = (float)$it->getVar('product_price');
-                $subtotal = $qty * $price;
-                $grand += $subtotal;
-                $rows[] = array(
-                    'product_name' => (string)$it->getVar('product_name'),
-                    'product_price_fmt' => number_format($price, 2),
-                    'quantity' => $qty,
-                    'subtotal_fmt' => number_format($subtotal, 2),
-                );
+            if ($obj->isScanned()) {
+                $icmsAdminTpl->assign('simplecart_order_scan_info', sprintf(_MD_SIMPLECART_SCAN_ALREADY_PROCESSED, $obj->getScannedAtFormatted(), $obj->getScannedByName()));
             }
-            $icmsAdminTpl->assign('simplecart_order_items', $rows);
-            $icmsAdminTpl->assign('simplecart_order_grand_total_fmt', number_format($grand, 2));
+
+            $itemRows = simplecart_getOrderItemRows((int)$obj->getVar('order_id'));
+            $icmsAdminTpl->assign('simplecart_order_items', $itemRows['items']);
+            $icmsAdminTpl->assign('simplecart_order_grand_total_fmt', $itemRows['grand_total_fmt']);
         } else {
             $icmsAdminTpl->assign('simplecart_order_error', _AM_SIMPLECART_ORDER_NOT_FOUND);
         }
@@ -76,9 +59,22 @@ switch ($clean_op) {
             redirect_header('order.php', 3, 'Invalid status.');
             exit;
         }
+        $previousStatus = (string)$obj->getVar('status', 'n');
         $obj->setVar('status', $status);
+
+        if ($status !== 'paid' || $previousStatus === 'paid') {
+            $icms_order_handler->insert($obj, true);
+            redirect_header('order.php', 2, 'Order status updated.');
+            exit;
+        }
+
+        $obj->ensureScanToken();
         $icms_order_handler->insert($obj, true);
-        redirect_header('order.php', 2, 'Order status updated.');
+
+        $mailMessage = simplecart_sendPaymentReceivedEmail($obj, $order_id) ?
+            _AM_SIMPLECART_PAYMENT_MAIL_SENT :
+            _AM_SIMPLECART_PAYMENT_MAIL_FAILED;
+        redirect_header('order.php', 3, "Order status updated. {$mailMessage}");
         exit;
 
     default:
@@ -114,6 +110,9 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));
         $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 120));
+        $objectTable->addColumn(new icms_ipf_view_Column('customer_name', 'left'));
+        $objectTable->addColumn(new icms_ipf_view_Column('customer_email', 'left'));
+        $objectTable->addColumn(new icms_ipf_view_Column('customer_phone', 'left'));
         $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120));
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
         $objectTable->addCustomAction('getViewItemLink');

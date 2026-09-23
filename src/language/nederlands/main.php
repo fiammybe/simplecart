@@ -70,3 +70,16 @@ define('_MD_SIMPLECART_MAIL_PAYMENTINFO', 'Indien de betaling via QR code niet g
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT', 'Betaling ontvangen - Bestelling #%d');
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING', 'Betaling ontvangen!');
 define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We hebben uw betaling voor bestelling #%d ontvangen. Dank u!');
+// Order scan QR code
+define('_MD_SIMPLECART_SCAN_EMAIL_HEADING', 'Uw QR-code voor het afhalen');
+define('_MD_SIMPLECART_SCAN_EMAIL_TEXT', 'Toon deze QR-code wanneer u uw bestelling komt afhalen. Wij scannen hem om uw bestelling terug te vinden.');
+define('_MD_SIMPLECART_SCAN_TITLE', 'Bestelling scannen');
+define('_MD_SIMPLECART_SCAN_PROCESSED', 'Bestelling verwerkt. Dit is de eerste scan van deze bestelling.');
+define('_MD_SIMPLECART_SCAN_ALREADY_PROCESSED', 'Deze bestelling werd al verwerkt op %s door %s.');
+define('_MD_SIMPLECART_SCAN_NOT_PAID', 'Opgelet: deze bestelling is niet als betaald gemarkeerd.');
+define('_MD_SIMPLECART_SCAN_LOGIN_REQUIRED', 'Meld u aan als beheerder om deze bestelling te bekijken.');
+define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'U heeft geen toegang tot deze bestelling.');
+define('_MD_SIMPLECART_SCAN_INVALID', 'Deze link is ongeldig of de bestelling bestaat niet meer.');
+define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
+define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Bestelling openen in het beheer');
+

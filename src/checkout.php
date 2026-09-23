@@ -77,11 +77,12 @@ if (!empty($_GET['success']) && $orderId > 0) {
             $orderDetails['total'] = (float)$order->getVar('total_amount');
             $orderDetails['total_formatted'] = simplecart_formatMoney($orderDetails['total'], 'EUR');
 
-            $customerInfoJson = (string)$order->getVar('customer_info', 'n');
-            $decodedCustomerInfo = json_decode($customerInfoJson, true);
-            if (is_array($decodedCustomerInfo)) {
-                $orderDetails['customer'] = $decodedCustomerInfo;
-            }
+            $orderDetails['customer'] = array(
+                'name' => (string)$order->getVar('customer_name', 'n'),
+                'email' => (string)$order->getVar('customer_email', 'n'),
+                'phone' => (string)$order->getVar('customer_phone', 'n'),
+                'address' => (string)$order->getVar('customer_address', 'n'),
+            );
 
             $orderItemHandler = simplecart_getHandler('orderitem');
             $criteria = new icms_db_criteria_Compo();

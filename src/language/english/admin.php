@@ -14,3 +14,5 @@ define('_AM_SIMPLECART_ORDER_VIEW', 'Order');
 define('_AM_SIMPLECART_ORDER_NOT_FOUND', 'Order not found');
 define('_AM_SIMPLECART_ORDER_DELETE_CONFIRM', 'Are you sure you want to delete this order and all its items?');
 define('_AM_SIMPLECART_ORDER_DELETED', 'Order and related items deleted successfully');
+define('_AM_SIMPLECART_PAYMENT_MAIL_SENT', 'Payment confirmation email with QR code sent to the customer.');
+define('_AM_SIMPLECART_PAYMENT_MAIL_FAILED', 'The payment confirmation email could not be sent.');

@@ -33,40 +33,10 @@ class OrderConfirmationEmail {
     }
 
     private function extractCustomerInfo() {
-        // Use 'n' format to get raw JSON without HTML decoding
-        $customerInfo = (string)$this->order->getVar('customer_info', 'n');
-
-        // Debug logging
-        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
-            require_once dirname(__DIR__) . '/include/common.php';
-            simplecart_debugLog("extractCustomerInfo() - Raw customer_info: " . substr($customerInfo, 0, 200));
-        }
-
-        // Parse customer_info as JSON
-        $customerData = json_decode($customerInfo, true);
-
-        if (defined('SIMPLECART_DEBUG_EMAIL') && SIMPLECART_DEBUG_EMAIL) {
-            simplecart_debugLog("extractCustomerInfo() - JSON decode result: " . (is_array($customerData) ? "SUCCESS (array)" : "FAILED (not array)"));
-            if (!is_array($customerData)) {
-                simplecart_debugLog("extractCustomerInfo() - JSON error: " . json_last_error_msg());
-            } else {
-                simplecart_debugLog("extractCustomerInfo() - Decoded data keys: " . implode(', ', array_keys($customerData)));
-            }
-        }
-
-        if (is_array($customerData)) {
-            // Extract all customer fields from JSON
-            $this->customerEmail = isset($customerData['email']) ? trim($customerData['email']) : '';
-            $this->customerName = isset($customerData['name']) ? trim($customerData['name']) : '';
-            $this->customerPhone = isset($customerData['phone']) ? trim($customerData['phone']) : '';
-            $this->customerAddress = isset($customerData['address']) ? trim($customerData['address']) : '';
-        } else {
-            // JSON parsing failed
-            $this->customerEmail = '';
-            $this->customerName = '';
-            $this->customerPhone = '';
-            $this->customerAddress = '';
-        }
+        $this->customerEmail = trim((string)$this->order->getVar('customer_email', 'n'));
+        $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
+        $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
+        $this->customerAddress = trim((string)$this->order->getVar('customer_address', 'n'));
 
         // Extract helpende_hand from order fields
         $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');

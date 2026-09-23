@@ -11,13 +11,20 @@ define('_MI_SIMPLECART_MENU_ORDERS', 'Orders');
 define('_MI_SIMPLECART_PRODUCT_NAME', 'Name');
 define('_MI_SIMPLECART_PRODUCT_PRICE', 'Price');
 define('_MI_SIMPLECART_PRODUCT_DESC', 'Description');
+define('_MI_SIMPLECART_PRODUCT_IMAGE', 'Image');
 define('_MI_SIMPLECART_PRODUCT_ACTIVE', 'Active');
 
 // Order fields
 define('_MI_SIMPLECART_ORDER_TIMESTAMP', 'Date');
 define('_MI_SIMPLECART_ORDER_TOTAL', 'Total');
 define('_MI_SIMPLECART_ORDER_STATUS', 'Status');
-define('_MI_SIMPLECART_ORDER_CUSTOMER_INFO', 'Customer info');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_NAME', 'Customer name');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_EMAIL', 'Customer email');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_PHONE', 'Customer phone');
+define('_MI_SIMPLECART_ORDER_CUSTOMER_ADDRESS', 'Customer address');
+define('_MI_SIMPLECART_ORDER_PAYMENT_REF', 'Payment Reference');
+define('_MI_SIMPLECART_ORDER_SHIFT', 'Shift');
+define('_MI_SIMPLECART_ORDER_HELPENDE_HAND', 'Helping Hands');
 
 // Order item fields
 define('_MI_SIMPLECART_ORDERITEM_ORDER_ID', 'Order');
@@ -40,6 +47,7 @@ define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC', 'SEPA Beneficiary BIC');
 define('_MI_SIMPLECART_SEPA_BENEFICIARY_BIC_DESC', 'The BIC (Bank Identifier Code) of the beneficiary. This is optional but recommended. Example: COBADEFFXXX');
 define('_MI_SIMPLECART_SEPA_CURRENCY', 'SEPA Currency Code');
 define('_MI_SIMPLECART_SEPA_CURRENCY_DESC', 'The ISO 4217 currency code for SEPA payments. Default is EUR (Euro). Only EUR is recommended for SEPA transfers.');
+define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
+define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO', 'Duplicate order email recipient');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO_DESC', 'Optional email address that receives a duplicate copy of every order confirmation. Use a comma- or semicolon-separated list if needed.');
-?>

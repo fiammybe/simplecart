@@ -8,15 +8,27 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->initVar('timestamp', XOBJ_DTYPE_LTIME, time(), false, null, '', false, _MI_SIMPLECART_ORDER_TIMESTAMP, '', false, true, false);
         $this->initVar('total_amount', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDER_TOTAL);
         $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_SIMPLECART_ORDER_STATUS);
-        $this->initVar('customer_info', XOBJ_DTYPE_TXTBOX, '', false, 500, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
-        $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_INFO);
+        $this->initVar('customer_name', XOBJ_DTYPE_TXTBOX, '', false, 100, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_NAME);
+        $this->initVar('customer_email', XOBJ_DTYPE_TXTBOX, '', false, 255, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_EMAIL);
+        $this->initVar('customer_phone', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_PHONE);
+        $this->initVar('customer_address', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_ADDRESS);
+        $this->initVar('payment_ref', XOBJ_DTYPE_TXTAREA, '', false, null, '', false, _MI_SIMPLECART_ORDER_PAYMENT_REF);
         $this->initVar('helpende_hand', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_HELPENDE_HAND);
+        $this->initVar('scan_token', XOBJ_DTYPE_TXTBOX, '', false, 64);
+        $this->initVar('scanned_at', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('scanned_by', XOBJ_DTYPE_INT, 0, false);
 
         $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
 
         $this->hideFieldFromForm('order_id');
         $this->hideFieldFromForm('timestamp');
         $this->hideFieldFromForm('total_amount');
+        $this->hideFieldFromForm('scan_token');
+        $this->hideFieldFromForm('scanned_at');
+        $this->hideFieldFromForm('scanned_by');
+        $this->hideFieldFromSingleView('scan_token');
+        $this->hideFieldFromSingleView('scanned_at');
+        $this->hideFieldFromSingleView('scanned_by');
 
         $this->handler->identifierName = 'order_id';
         $this->handler->_page = 'admin/order.php';
@@ -88,13 +100,70 @@ class SimplecartOrder extends icms_ipf_Object {
         return implode(', ', $summary);
     }
 
+    public function ensureScanToken(): string
+    {
+        $token = (string)$this->getVar('scan_token', 'n');
+
+        if ($token !== '') {
+            return $token;
+        }
+
+        $token = bin2hex(random_bytes(16));
+        $this->setVar('scan_token', $token);
+
+        return $token;
+    }
+
+    public function hasValidScanToken(string $token): bool
+    {
+        $storedToken = (string)$this->getVar('scan_token', 'n');
+
+        if ($storedToken === '') {
+            return false;
+        }
+
+        return hash_equals($storedToken, $token);
+    }
+
+    public function getScanUrl(): string
+    {
+        $orderId = (int)$this->getVar('order_id');
+        $token = $this->ensureScanToken();
+
+        return SIMPLECART_URL . "scan.php?order_id={$orderId}&token={$token}";
+    }
+
+    public function isScanned(): bool
+    {
+        return (int)$this->getVar('scanned_at', 'n') > 0;
+    }
+
+    public function getScannedAtFormatted(): string
+    {
+        if (!$this->isScanned()) {
+            return '';
+        }
+
+        return formatTimestamp((int)$this->getVar('scanned_at', 'n'), 'm');
+    }
+
+    public function getScannedByName(): string
+    {
+        $uid = (int)$this->getVar('scanned_by', 'n');
+
+        if ($uid <= 0) {
+            return '';
+        }
+
+        return (string)icms_member_user_Object::getUnameFromId($uid);
+    }
 }
 
 class SimplecartOrderHandler extends icms_ipf_Handler {
     protected $allowedStatus = array('pending', 'awaiting_payment', 'paid', 'reimbursed', 'closed', 'cancelled');
 
     public function __construct(&$db) {
-        parent::__construct($db, 'order', 'order_id', 'order_id', 'customer_info', 'simplecart');
+        parent::__construct($db, 'order', 'order_id', 'order_id', 'customer_name', 'simplecart');
         // Avoid using reserved keyword "order" as SQL alias; use a safe alias instead
         $this->_itemname = 'sorder';
     }
@@ -141,6 +210,25 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             $orderItemHandler->deleteAll($criteria);
         }
         return true;
+    }
+
+    /**
+     * Records the first scan of an order; the WHERE clause keeps concurrent scans from both succeeding
+     */
+    public function markScanned(int $orderId, int $uid): bool
+    {
+        $table = $this->db->prefix('simplecart_order');
+        $scannedAt = time();
+
+        $result = $this->db->queryF(
+            "UPDATE `{$table}` SET `scanned_at` = {$scannedAt}, `scanned_by` = {$uid} WHERE `order_id` = {$orderId} AND `scanned_at` = 0"
+        );
+
+        if (!$result) {
+            return false;
+        }
+
+        return (int)$this->db->getAffectedRows() === 1;
     }
 }
 ?>
