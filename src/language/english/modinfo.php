@@ -11,6 +11,7 @@ define('_MI_SIMPLECART_MENU_ORDERS', 'Orders');
 define('_MI_SIMPLECART_PRODUCT_NAME', 'Name');
 define('_MI_SIMPLECART_PRODUCT_PRICE', 'Price');
 define('_MI_SIMPLECART_PRODUCT_DESC', 'Description');
+define('_MI_SIMPLECART_PRODUCT_IMAGE', 'Image');
 define('_MI_SIMPLECART_PRODUCT_ACTIVE', 'Active');
 
 // Order fields

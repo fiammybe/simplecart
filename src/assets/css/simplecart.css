@@ -1,6 +1,7 @@
 /* SimpleCart custom tweaks on top of Bulma */
 .sc-card-price { margin-bottom: .75rem; }
 .sc-total { margin-top: 1rem; }
+.sc-product-image { object-fit: cover; }
 
 /* Optional: tighten table spacing on mobile */
 @media (max-width: 600px) {

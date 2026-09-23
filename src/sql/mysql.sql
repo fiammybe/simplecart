@@ -3,6 +3,7 @@ CREATE TABLE `simplecart_product` (
   `name` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `description` text,
+  `image` varchar(255) NOT NULL DEFAULT '',
   `active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`product_id`),
   KEY `active_idx` (`active`)

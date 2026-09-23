@@ -11,6 +11,7 @@ define('_MI_SIMPLECART_MENU_ORDERS', 'Bestellingen');
 define('_MI_SIMPLECART_PRODUCT_NAME', 'Naam');
 define('_MI_SIMPLECART_PRODUCT_PRICE', 'Prijs');
 define('_MI_SIMPLECART_PRODUCT_DESC', 'Beschrijving');
+define('_MI_SIMPLECART_PRODUCT_IMAGE', 'Afbeelding');
 define('_MI_SIMPLECART_PRODUCT_ACTIVE', 'Actief');
 
 // Order fields

@@ -210,6 +210,7 @@ function simplecart_getProductList($onlyActive = true) {
             'name' => (string)$product->getVar('name'),
             'price' => (float)$product->getVar('price'),
             'description' => (string)$product->getVar('description'),
+            'image_url' => $product->getImageUrl(),
             'price_formatted' => simplecart_formatMoney((float)$product->getVar('price')),
         );
     }

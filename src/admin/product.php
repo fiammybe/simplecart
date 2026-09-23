@@ -42,6 +42,7 @@ switch ($clean_op) {
         icms::$module->displayAdminMenu(0, 'SimpleCart');
         global $icmsAdminTpl;
         $objectTable = new icms_ipf_view_Table($icms_product_handler);
+        $objectTable->addColumn(new icms_ipf_view_Column('image', 'center', 80, 'getImageThumbnail', false, false, false));
         $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
         $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
         $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));

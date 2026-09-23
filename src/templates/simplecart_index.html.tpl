@@ -13,6 +13,13 @@
       <{foreach from=$simplecart_products item=product}>
       <div class="column is-12-mobile is-6-tablet is-4-desktop">
         <div class="card">
+          <{if $product.image_url}>
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="<{$product.image_url}>" alt="<{$product.name}>" class="sc-product-image" loading="lazy">
+            </figure>
+          </div>
+          <{/if}>
           <div class="card-content">
             <p class="title is-5"><{$product.name}></p>
             <p class="title sc-card-price"><{$product.price_formatted}></p>

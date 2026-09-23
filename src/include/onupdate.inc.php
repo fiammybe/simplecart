@@ -2,14 +2,23 @@
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 /**
- * Brings installations created before version 2.1.0 up to the current order table layout
+ * Brings older installations up to the current product and order table layout
  */
 function icms_module_update_simplecart($module): bool
 {
     $db = icms::$xoopsDB;
+
+    $productColumns = [
+        'image' => "varchar(255) NOT NULL DEFAULT ''",
+    ];
+
+    if (!simplecart_addMissingColumns($module, $db->prefix('simplecart_product'), $productColumns)) {
+        return false;
+    }
+
     $table = $db->prefix('simplecart_order');
 
-    $columns = [
+    $orderColumns = [
         'scan_token' => "varchar(64) NOT NULL DEFAULT ''",
         'scanned_at' => "int(10) unsigned NOT NULL DEFAULT '0'",
         'scanned_by' => "int(10) unsigned NOT NULL DEFAULT '0'",
@@ -19,19 +28,11 @@ function icms_module_update_simplecart($module): bool
         'customer_address' => 'text',
     ];
 
-    foreach ($columns as $column => $definition) {
-        if (simplecart_orderColumnExists($table, $column)) {
-            continue;
-        }
-
-        if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
-            $module->setErrors("Could not add column {$column} to {$table}");
-
-            return false;
-        }
+    if (!simplecart_addMissingColumns($module, $table, $orderColumns)) {
+        return false;
     }
 
-    if (!simplecart_orderColumnExists($table, 'customer_info')) {
+    if (!simplecart_columnExists($table, 'customer_info')) {
         return true;
     }
 
@@ -50,7 +51,29 @@ function icms_module_update_simplecart($module): bool
     return true;
 }
 
-function simplecart_orderColumnExists(string $table, string $column): bool
+/**
+ * @param array<string, string> $columns
+ */
+function simplecart_addMissingColumns($module, string $table, array $columns): bool
+{
+    $db = icms::$xoopsDB;
+
+    foreach ($columns as $column => $definition) {
+        if (simplecart_columnExists($table, $column)) {
+            continue;
+        }
+
+        if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
+            $module->setErrors("Could not add column {$column} to {$table}");
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function simplecart_columnExists(string $table, string $column): bool
 {
     $db = icms::$xoopsDB;
     $result = $db->queryF("SHOW COLUMNS FROM `{$table}` LIKE '{$column}'");
