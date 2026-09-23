@@ -16,12 +16,7 @@ class SimplecartProduct extends icms_ipf_Object {
         $this->initVar('active', XOBJ_DTYPE_INT, 1, false, null, '', false, _MI_SIMPLECART_PRODUCT_ACTIVE);
 
         $this->setControl('description', array('name' => 'textarea'));
-        $this->setControl('image', [
-            'name' => 'select',
-            'itemHandler' => 'product',
-            'method' => 'getImageManagerOptions',
-            'module' => 'simplecart',
-        ]);
+        $this->setControl('image', 'imagemanager');
         $this->setControl('active', 'yesno');
 
         $this->hideFieldFromForm('product_id');
@@ -80,25 +75,6 @@ class SimplecartProductHandler extends icms_ipf_Handler {
 
     public function beforeUpdate(&$obj) {
         return $this->beforeInsert($obj);
-    }
-
-    /** @return array<string, string> */
-    public function getImageManagerOptions(): array
-    {
-        $options = ['' => '---'];
-        $imageList = (new icms_form_elements_select_Image('', 'image'))->getImageList();
-
-        foreach ($imageList as $category => $images) {
-            if (!is_array($images)) {
-                continue;
-            }
-
-            foreach ($images as $path => $name) {
-                $options[$path] = "{$category} – {$name}";
-            }
-        }
-
-        return $options;
     }
 }
 ?>
