@@ -91,6 +91,6 @@ if (!isset($icmsAdminTpl) || !is_object($icmsAdminTpl)) {
 }
 $icmsAdminTpl->assign('dashboard', $dashboard);
 $icmsAdminTpl->assign('productSalesBreakdown', $productSalesBreakdown);
-$icmsAdminTpl->display('db:simplecart_admin_dashboard.html');
+$icmsAdminTpl->display('db:simplecart_admin_dashboard.html.tpl');
 
 icms_cp_footer();

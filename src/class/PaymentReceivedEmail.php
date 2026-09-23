@@ -27,23 +27,9 @@ class PaymentReceivedEmail {
     }
 
     private function extractCustomerInfo() {
-        // Use 'n' format to get raw JSON without HTML decoding
-        $customerInfo = (string)$this->order->getVar('customer_info', 'n');
-
-        // Parse customer_info as JSON
-        $customerData = json_decode($customerInfo, true);
-
-        if (is_array($customerData)) {
-            // Extract email and name from JSON
-            $this->customerEmail = isset($customerData['email']) ? trim($customerData['email']) : '';
-            $this->customerName = isset($customerData['name']) ? trim($customerData['name']) : '';
-            $this->customerPhone = isset($customerData['phone']) ? trim($customerData['phone']) : '';
-        } else {
-            // JSON parsing failed
-            $this->customerEmail = '';
-            $this->customerName = '';
-            $this->customerPhone = '';
-        }
+        $this->customerEmail = trim((string)$this->order->getVar('customer_email', 'n'));
+        $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
+        $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
 
         // Extract helpende_hand from order fields
         $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');
@@ -137,11 +123,125 @@ class PaymentReceivedEmail {
         );
         $text .= str_repeat('=', 70) . "\n\n";
 
+        $text .= _MD_SIMPLECART_SCAN_EMAIL_HEADING . "\n";
+        $text .= str_repeat('-', 70) . "\n";
+        $text .= _MD_SIMPLECART_SCAN_EMAIL_TEXT . "\n";
+        $text .= $this->order->getScanUrl() . "\n\n";
+
         // Footer
         $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
         $text .= str_repeat('=', 70) . "\n";
 
         return $text;
+    }
+
+    public function getHtmlContent(string $qrContentId): string
+    {
+        $orderId = (int)$this->order->getVar('order_id');
+        $totalAmount = (float)$this->order->getVar('total_amount');
+        $orderDate = $this->escape((string)$this->order->getVar('timestamp'));
+        $scanUrl = $this->escape($this->order->getScanUrl());
+
+        $customerRows = '';
+        $customerFields = [
+            _MD_SIMPLECART_NAME => $this->customerName,
+            _MD_SIMPLECART_EMAIL => $this->customerEmail,
+            _MD_SIMPLECART_PHONE => $this->customerPhone,
+            _MD_SIMPLECART_HELP_MAIL => $this->customerHelpendehanden === '' ? '' : $this->getHelpLabel($this->customerHelpendehanden),
+        ];
+
+        foreach ($customerFields as $label => $value) {
+            if ($value === '') {
+                continue;
+            }
+
+            $customerRows .= "<tr><td style=\"padding:2px 8px 2px 0;\"><strong>{$this->escape($label)}</strong></td><td>{$this->escape($value)}</td></tr>";
+        }
+
+        $itemRows = '';
+        foreach ($this->orderItems as $item) {
+            $price = (float)$item->getVar('product_price');
+            $quantity = (int)$item->getVar('quantity');
+
+            $itemRows .= '<tr>'
+                . "<td style=\"padding:4px;border-bottom:1px solid #ddd;\">{$this->escape((string)$item->getVar('product_name', 'n'))}</td>"
+                . "<td style=\"padding:4px;border-bottom:1px solid #ddd;text-align:right;\">{$this->formatCurrency($price)}</td>"
+                . "<td style=\"padding:4px;border-bottom:1px solid #ddd;text-align:right;\">{$quantity}</td>"
+                . "<td style=\"padding:4px;border-bottom:1px solid #ddd;text-align:right;\">{$this->formatCurrency($quantity * $price)}</td>"
+                . '</tr>';
+        }
+
+        $heading = $this->escape(_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING);
+        $greeting = $this->escape(_MD_SIMPLECART_EMAIL_GREETING . ' ' . $this->customerName);
+        $message = $this->escape(sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE, $orderId));
+        $detailsHeading = $this->escape(_MD_SIMPLECART_EMAIL_ORDER_DETAILS);
+        $orderIdLabel = $this->escape(_MD_SIMPLECART_ORDER_ID);
+        $orderDateLabel = $this->escape(_MD_SIMPLECART_EMAIL_ORDER_DATE);
+        $customerHeading = $this->escape(_MD_SIMPLECART_EMAIL_CUSTOMER_INFO);
+        $itemsHeading = $this->escape(_MD_SIMPLECART_EMAIL_ITEMS);
+        $nameLabel = $this->escape(_MD_SIMPLECART_NAME);
+        $unitPriceLabel = $this->escape(_MD_SIMPLECART_EMAIL_UNIT_PRICE);
+        $quantityLabel = $this->escape(_MD_SIMPLECART_EMAIL_QUANTITY);
+        $subtotalLabel = $this->escape(_MD_SIMPLECART_EMAIL_SUBTOTAL);
+        $totalLabel = $this->escape(_MD_SIMPLECART_TOTAL);
+        $total = $this->formatCurrency($totalAmount);
+        $scanHeading = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_HEADING);
+        $scanText = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_TEXT);
+        $footer = $this->escape(_MD_SIMPLECART_EMAIL_FOOTER);
+
+        return <<<HTML
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#222;max-width:640px;margin:0 auto;">
+    <h1 style="font-size:22px;">{$heading}</h1>
+    <p>{$greeting},</p>
+    <p>{$message}</p>
+
+    <div style="text-align:center;margin:24px 0;padding:16px;border:1px solid #ddd;border-radius:6px;">
+        <h2 style="font-size:18px;margin-top:0;">{$scanHeading}</h2>
+        <p>{$scanText}</p>
+        <img src="cid:{$qrContentId}" width="300" height="300" alt="QR code order #{$orderId}">
+        <p style="font-size:12px;color:#666;word-break:break-all;"><a href="{$scanUrl}">{$scanUrl}</a></p>
+    </div>
+
+    <h2 style="font-size:18px;">{$detailsHeading}</h2>
+    <table>
+        <tr><td style="padding:2px 8px 2px 0;"><strong>{$orderIdLabel}</strong></td><td>#{$orderId}</td></tr>
+        <tr><td style="padding:2px 8px 2px 0;"><strong>{$orderDateLabel}</strong></td><td>{$orderDate}</td></tr>
+    </table>
+
+    <h2 style="font-size:18px;">{$customerHeading}</h2>
+    <table>{$customerRows}</table>
+
+    <h2 style="font-size:18px;">{$itemsHeading}</h2>
+    <table style="width:100%;border-collapse:collapse;">
+        <thead>
+            <tr>
+                <th style="padding:4px;text-align:left;border-bottom:2px solid #222;">{$nameLabel}</th>
+                <th style="padding:4px;text-align:right;border-bottom:2px solid #222;">{$unitPriceLabel}</th>
+                <th style="padding:4px;text-align:right;border-bottom:2px solid #222;">{$quantityLabel}</th>
+                <th style="padding:4px;text-align:right;border-bottom:2px solid #222;">{$subtotalLabel}</th>
+            </tr>
+        </thead>
+        <tbody>{$itemRows}</tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="padding:4px;text-align:right;"><strong>{$totalLabel}</strong></td>
+                <td style="padding:4px;text-align:right;"><strong>{$total}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <p style="margin-top:24px;">{$footer}</p>
+</body>
+</html>
+HTML;
+    }
+
+    private function escape(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
 
     private function formatCurrency($amount) {

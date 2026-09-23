@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '2.0.0';
+$modversion['version'] = '2.1.0';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'David Janssens (fiammybe)';
 $modversion['credits'] = 'ImpressCMS, IPF';
@@ -11,9 +11,9 @@ $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
 
-$modversion['status_version'] = "2.0.0";
+$modversion['status_version'] = "2.1.0";
 $modversion['status'] = "Final";
-$modversion['date'] = "28 Aug 2026";
+$modversion['date'] = "23 Sep 2026";
 $modversion['author_word'] = "Move from Ajax to plain old PHP/Smarty again";
 
 $modversion['hasMain'] = 1;
@@ -23,6 +23,7 @@ $modversion['adminindex'] = 'admin/index.php';
 $modversion['adminmenu'] = 'admin/menu.php';
 
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
+$modversion['onUpdate'] = 'include/onupdate.inc.php';
 //$modversion['object_items'] = array(
 //    'simplecart_product',
 //    'simplecart_order',
@@ -32,10 +33,10 @@ $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
 
 $modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');
 $modversion['templates'][] = array('file' => 'simplecart_checkout.html.tpl', 'description' => 'SimpleCart Checkout');
-$modversion['templates'][] = array('file' => 'simplecart_order_confirm.html.tpl', 'description' => 'SimpleCart Order Confirmation');
 $modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl', 'description' => 'Admin - Products');
 $modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
 $modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html.tpl', 'description' => 'Admin - Dashboard');
+$modversion['templates'][] = array('file' => 'simplecart_order_scan.html.tpl', 'description' => 'SimpleCart Order Scan');
 
 $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;

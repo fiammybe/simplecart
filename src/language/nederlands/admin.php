@@ -15,3 +15,5 @@ define('_AM_SIMPLECART_ORDER_NOT_FOUND', 'Bestelling niet gevonden');
 define('_AM_SIMPLECART_ORDER_DELETE_CONFIRM', 'Ben je zeker dat je deze bestelling en alle bijbehorende items wil verwijderen?');
 define('_AM_SIMPLECART_ORDER_DELETED', 'Bestelling en gerelateerde items met succes verwijderd');
 
+define('_AM_SIMPLECART_PAYMENT_MAIL_SENT', 'Betalingsbevestiging met QR-code naar de klant verstuurd.');
+define('_AM_SIMPLECART_PAYMENT_MAIL_FAILED', 'De betalingsbevestiging kon niet verstuurd worden.');
