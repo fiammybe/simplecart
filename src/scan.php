@@ -80,15 +80,20 @@ if ($status === 'paid') {
 }
 
 $itemRows = simplecart_getOrderItemRows($orderId);
+$customerPhone = (string)$order->getVar('customer_phone', 'n');
 
+$icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_scan_order', [
     'order_id' => $orderId,
     'date' => (string)$order->getVar('timestamp'),
     'status' => $statusLabels[$status] ?? $status,
+    'status_key' => $status,
     'customer_name' => (string)$order->getVar('customer_name', 'n'),
     'customer_email' => (string)$order->getVar('customer_email', 'n'),
-    'customer_phone' => (string)$order->getVar('customer_phone', 'n'),
+    'customer_phone' => $customerPhone,
+    'customer_phone_href' => preg_replace('/[^0-9+]/', '', $customerPhone),
     'items' => $itemRows['items'],
+    'item_count' => array_sum(array_column($itemRows['items'], 'quantity')),
     'grand_total_fmt' => $itemRows['grand_total_fmt'],
     'currency' => strtoupper((string)simplecart_getSepaConfig('currency', 'EUR')),
     'admin_url' => SIMPLECART_URL . "admin/order.php?op=view&order_id={$orderId}",
