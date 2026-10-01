@@ -17,6 +17,7 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->initVar('scan_token', XOBJ_DTYPE_TXTBOX, '', false, 64);
         $this->initVar('scanned_at', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('scanned_by', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('access_code', XOBJ_DTYPE_TXTBOX, '', false, 16, '', false, _MI_SIMPLECART_ORDER_ACCESS_CODE);
 
         $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
 
@@ -26,6 +27,7 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromForm('scan_token');
         $this->hideFieldFromForm('scanned_at');
         $this->hideFieldFromForm('scanned_by');
+        $this->hideFieldFromForm('access_code');
         $this->hideFieldFromSingleView('scan_token');
         $this->hideFieldFromSingleView('scanned_at');
         $this->hideFieldFromSingleView('scanned_by');
@@ -39,7 +41,7 @@ class SimplecartOrder extends icms_ipf_Object {
         // Security: Create time-limited token (1 hour) for status changes
         $token = icms::$security->createToken(3600, 'simplecart_order_status');
         $actions = array(
-            'paid' => 'Betaald',
+            'paid' => _MI_SIMPLECART_STATUS_PAID,
 //            'reimbursed' => 'Terugbetaald',
 //            'closed' => 'Afgesloten',
         );
@@ -133,6 +135,41 @@ class SimplecartOrder extends icms_ipf_Object {
         return SIMPLECART_URL . "scan.php?order_id={$orderId}&token={$token}";
     }
 
+    public function ensureAccessCode(): string
+    {
+        $code = (string)$this->getVar('access_code', 'n');
+
+        if ($code !== '') {
+            return $code;
+        }
+
+        $code = SimplecartOrderHandler::generateAccessCode();
+        $this->setVar('access_code', $code);
+
+        return $code;
+    }
+
+    public function hasValidAccessCode(string $code): bool
+    {
+        $storedCode = (string)$this->getVar('access_code', 'n');
+
+        if ($storedCode === '') {
+            return false;
+        }
+
+        return hash_equals($storedCode, SimplecartOrderHandler::normalizeAccessCode($code));
+    }
+
+    public function getFormattedAccessCode(): string
+    {
+        return SimplecartOrderHandler::formatAccessCode($this->ensureAccessCode());
+    }
+
+    public function getAccessUrl(): string
+    {
+        return SIMPLECART_URL . 'orders.php';
+    }
+
     public function isScanned(): bool
     {
         return (int)$this->getVar('scanned_at', 'n') > 0;
@@ -162,26 +199,28 @@ class SimplecartOrder extends icms_ipf_Object {
 class SimplecartOrderHandler extends icms_ipf_Handler {
     protected $allowedStatus = array('pending', 'awaiting_payment', 'paid', 'reimbursed', 'closed', 'cancelled');
 
+    /** Unambiguous characters only, so codes survive being read aloud or retyped from a mail */
+    private const ACCESS_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    private const ACCESS_CODE_LENGTH = 10;
+
     public function __construct(&$db) {
         parent::__construct($db, 'order', 'order_id', 'order_id', 'customer_name', 'simplecart');
         // Avoid using reserved keyword "order" as SQL alias; use a safe alias instead
         $this->_itemname = 'sorder';
     }
 
-    public function getStatusArray() {
-        // Labels fallback to humanized text if constants are not defined
-        $label = function($key, $fallback) {
-            $const = '._DUMMY_'; // ensure undefined
-            return defined($const = $key) ? constant($const) : $fallback;
-        };
-        return array(
-            'pending' => 'Pending',
-            'awaiting_payment' => 'Awaiting payment',
-            'paid' => 'Paid',
-            'reimbursed' => 'Reimbursed',
-            'closed' => 'Closed',
-            'cancelled' => 'Cancelled',
-        );
+    /** @return array<string, string> */
+    public function getStatusArray(): array
+    {
+        return [
+            'pending' => _MI_SIMPLECART_STATUS_PENDING,
+            'awaiting_payment' => _MI_SIMPLECART_STATUS_AWAITING_PAYMENT,
+            'paid' => _MI_SIMPLECART_STATUS_PAID,
+            'reimbursed' => _MI_SIMPLECART_STATUS_REIMBURSED,
+            'closed' => _MI_SIMPLECART_STATUS_CLOSED,
+            'cancelled' => _MI_SIMPLECART_STATUS_CANCELLED,
+        ];
     }
 
     public function beforeInsert(&$obj) {
@@ -192,10 +231,12 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
         }
         $total = (float)$obj->getVar('total_amount');
         if ($total < 0) { $obj->setVar('total_amount', 0.0); }
+        $obj->ensureAccessCode();
         return true;
     }
 
     public function beforeUpdate(&$obj) {
+        $obj->ensureAccessCode();
         // Prevent editing orders via admin (enforce read-only by ignoring admin saves)
         return true;
     }
@@ -210,6 +251,67 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             $orderItemHandler->deleteAll($criteria);
         }
         return true;
+    }
+
+    public static function generateAccessCode(): string
+    {
+        $alphabetLength = strlen(self::ACCESS_CODE_ALPHABET);
+        $code = '';
+
+        for ($i = 0; $i < self::ACCESS_CODE_LENGTH; $i++) {
+            $code .= self::ACCESS_CODE_ALPHABET[random_int(0, $alphabetLength - 1)];
+        }
+
+        return $code;
+    }
+
+    public static function normalizeAccessCode(string $code): string
+    {
+        return (string)preg_replace('/[^A-Z0-9]/', '', strtoupper($code));
+    }
+
+    public static function formatAccessCode(string $code): string
+    {
+        return implode('-', str_split($code, 5));
+    }
+
+    /**
+     * Orders placed with this e-mail address, newest first
+     *
+     * @return array<int, SimplecartOrder>
+     */
+    public function getOrdersByEmail(string $email): array
+    {
+        $email = trim($email);
+
+        if ($email === '') {
+            return [];
+        }
+
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('customer_email', $email));
+        $criteria->setSort('timestamp');
+        $criteria->setOrder('DESC');
+
+        return $this->getObjects($criteria, false, true);
+    }
+
+    /**
+     * True when one of the orders of this e-mail address carries the given access code
+     */
+    public function isValidAccessCodeForEmail(string $email, string $code): bool
+    {
+        if (self::normalizeAccessCode($code) === '') {
+            return false;
+        }
+
+        foreach ($this->getOrdersByEmail($email) as $order) {
+            if ($order->hasValidAccessCode($code)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

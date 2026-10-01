@@ -85,3 +85,17 @@ define('_MD_SIMPLECART_SCAN_INVALID', 'This order link is invalid or the order n
 define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
 define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Open order in administration');
 
+// Customer order access
+define('_MD_SIMPLECART_ACCESS_EMAIL_HEADING', 'View your orders online');
+define('_MD_SIMPLECART_ACCESS_EMAIL_TEXT', 'You can view your orders at any time with your e-mail address and this access code:');
+define('_MD_SIMPLECART_ACCESS_CODE', 'Access code');
+define('_MD_SIMPLECART_ACCESS_TITLE', 'My orders');
+define('_MD_SIMPLECART_ACCESS_INTRO', 'Enter the e-mail address you ordered with and the access code from your order confirmation mail.');
+define('_MD_SIMPLECART_ACCESS_SUBMIT', 'Show my orders');
+define('_MD_SIMPLECART_ACCESS_INVALID', 'This combination of e-mail address and access code is not known.');
+define('_MD_SIMPLECART_ACCESS_TOO_MANY_ATTEMPTS', 'Too many failed attempts. Please try again in a few minutes.');
+define('_MD_SIMPLECART_ACCESS_SESSION_EXPIRED', 'Your session has expired. Please try again.');
+define('_MD_SIMPLECART_ACCESS_LOGGED_IN_AS', 'Orders for %s');
+define('_MD_SIMPLECART_ACCESS_LOGOUT', 'Close');
+define('_MD_SIMPLECART_ACCESS_NO_ORDERS', 'No orders were found.');
+
