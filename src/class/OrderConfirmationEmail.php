@@ -143,6 +143,13 @@ class OrderConfirmationEmail {
             $text .= str_repeat('-', 70) . "\n\n";
         }
 
+        $text .= _MD_SIMPLECART_ACCESS_EMAIL_HEADING . "\n";
+        $text .= str_repeat('-', 70) . "\n";
+        $text .= _MD_SIMPLECART_ACCESS_EMAIL_TEXT . "\n";
+        $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+        $text .= _MD_SIMPLECART_ACCESS_CODE . ": " . $this->order->getFormattedAccessCode() . "\n";
+        $text .= $this->order->getAccessUrl() . "\n\n";
+
         // Footer
         $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
         $text .= str_repeat('=', 70) . "\n";

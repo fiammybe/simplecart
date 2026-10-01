@@ -83,3 +83,17 @@ define('_MD_SIMPLECART_SCAN_INVALID', 'Deze link is ongeldig of de bestelling be
 define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
 define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Bestelling openen in het beheer');
 
+// Bestellingen raadplegen door klanten
+define('_MD_SIMPLECART_ACCESS_EMAIL_HEADING', 'Uw bestellingen online bekijken');
+define('_MD_SIMPLECART_ACCESS_EMAIL_TEXT', 'U kan uw bestellingen op elk moment bekijken met uw e-mailadres en deze toegangscode:');
+define('_MD_SIMPLECART_ACCESS_CODE', 'Toegangscode');
+define('_MD_SIMPLECART_ACCESS_TITLE', 'Mijn bestellingen');
+define('_MD_SIMPLECART_ACCESS_INTRO', 'Geef het e-mailadres waarmee u bestelde en de toegangscode uit uw bevestigingsmail.');
+define('_MD_SIMPLECART_ACCESS_SUBMIT', 'Toon mijn bestellingen');
+define('_MD_SIMPLECART_ACCESS_INVALID', 'Deze combinatie van e-mailadres en toegangscode is niet gekend.');
+define('_MD_SIMPLECART_ACCESS_TOO_MANY_ATTEMPTS', 'Te veel mislukte pogingen. Probeer het binnen enkele minuten opnieuw.');
+define('_MD_SIMPLECART_ACCESS_SESSION_EXPIRED', 'Uw sessie is verlopen. Probeer het opnieuw.');
+define('_MD_SIMPLECART_ACCESS_LOGGED_IN_AS', 'Bestellingen van %s');
+define('_MD_SIMPLECART_ACCESS_LOGOUT', 'Sluiten');
+define('_MD_SIMPLECART_ACCESS_NO_ORDERS', 'Er werden geen bestellingen gevonden.');
+

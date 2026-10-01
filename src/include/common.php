@@ -11,6 +11,9 @@ if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_ROOT_PATH', ICMS_ROOT_PATH . '/modules/' . SIMPLECART_DIRNAME . '/');
     define('SIMPLECART_DEBUG_EMAIL', false); // Set to true to enable email debug logging
     define('SIMPLECART_DEBUG_LOG_FILE', ICMS_TRUST_PATH . '/logs/debug_email.log');
+    define('SIMPLECART_ORDER_ACCESS_LIFETIME', 3600);
+    define('SIMPLECART_ORDER_ACCESS_MAX_ATTEMPTS', 5);
+    define('SIMPLECART_ORDER_ACCESS_LOCKOUT', 900);
 }
 
 icms_loadLanguageFile('simplecart', 'main');
@@ -75,6 +78,88 @@ function simplecart_sessionStart() {
     } elseif (!isset($_SESSION)) {
         @session_start();
     }
+}
+
+/**
+ * Lets an anonymous visitor see the orders of this e-mail address for the rest of the session
+ */
+function simplecart_grantOrderAccess(string $email): void
+{
+    simplecart_sessionStart();
+
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
+    }
+
+    unset($_SESSION['simplecart_order_access_failures']);
+
+    $_SESSION['simplecart_order_access'] = [
+        'email' => $email,
+        'expires' => time() + SIMPLECART_ORDER_ACCESS_LIFETIME,
+    ];
+}
+
+function simplecart_revokeOrderAccess(): void
+{
+    simplecart_sessionStart();
+
+    unset($_SESSION['simplecart_order_access']);
+}
+
+function simplecart_getOrderAccessEmail(): ?string
+{
+    simplecart_sessionStart();
+
+    $access = $_SESSION['simplecart_order_access'] ?? null;
+
+    if (!is_array($access)) {
+        return null;
+    }
+
+    if ((int)($access['expires'] ?? 0) < time()) {
+        simplecart_revokeOrderAccess();
+
+        return null;
+    }
+
+    $email = (string)($access['email'] ?? '');
+
+    return $email === '' ? null : $email;
+}
+
+function simplecart_isOrderAccessLocked(): bool
+{
+    simplecart_sessionStart();
+
+    $failures = $_SESSION['simplecart_order_access_failures'] ?? null;
+
+    if (!is_array($failures)) {
+        return false;
+    }
+
+    if (time() - (int)$failures['since'] > SIMPLECART_ORDER_ACCESS_LOCKOUT) {
+        return false;
+    }
+
+    return (int)$failures['count'] >= SIMPLECART_ORDER_ACCESS_MAX_ATTEMPTS;
+}
+
+function simplecart_registerFailedOrderAccess(): void
+{
+    simplecart_sessionStart();
+
+    $failures = $_SESSION['simplecart_order_access_failures'] ?? null;
+
+    if (!is_array($failures) || time() - (int)$failures['since'] > SIMPLECART_ORDER_ACCESS_LOCKOUT) {
+        $failures = [
+            'count' => 0,
+            'since' => time(),
+        ];
+    }
+
+    $failures['count']++;
+
+    $_SESSION['simplecart_order_access_failures'] = $failures;
 }
 
 function simplecart_formatMoney($amount, $currency = 'EUR') {

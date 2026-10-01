@@ -26,9 +26,16 @@ function icms_module_update_simplecart($module): bool
         'customer_email' => "varchar(255) NOT NULL DEFAULT ''",
         'customer_phone' => "varchar(50) NOT NULL DEFAULT ''",
         'customer_address' => 'text',
+        'access_code' => "varchar(16) NOT NULL DEFAULT ''",
     ];
 
     if (!simplecart_addMissingColumns($module, $table, $orderColumns)) {
+        return false;
+    }
+
+    if (!simplecart_addMissingAccessCodes($table)) {
+        $module->setErrors("Could not generate access codes for existing orders in {$table}");
+
         return false;
     }
 
@@ -66,6 +73,32 @@ function simplecart_addMissingColumns($module, string $table, array $columns): b
         if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
             $module->setErrors("Could not add column {$column} to {$table}");
 
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Gives orders placed before access codes existed their own code
+ */
+function simplecart_addMissingAccessCodes(string $table): bool
+{
+    require_once dirname(__DIR__) . '/class/order.php';
+
+    $db = icms::$xoopsDB;
+    $result = $db->queryF("SELECT `order_id` FROM `{$table}` WHERE `access_code` = ''");
+
+    if (!$result) {
+        return false;
+    }
+
+    while ($row = $db->fetchArray($result)) {
+        $orderId = (int)$row['order_id'];
+        $code = $db->quoteString(SimplecartOrderHandler::generateAccessCode());
+
+        if (!$db->queryF("UPDATE `{$table}` SET `access_code` = {$code} WHERE `order_id` = {$orderId}")) {
             return false;
         }
     }

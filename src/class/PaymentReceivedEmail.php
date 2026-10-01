@@ -128,6 +128,13 @@ class PaymentReceivedEmail {
         $text .= _MD_SIMPLECART_SCAN_EMAIL_TEXT . "\n";
         $text .= $this->order->getScanUrl() . "\n\n";
 
+        $text .= _MD_SIMPLECART_ACCESS_EMAIL_HEADING . "\n";
+        $text .= str_repeat('-', 70) . "\n";
+        $text .= _MD_SIMPLECART_ACCESS_EMAIL_TEXT . "\n";
+        $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+        $text .= _MD_SIMPLECART_ACCESS_CODE . ": " . $this->order->getFormattedAccessCode() . "\n";
+        $text .= $this->order->getAccessUrl() . "\n\n";
+
         // Footer
         $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
         $text .= str_repeat('=', 70) . "\n";
@@ -188,6 +195,13 @@ class PaymentReceivedEmail {
         $scanHeading = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_HEADING);
         $scanText = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_TEXT);
         $footer = $this->escape(_MD_SIMPLECART_EMAIL_FOOTER);
+        $accessHeading = $this->escape(_MD_SIMPLECART_ACCESS_EMAIL_HEADING);
+        $accessText = $this->escape(_MD_SIMPLECART_ACCESS_EMAIL_TEXT);
+        $emailLabel = $this->escape(_MD_SIMPLECART_EMAIL);
+        $accessCodeLabel = $this->escape(_MD_SIMPLECART_ACCESS_CODE);
+        $customerEmail = $this->escape($this->customerEmail);
+        $accessCode = $this->escape($this->order->getFormattedAccessCode());
+        $accessUrl = $this->escape($this->order->getAccessUrl());
 
         return <<<HTML
 <!DOCTYPE html>
@@ -232,6 +246,14 @@ class PaymentReceivedEmail {
             </tr>
         </tfoot>
     </table>
+
+    <h2 style="font-size:18px;">{$accessHeading}</h2>
+    <p>{$accessText}</p>
+    <table>
+        <tr><td style="padding:2px 8px 2px 0;"><strong>{$emailLabel}</strong></td><td>{$customerEmail}</td></tr>
+        <tr><td style="padding:2px 8px 2px 0;"><strong>{$accessCodeLabel}</strong></td><td style="font-family:monospace;font-size:16px;">{$accessCode}</td></tr>
+    </table>
+    <p><a href="{$accessUrl}">{$accessUrl}</a></p>
 
     <p style="margin-top:24px;">{$footer}</p>
 </body>

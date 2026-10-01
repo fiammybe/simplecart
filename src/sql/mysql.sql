@@ -23,6 +23,7 @@ CREATE TABLE `simplecart_order` (
   `scan_token` varchar(64) NOT NULL DEFAULT '',
   `scanned_at` int(10) unsigned NOT NULL DEFAULT '0',
   `scanned_by` int(10) unsigned NOT NULL DEFAULT '0',
+  `access_code` varchar(16) NOT NULL DEFAULT '',
   PRIMARY KEY (`order_id`),
   KEY `status_idx` (`status`),
   KEY `timestamp_idx` (`timestamp`)
