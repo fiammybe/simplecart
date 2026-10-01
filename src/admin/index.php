@@ -35,7 +35,7 @@ foreach ($orders as $orderObj) {
 
    $dashboard[0]['total_orders']++;
    $dashboard[0]['total_amount'] += $amount;
-   if ($status === 'paid') {
+   if (in_array($status, array('paid', 'closed'), true)) {
        $dashboard[0]['paid_orders']++;
        $dashboard[0]['paid_amount'] += $amount;
    } elseif ($status === 'pending') {

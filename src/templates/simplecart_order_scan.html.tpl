@@ -7,9 +7,11 @@
         <{if isset($simplecart_scan_error)}>
             <div class="notification is-danger"><{$simplecart_scan_error|escape}></div>
         <{else}>
-            <div class="notification <{if $simplecart_scan_first}>is-success<{else}>is-warning<{/if}>">
-                <strong><{$simplecart_scan_message|escape}></strong>
-            </div>
+            <{if isset($simplecart_scan_closed_message)}>
+                <div class="notification is-warning">
+                    <strong><{$simplecart_scan_closed_message|escape}></strong>
+                </div>
+            <{/if}>
 
             <{if isset($simplecart_scan_status_warning)}>
                 <div class="notification is-danger is-light"><{$simplecart_scan_status_warning|escape}></div>
@@ -80,6 +82,13 @@
                     </table>
                 </div>
             </div>
+
+            <{if isset($simplecart_scan_close_form)}>
+                <form method="post" action="<{$simplecart_scan_close_form.action|escape}>" class="block">
+                    <input type="hidden" name="close_token" value="<{$simplecart_scan_close_form.close_token|escape}>">
+                    <button type="submit" class="button is-success is-large is-fullwidth"><{$smarty.const._MD_SIMPLECART_SCAN_CLOSE_BUTTON}></button>
+                </form>
+            <{/if}>
 
             <a class="button is-link is-light" href="<{$simplecart_scan_order.admin_url}>"><{$smarty.const._MD_SIMPLECART_SCAN_ADMIN_LINK}></a>
         <{/if}>
