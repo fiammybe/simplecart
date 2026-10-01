@@ -213,15 +213,15 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     }
 
     /**
-     * Records the first scan of an order; the WHERE clause keeps concurrent scans from both succeeding
+     * Closes a paid order from the scan page; the WHERE clause keeps concurrent scans from both succeeding
      */
-    public function markScanned(int $orderId, int $uid): bool
+    public function closeScannedOrder(int $orderId, int $uid): bool
     {
         $table = $this->db->prefix('simplecart_order');
         $scannedAt = time();
 
         $result = $this->db->queryF(
-            "UPDATE `{$table}` SET `scanned_at` = {$scannedAt}, `scanned_by` = {$uid} WHERE `order_id` = {$orderId} AND `scanned_at` = 0"
+            "UPDATE `{$table}` SET `status` = 'closed', `scanned_at` = {$scannedAt}, `scanned_by` = {$uid} WHERE `order_id` = {$orderId} AND `status` = 'paid'"
         );
 
         if (!$result) {

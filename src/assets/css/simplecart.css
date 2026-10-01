@@ -3,6 +3,22 @@
 .sc-total { margin-top: 1rem; }
 .sc-product-image { object-fit: cover; }
 
+/* Order scan page: built for a phone in one hand */
+.sc-scan { max-width: 32rem; margin: 0 auto; padding: 1rem .75rem; }
+.sc-scan-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+.sc-scan-notice { padding: 1rem; }
+.sc-scan-total { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.sc-scan-box { padding: 1rem; margin-bottom: 1rem !important; }
+.sc-scan-items { list-style: none; margin: 0; padding: 0; }
+.sc-scan-items li { display: flex; align-items: baseline; gap: .75rem; padding: .6rem 0; border-top: 1px solid #f0f0f0; }
+.sc-scan-items li:first-child { border-top: 0; }
+.sc-scan-qty { flex: 0 0 auto; min-width: 2.5rem; font-size: 1.25rem; font-weight: 700; }
+.sc-scan-name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.sc-scan-subtotal { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.sc-scan-email { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.sc-scan-actions { position: sticky; bottom: 0; padding: .75rem 0 calc(.75rem + env(safe-area-inset-bottom)); background: #fff; box-shadow: 0 -.5rem 1rem -.75rem rgba(0, 0, 0, .25); }
+.sc-scan-actions .button { min-height: 3.5rem; }
+
 /* Optional: tighten table spacing on mobile */
 @media (max-width: 600px) {
   .table td, .table th { padding: .5rem .5rem; }

@@ -23,7 +23,7 @@ switch ($clean_op) {
             $icmsAdminTpl->assign('simplecart_order_single', $obj->displaySingleObject(true, false, array(), true));
 
             if ($obj->isScanned()) {
-                $icmsAdminTpl->assign('simplecart_order_scan_info', sprintf(_MD_SIMPLECART_SCAN_ALREADY_PROCESSED, $obj->getScannedAtFormatted(), $obj->getScannedByName()));
+                $icmsAdminTpl->assign('simplecart_order_scan_info', sprintf(_MD_SIMPLECART_SCAN_ALREADY_CLOSED, $obj->getScannedAtFormatted(), $obj->getScannedByName()));
             }
 
             $itemRows = simplecart_getOrderItemRows((int)$obj->getVar('order_id'));
@@ -85,8 +85,8 @@ switch ($clean_op) {
         // Build criteria from request filters so the table honors URL parameters
         $criteria = new icms_db_criteria_Compo();
 
-        // Filter by status — only allow 'pending' or 'paid' (empty = no filter)
-        $allowed_status = array('pending', 'paid');
+        // Filter by status — only allow 'pending', 'paid' or 'closed' (empty = no filter)
+        $allowed_status = array('pending', 'paid', 'closed');
         if (isset($_REQUEST['status']) && $_REQUEST['status'] !== '') {
             $status = strtolower(trim($_REQUEST['status']));
             if (in_array($status, $allowed_status, true)) {
@@ -95,17 +95,7 @@ switch ($clean_op) {
         }
 
         // Read-only list: remove default edit/delete actions
-        $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array());
-
-        // Try to attach the criteria in a compatible way with multiple IPF versions
-        if (method_exists($objectTable, 'setCriteria')) {
-            $objectTable->setCriteria($criteria);
-        } elseif (method_exists($objectTable, 'setFilter')) {
-            $objectTable->setFilter($criteria);
-        } else {
-            // fallback: try recreating with criteria as 4th ctor arg (some IPF variants accept this)
-            $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array(), $criteria);
-        }
+        $objectTable = new icms_ipf_view_Table($icms_order_handler, $criteria, array());
 
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));

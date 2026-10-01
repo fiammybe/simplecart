@@ -76,8 +76,12 @@ define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We have received your payment
 define('_MD_SIMPLECART_SCAN_EMAIL_HEADING', 'Your pickup QR code');
 define('_MD_SIMPLECART_SCAN_EMAIL_TEXT', 'Show this QR code when you collect your order. We will scan it to find your order.');
 define('_MD_SIMPLECART_SCAN_TITLE', 'Order scan');
-define('_MD_SIMPLECART_SCAN_PROCESSED', 'Order processed. This is the first scan of this order.');
-define('_MD_SIMPLECART_SCAN_ALREADY_PROCESSED', 'This order was already processed on %s by %s.');
+define('_MD_SIMPLECART_SCAN_ALREADY_CLOSED', 'This order was already closed on %s by %s.');
+define('_MD_SIMPLECART_SCAN_ALREADY_CLOSED_ADMIN', 'This order is already closed.');
+define('_MD_SIMPLECART_SCAN_CLOSE_BUTTON', 'Mark order as closed');
+define('_MD_SIMPLECART_SCAN_CLOSED', 'The order has been closed.');
+define('_MD_SIMPLECART_SCAN_CLOSE_FAILED', 'The order could not be closed. Only paid orders can be closed.');
+define('_MD_SIMPLECART_SCAN_TOKEN_INVALID', 'Security token invalid or expired. Please try again.');
 define('_MD_SIMPLECART_SCAN_NOT_PAID', 'Warning: this order is not marked as paid.');
 define('_MD_SIMPLECART_SCAN_LOGIN_REQUIRED', 'Please log in as an administrator to view this order.');
 define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'You do not have access to this order.');

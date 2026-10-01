@@ -74,8 +74,12 @@ define('_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE', 'We hebben uw betaling voor be
 define('_MD_SIMPLECART_SCAN_EMAIL_HEADING', 'Uw QR-code voor het afhalen');
 define('_MD_SIMPLECART_SCAN_EMAIL_TEXT', 'Toon deze QR-code wanneer u uw bestelling komt afhalen. Wij scannen hem om uw bestelling terug te vinden.');
 define('_MD_SIMPLECART_SCAN_TITLE', 'Bestelling scannen');
-define('_MD_SIMPLECART_SCAN_PROCESSED', 'Bestelling verwerkt. Dit is de eerste scan van deze bestelling.');
-define('_MD_SIMPLECART_SCAN_ALREADY_PROCESSED', 'Deze bestelling werd al verwerkt op %s door %s.');
+define('_MD_SIMPLECART_SCAN_ALREADY_CLOSED', 'Deze bestelling werd al afgesloten op %s door %s.');
+define('_MD_SIMPLECART_SCAN_ALREADY_CLOSED_ADMIN', 'Deze bestelling is al afgesloten.');
+define('_MD_SIMPLECART_SCAN_CLOSE_BUTTON', 'Bestelling afsluiten');
+define('_MD_SIMPLECART_SCAN_CLOSED', 'De bestelling is afgesloten.');
+define('_MD_SIMPLECART_SCAN_CLOSE_FAILED', 'De bestelling kon niet worden afgesloten. Enkel betaalde bestellingen kunnen worden afgesloten.');
+define('_MD_SIMPLECART_SCAN_TOKEN_INVALID', 'Beveiligingstoken ongeldig of verlopen. Probeer opnieuw.');
 define('_MD_SIMPLECART_SCAN_NOT_PAID', 'Opgelet: deze bestelling is niet als betaald gemarkeerd.');
 define('_MD_SIMPLECART_SCAN_LOGIN_REQUIRED', 'Meld u aan als beheerder om deze bestelling te bekijken.');
 define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'U heeft geen toegang tot deze bestelling.');
