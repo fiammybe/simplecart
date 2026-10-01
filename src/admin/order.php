@@ -95,17 +95,7 @@ switch ($clean_op) {
         }
 
         // Read-only list: remove default edit/delete actions
-        $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array());
-
-        // Try to attach the criteria in a compatible way with multiple IPF versions
-        if (method_exists($objectTable, 'setCriteria')) {
-            $objectTable->setCriteria($criteria);
-        } elseif (method_exists($objectTable, 'setFilter')) {
-            $objectTable->setFilter($criteria);
-        } else {
-            // fallback: try recreating with criteria as 4th ctor arg (some IPF variants accept this)
-            $objectTable = new icms_ipf_view_Table($icms_order_handler, false, array(), $criteria);
-        }
+        $objectTable = new icms_ipf_view_Table($icms_order_handler, $criteria, array());
 
         $objectTable->addColumn(new icms_ipf_view_Column('order_id', 'center', 60));
         $objectTable->addColumn(new icms_ipf_view_Column('timestamp', 'center', 160));
