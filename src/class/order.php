@@ -5,7 +5,7 @@ class SimplecartOrder extends icms_ipf_Object {
     public function __construct(&$handler) {
         parent::__construct($handler);
         $this->initVar('order_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('timestamp', XOBJ_DTYPE_LTIME, time(), false, null, '', false, _MI_SIMPLECART_ORDER_TIMESTAMP, '', false, true, false);
+        $this->initVar('timestamp', XOBJ_DTYPE_LTIME, 0, false, null, '', false, _MI_SIMPLECART_ORDER_TIMESTAMP, '', false, true, false);
         $this->initVar('total_amount', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDER_TOTAL);
         $this->initVar('status', XOBJ_DTYPE_TXTBOX, 'pending', true, 32, '', false, _MI_SIMPLECART_ORDER_STATUS);
         $this->initVar('customer_name', XOBJ_DTYPE_TXTBOX, '', false, 100, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_NAME);
