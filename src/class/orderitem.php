@@ -34,5 +34,23 @@ class SimplecartOrderitemHandler extends icms_ipf_Handler {
     public function beforeUpdate(&$obj) {
         return $this->beforeInsert($obj);
     }
+
+    /** @return array<int, SimplecartOrderitem> */
+    public function getByOrder(int $orderId): array
+    {
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+        $criteria->setSort('orderitem_id');
+        $criteria->setOrder('ASC');
+
+        return $this->getObjects($criteria, false, true);
+    }
+
+    public function deleteByOrder(int $orderId): void
+    {
+        $criteria = new icms_db_criteria_Compo();
+        $criteria->add(new icms_db_criteria_Item('order_id', $orderId));
+        $this->deleteAll($criteria);
+    }
 }
 ?>

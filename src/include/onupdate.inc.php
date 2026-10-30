@@ -1,60 +1,68 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+simplecart_prepareLegacyOrderTable();
+
 /**
- * Brings older installations up to the current product and order table layout
+ * The IPF upgrade drops every column that no object declares, so the legacy customer_info
+ * data has to be copied to the customer columns before that upgrade runs
  */
-function icms_module_update_simplecart($module): bool
+function simplecart_prepareLegacyOrderTable(): void
 {
     $db = icms::$xoopsDB;
-
-    $productColumns = [
-        'image' => "varchar(255) NOT NULL DEFAULT ''",
-    ];
-
-    if (!simplecart_addMissingColumns($module, $db->prefix('simplecart_product'), $productColumns)) {
-        return false;
-    }
-
     $table = $db->prefix('simplecart_order');
 
-    $orderColumns = [
-        'scan_token' => "varchar(64) NOT NULL DEFAULT ''",
-        'scanned_at' => "int(10) unsigned NOT NULL DEFAULT '0'",
-        'scanned_by' => "int(10) unsigned NOT NULL DEFAULT '0'",
+    if (!simplecart_tableExists($table)) {
+        return;
+    }
+
+    $customerColumns = [
         'customer_name' => "varchar(100) NOT NULL DEFAULT ''",
         'customer_email' => "varchar(255) NOT NULL DEFAULT ''",
         'customer_phone' => "varchar(50) NOT NULL DEFAULT ''",
         'customer_address' => 'text',
     ];
 
-    if (!simplecart_addMissingColumns($module, $table, $orderColumns)) {
-        return false;
+    simplecart_addMissingColumns($table, $customerColumns);
+
+    if (simplecart_columnExists($table, 'customer_info') && ! simplecart_migrateCustomerInfo($table)) {
+        throw new RuntimeException("Could not migrate customer_info in {$table}; the update was stopped before the column could be dropped");
     }
 
-    if (!simplecart_columnExists($table, 'customer_info')) {
-        return true;
+    simplecart_replaceNullsWithEmptyStrings($table, ['customer_address', 'payment_ref', 'helpende_hand']);
+    simplecart_replaceNullsWithEmptyStrings($db->prefix('simplecart_product'), ['description']);
+}
+
+/**
+ * The IPF upgrade makes every column NOT NULL, which fails while a row still holds NULL
+ *
+ * @param array<int, string> $columns
+ */
+function simplecart_replaceNullsWithEmptyStrings(string $table, array $columns): void
+{
+    $db = icms::$xoopsDB;
+
+    foreach ($columns as $column) {
+        if (! simplecart_columnExists($table, $column)) {
+            continue;
+        }
+
+        $db->queryF("UPDATE `{$table}` SET `{$column}` = '' WHERE `{$column}` IS NULL");
     }
+}
 
-    if (!simplecart_migrateCustomerInfo($table)) {
-        $module->setErrors("Could not migrate customer_info in {$table}; the column was kept");
+function simplecart_tableExists(string $table): bool
+{
+    $db = icms::$xoopsDB;
+    $result = $db->queryF("SHOW TABLES LIKE '{$table}'");
 
-        return false;
-    }
-
-    if (!$db->queryF("ALTER TABLE `{$table}` DROP COLUMN `customer_info`")) {
-        $module->setErrors("Could not drop column customer_info from {$table}");
-
-        return false;
-    }
-
-    return true;
+    return $result && $db->getRowsNum($result) > 0;
 }
 
 /**
  * @param array<string, string> $columns
  */
-function simplecart_addMissingColumns($module, string $table, array $columns): bool
+function simplecart_addMissingColumns(string $table, array $columns): void
 {
     $db = icms::$xoopsDB;
 
@@ -63,14 +71,10 @@ function simplecart_addMissingColumns($module, string $table, array $columns): b
             continue;
         }
 
-        if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
-            $module->setErrors("Could not add column {$column} to {$table}");
-
-            return false;
+        if (! $db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
+            throw new RuntimeException("Could not add column {$column} to {$table}");
         }
     }
-
-    return true;
 }
 
 function simplecart_columnExists(string $table, string $column): bool
