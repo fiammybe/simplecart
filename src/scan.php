@@ -49,7 +49,7 @@ if ($status !== 'paid') {
     $icmsTpl->assign('simplecart_scan_status_warning', _MD_SIMPLECART_SCAN_NOT_PAID);
 }
 
-$itemRows = simplecart_getOrderItemRows($orderId);
+$itemRows = $order->getItemRows();
 
 $icmsTpl->assign('simplecart_scan_order', [
     'order_id' => $orderId,

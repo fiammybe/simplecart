@@ -41,6 +41,30 @@ class SimplecartProduct extends icms_ipf_Object {
         return ICMS_URL . $image;
     }
 
+    /**
+     * @return array{
+     *     product_id: int,
+     *     name: string,
+     *     price: float,
+     *     description: string,
+     *     image_url: string,
+     *     price_formatted: string
+     * }
+     */
+    public function toListRow(): array
+    {
+        $price = (float)$this->getVar('price');
+
+        return [
+            'product_id' => (int)$this->getVar('product_id'),
+            'name' => (string)$this->getVar('name'),
+            'price' => $price,
+            'description' => (string)$this->getVar('description'),
+            'image_url' => $this->getImageUrl(),
+            'price_formatted' => simplecart_formatMoney($price),
+        ];
+    }
+
     public function getImageThumbnail(): string
     {
         $url = $this->getImageUrl();
@@ -75,6 +99,40 @@ class SimplecartProductHandler extends icms_ipf_Handler {
 
     public function beforeUpdate(&$obj) {
         return $this->beforeInsert($obj);
+    }
+
+    public function getActiveProduct(int $productId): ?SimplecartProduct
+    {
+        if ($productId <= 0) {
+            return null;
+        }
+
+        $product = $this->get($productId);
+
+        if (! $product || $product->isNew()) {
+            return null;
+        }
+
+        if ((int)$product->getVar('active') !== 1) {
+            return null;
+        }
+
+        return $product;
+    }
+
+    /** @return array<int, SimplecartProduct> */
+    public function getProducts(bool $onlyActive = true): array
+    {
+        $criteria = new icms_db_criteria_Compo();
+
+        if ($onlyActive) {
+            $criteria->add(new icms_db_criteria_Item('active', 1));
+        }
+
+        $criteria->setSort('name');
+        $criteria->setOrder('ASC');
+
+        return $this->getObjects($criteria, false, true);
     }
 }
 ?>
