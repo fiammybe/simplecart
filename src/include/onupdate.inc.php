@@ -1,60 +1,55 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
-/**
- * Brings older installations up to the current product and order table layout
+/*
+ * The tables are synchronised by IPF (object_items in icms_version.php) before any update function
+ * runs, and that sync drops columns that have no matching var. The legacy customer_info data is
+ * therefore migrated while this file is being included, which happens just before the sync.
  */
-function icms_module_update_simplecart($module): bool
+simplecart_prepareLegacyOrderTable();
+
+function simplecart_prepareLegacyOrderTable(): void
 {
     $db = icms::$xoopsDB;
-
-    $productColumns = [
-        'image' => "varchar(255) NOT NULL DEFAULT ''",
-    ];
-
-    if (!simplecart_addMissingColumns($module, $db->prefix('simplecart_product'), $productColumns)) {
-        return false;
-    }
-
     $table = $db->prefix('simplecart_order');
 
-    $orderColumns = [
-        'scan_token' => "varchar(64) NOT NULL DEFAULT ''",
-        'scanned_at' => "int(10) unsigned NOT NULL DEFAULT '0'",
-        'scanned_by' => "int(10) unsigned NOT NULL DEFAULT '0'",
+    if (!simplecart_tableExists($table) || !simplecart_columnExists($table, 'customer_info')) {
+        return;
+    }
+
+    $backup = $db->prefix('simplecart_order_customer_info_backup');
+    $db->queryF("CREATE TABLE IF NOT EXISTS `{$backup}` AS SELECT `order_id`, `customer_info` FROM `{$table}`");
+
+    $customerColumns = [
         'customer_name' => "varchar(100) NOT NULL DEFAULT ''",
         'customer_email' => "varchar(255) NOT NULL DEFAULT ''",
         'customer_phone' => "varchar(50) NOT NULL DEFAULT ''",
         'customer_address' => 'text',
     ];
 
-    if (!simplecart_addMissingColumns($module, $table, $orderColumns)) {
+    if (!simplecart_addMissingColumns($table, $customerColumns)) {
+        return;
+    }
+
+    simplecart_migrateCustomerInfo($table);
+}
+
+function simplecart_tableExists(string $table): bool
+{
+    $db = icms::$xoopsDB;
+    $result = $db->queryF("SHOW TABLES LIKE '{$table}'");
+
+    if (!$result) {
         return false;
     }
 
-    if (!simplecart_columnExists($table, 'customer_info')) {
-        return true;
-    }
-
-    if (!simplecart_migrateCustomerInfo($table)) {
-        $module->setErrors("Could not migrate customer_info in {$table}; the column was kept");
-
-        return false;
-    }
-
-    if (!$db->queryF("ALTER TABLE `{$table}` DROP COLUMN `customer_info`")) {
-        $module->setErrors("Could not drop column customer_info from {$table}");
-
-        return false;
-    }
-
-    return true;
+    return $db->getRowsNum($result) > 0;
 }
 
 /**
  * @param array<string, string> $columns
  */
-function simplecart_addMissingColumns($module, string $table, array $columns): bool
+function simplecart_addMissingColumns(string $table, array $columns): bool
 {
     $db = icms::$xoopsDB;
 
@@ -64,8 +59,6 @@ function simplecart_addMissingColumns($module, string $table, array $columns): b
         }
 
         if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
-            $module->setErrors("Could not add column {$column} to {$table}");
-
             return false;
         }
     }

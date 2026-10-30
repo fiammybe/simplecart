@@ -13,6 +13,7 @@ $customer = array(
     'helpendehanden' => '',
 );
 $checkoutError = '';
+$removedItems = simplecart_pruneUnavailableCartItems();
 $checkoutSuccess = false;
 $checkoutMessage = '';
 $paymentInfo = array();
@@ -40,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $checkoutError = _MD_SIMPLECART_CSRF_FAIL;
     } else {
         try {
+            if (!empty($removedItems)) {
+                throw new Exception(_MD_SIMPLECART_ITEMS_REMOVED . ' ' . implode(', ', $removedItems));
+            }
+
             $cart = simplecart_getCart();
             if (empty($cart)) {
                 throw new Exception(_MD_SIMPLECART_EMPTY_CART);
@@ -117,6 +122,7 @@ $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_order_token', icms::$security->createToken(3600, 'simplecart_checkout'));
 $icmsTpl->assign('simplecart_customer', $customer);
 $icmsTpl->assign('simplecart_error_message', $checkoutError);
+$icmsTpl->assign('simplecart_removed_items', $removedItems);
 $icmsTpl->assign('simplecart_order_success', $checkoutSuccess);
 $icmsTpl->assign('simplecart_order_success_message', $checkoutMessage);
 $icmsTpl->assign('simplecart_order_id', $orderId);

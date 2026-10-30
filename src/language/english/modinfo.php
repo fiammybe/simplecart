@@ -51,3 +51,9 @@ define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO', 'Duplicate order email recipient');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO_DESC', 'Optional email address that receives a duplicate copy of every order confirmation. Use a comma- or semicolon-separated list if needed.');
+
+// Campaign fields
+define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Name');
+define('_MI_SIMPLECART_CAMPAIGN_START', 'Start');
+define('_MI_SIMPLECART_CAMPAIGN_END', 'End (leave empty for no end)');
+define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campaign');

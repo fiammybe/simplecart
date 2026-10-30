@@ -15,6 +15,9 @@ class SimplecartProduct extends icms_ipf_Object {
         $this->initVar('image', XOBJ_DTYPE_TXTBOX, '', false, 255, '', false, _MI_SIMPLECART_PRODUCT_IMAGE);
         $this->initVar('active', XOBJ_DTYPE_INT, 1, false, null, '', false, _MI_SIMPLECART_PRODUCT_ACTIVE);
 
+        $this->initVar('campaign_id', XOBJ_DTYPE_INT, 0, false, null, '', false, _MI_SIMPLECART_PRODUCT_CAMPAIGN);
+
+        $this->setControl('campaign_id', array('name' => 'select', 'itemHandler' => 'campaign', 'method' => 'getCampaignArray', 'module' => 'simplecart'));
         $this->setControl('description', array('name' => 'textarea'));
         $this->setControl('image', 'imagemanager');
         $this->setControl('active', 'yesno');
@@ -24,6 +27,44 @@ class SimplecartProduct extends icms_ipf_Object {
 
         $this->handler->identifierName = 'name';
         $this->handler->summaryName = 'description';
+    }
+
+    public function isAvailable(): bool
+    {
+        if ((int)$this->getVar('active', 'n') !== 1) {
+            return false;
+        }
+
+        $campaignId = (int)$this->getVar('campaign_id', 'n');
+
+        if ($campaignId <= 0) {
+            return true;
+        }
+
+        $campaign = simplecart_getHandler('campaign')->get($campaignId);
+
+        if (!$campaign || $campaign->isNew()) {
+            return false;
+        }
+
+        return $campaign->isActive();
+    }
+
+    public function getCampaignName(): string
+    {
+        $campaignId = (int)$this->getVar('campaign_id', 'n');
+
+        if ($campaignId <= 0) {
+            return '-';
+        }
+
+        $campaign = simplecart_getHandler('campaign')->get($campaignId);
+
+        if (!$campaign || $campaign->isNew()) {
+            return '-';
+        }
+
+        return htmlspecialchars((string)$campaign->getVar('name', 'n'), ENT_QUOTES, 'UTF-8');
     }
 
     public function getImageUrl(): string

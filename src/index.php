@@ -6,6 +6,7 @@ $xoopsOption['template_main'] = 'simplecart_index.html.tpl';
 include ICMS_ROOT_PATH . '/header.php';
 
 $cartMessage = '';
+$removedItems = simplecart_pruneUnavailableCartItems();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? trim((string)$_POST['action']) : '';
     $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
@@ -40,6 +41,7 @@ $products = simplecart_getProductList(true);
 $cartSummary = simplecart_getCartSummary();
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_message', $cartMessage);
+$icmsTpl->assign('simplecart_removed_items', $removedItems);
 $icmsTpl->assign('simplecart_products', $products);
 $icmsTpl->assign('simplecart_cart_items', $cartSummary['items']);
 $icmsTpl->assign('simplecart_cart_total', $cartSummary['total']);

@@ -17,3 +17,16 @@ define('_AM_SIMPLECART_ORDER_DELETED', 'Bestelling en gerelateerde items met suc
 
 define('_AM_SIMPLECART_PAYMENT_MAIL_SENT', 'Betalingsbevestiging met QR-code naar de klant verstuurd.');
 define('_AM_SIMPLECART_PAYMENT_MAIL_FAILED', 'De betalingsbevestiging kon niet verstuurd worden.');
+
+define('_AM_SIMPLECART_CAMPAIGN_ADMIN', 'Beheer campagnes');
+define('_AM_SIMPLECART_CAMPAIGN_FORM', 'Campagne');
+define('_AM_SIMPLECART_CAMPAIGN_CREATE', 'Campagne aanmaken');
+define('_AM_SIMPLECART_CAMPAIGN_CREATED', 'Campagne met succes aangemaakt');
+define('_AM_SIMPLECART_CAMPAIGN_UPDATED', 'Campagne met succes gewijzigd');
+define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Ben je zeker dat je deze campagne wil verwijderen? De gekoppelde producten blijven bestaan maar worden losgekoppeld.');
+define('_AM_SIMPLECART_CAMPAIGN_NONE', '- Geen campagne -');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS_ACTIVE', 'Actief');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS_INACTIVE', 'Niet actief');
+define('_AM_SIMPLECART_CAMPAIGN_START_REQUIRED', 'Een begindatum is verplicht.');
+define('_AM_SIMPLECART_CAMPAIGN_END_BEFORE_START', 'Het einde moet na het begin liggen.');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS', 'Status');

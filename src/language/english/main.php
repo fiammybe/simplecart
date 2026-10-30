@@ -85,3 +85,5 @@ define('_MD_SIMPLECART_SCAN_INVALID', 'This order link is invalid or the order n
 define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
 define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Open order in administration');
 
+
+define('_MD_SIMPLECART_ITEMS_REMOVED', 'These products are no longer available and were removed from your cart:');
