@@ -5,6 +5,13 @@
   <div class="container">
     <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_CHECKOUT}></h1>
 
+    <{if $simplecart_removed_items && !$simplecart_error_message}>
+      <div class="notification is-warning">
+        <{$smarty.const._MD_SIMPLECART_ITEMS_REMOVED}>
+        <{foreach from=$simplecart_removed_items item=removed_name name=removed}><{$removed_name|escape:html}><{if !$smarty.foreach.removed.last}>, <{/if}><{/foreach}>
+      </div>
+    <{/if}>
+
     <{if $simplecart_order_success}>
       <div class="notification is-success"><strong><{$simplecart_order_success_message|escape:html}></strong></div>
 

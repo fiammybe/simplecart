@@ -197,6 +197,58 @@ function simplecart_removeFromCart($productId) {
     return true;
 }
 
+function simplecart_getAvailableCampaignCriteria() {
+    $activeIds = simplecart_getHandler('campaign')->getActiveIds();
+    $criteria = new icms_db_criteria_Compo(new icms_db_criteria_Item('campaign_id', 0));
+
+    if (!empty($activeIds)) {
+        $criteria->add(new icms_db_criteria_Item('campaign_id', '(' . implode(',', $activeIds) . ')', 'IN'), 'OR');
+    }
+
+    return $criteria;
+}
+
+/**
+ * Removes cart items whose product is no longer available and returns their names
+ *
+ * @return array<int, string>
+ */
+function simplecart_pruneUnavailableCartItems(): array
+{
+    $cart = simplecart_getCart();
+    $originalCart = $cart;
+
+    if (empty($cart)) {
+        return array();
+    }
+
+    $products = simplecart_getProductList(true);
+    $productHandler = simplecart_getHandler('product');
+    $removed = array();
+
+    foreach ($cart as $key => $item) {
+        $productId = isset($item['product_id']) ? (int)$item['product_id'] : (int)$key;
+
+        if (isset($products[$productId])) {
+            continue;
+        }
+
+        $product = $productHandler->get($productId);
+
+        if ($product && !$product->isNew()) {
+            $removed[] = (string)$product->getVar('name', 'n');
+        }
+
+        unset($cart[$key]);
+    }
+
+    if ($cart !== $originalCart) {
+        simplecart_saveCart($cart);
+    }
+
+    return $removed;
+}
+
 function simplecart_getProductList($onlyActive = true) {
     $list = array();
 

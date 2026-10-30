@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '2.3.1';
+$modversion['version'] = '2.4.0';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'David Janssens (fiammybe)';
 $modversion['credits'] = 'ImpressCMS, IPF';
@@ -11,10 +11,10 @@ $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
 
-$modversion['status_version'] = "2.3.1";
+$modversion['status_version'] = "2.4.0";
 $modversion['status'] = "Final";
 $modversion['date'] = "7 Nov 2026";
-$modversion['author_word'] = "Close orders from the order scan page";
+$modversion['author_word'] = "Add campaigns";
 
 $modversion['hasMain'] = 1;
 $modversion['hasAdmin'] = 1;
@@ -27,6 +27,7 @@ if (!defined('SIMPLECART_DB_VERSION')) {
 }
 
 $modversion['object_items'] = array(
+    'campaign',
     'product',
     'order',
     'orderitem'
@@ -38,6 +39,7 @@ $modversion['onUpdate'] = 'include/onupdate.inc.php';
 $modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');
 $modversion['templates'][] = array('file' => 'simplecart_checkout.html.tpl', 'description' => 'SimpleCart Checkout');
 $modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl', 'description' => 'Admin - Products');
+$modversion['templates'][] = array('file' => 'simplecart_admin_campaign.html.tpl', 'description' => 'Admin - Campaigns');
 $modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
 $modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html.tpl', 'description' => 'Admin - Dashboard');
 $modversion['templates'][] = array('file' => 'simplecart_order_scan.html.tpl', 'description' => 'SimpleCart Order Scan');
