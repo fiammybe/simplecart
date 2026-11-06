@@ -5,6 +5,13 @@
     <{if isset($simplecart_scan_error)}>
         <h1 class="title is-5"><{$smarty.const._MD_SIMPLECART_SCAN_TITLE}></h1>
         <div class="notification is-danger"><{$simplecart_scan_error|escape}></div>
+    <{elseif isset($simplecart_scan_extension)}>
+        <h1 class="title is-5"><{$smarty.const._MD_SIMPLECART_SCAN_TITLE}></h1>
+        <div class="notification sc-scan-notice <{if $simplecart_scan_extension.status == 'success'}>is-success<{elseif $simplecart_scan_extension.status == 'error'}>is-danger<{else}>is-warning<{/if}>">
+            <{if $simplecart_scan_extension.title}><p class="title is-5"><{$simplecart_scan_extension.title|escape}></p><{/if}>
+            <strong><{$simplecart_scan_extension.message|escape}></strong>
+        </div>
+        <{if $simplecart_scan_extension.html}><div class="box sc-scan-box"><{$simplecart_scan_extension.html}></div><{/if}>
     <{else}>
         <header class="sc-scan-header">
             <div>
@@ -68,6 +75,10 @@
                 </div>
             </div>
         <{/if}>
+
+        <{foreach from=$simplecart_extension_blocks item=block}>
+            <div class="box sc-scan-box"><{$block}></div>
+        <{/foreach}>
 
         <p class="has-text-centered mb-4">
             <a class="is-size-7" href="<{$simplecart_scan_order.admin_url}>"><{$smarty.const._MD_SIMPLECART_SCAN_ADMIN_LINK}></a>

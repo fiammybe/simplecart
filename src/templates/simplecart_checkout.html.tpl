@@ -85,6 +85,10 @@
               <p><strong><{$smarty.const._MD_SIMPLECART_TOTAL}></strong>: <{$simplecart_order_total_formatted}></p>
             <{/if}>
           <{/if}>
+
+          <{foreach from=$simplecart_extension_blocks item=block}>
+            <div class="box"><{$block}></div>
+          <{/foreach}>
         </div>
       <{/if}>
     <{elseif $simplecart_error_message}>

@@ -4,7 +4,9 @@ include_once __DIR__ . '/include/common.php';
 
 $orderId = isset($_REQUEST['order_id']) ? (int)$_REQUEST['order_id'] : 0;
 $token = isset($_REQUEST['token']) ? (string)$_REQUEST['token'] : '';
-$scanUrl = SIMPLECART_URL . 'scan.php?' . http_build_query(['order_id' => $orderId, 'token' => $token]);
+// Scan links that belong to an add-on (e.g. a ticket) carry an 'addon' parameter and their own parameters
+$isAddonScan = isset($_GET['addon']);
+$scanUrl = SIMPLECART_URL . 'scan.php?' . http_build_query($isAddonScan ? $_GET : ['order_id' => $orderId, 'token' => $token]);
 
 if (!is_object(icms::$user)) {
     redirect_header(ICMS_URL . '/user.php?xoops_redirect=' . urlencode($scanUrl), 3, _MD_SIMPLECART_SCAN_LOGIN_REQUIRED);
@@ -13,6 +15,41 @@ if (!is_object(icms::$user)) {
 
 $moduleId = (int)icms::handler('icms_module')->getByDirname(SIMPLECART_DIRNAME)->getVar('mid');
 $isModuleAdmin = icms::$user->isAdmin($moduleId);
+
+if ($isAddonScan) {
+    $xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
+    include ICMS_ROOT_PATH . '/header.php';
+
+    if (!$isModuleAdmin) {
+        $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_NO_ACCESS);
+        include ICMS_ROOT_PATH . '/footer.php';
+        exit;
+    }
+
+    $scanEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_SCAN_RESOLVE, array(
+        'addon' => (string)$_GET['addon'],
+        'params' => $_GET,
+        'user' => icms::$user,
+    ));
+
+    $scanResults = $scanEvent->getResults();
+    if (empty($scanResults)) {
+        $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_INVALID);
+    } else {
+        $scanResult = $scanResults[0];
+        $icmsTpl->assign('simplecart_scan_extension', array(
+            'title' => (string)($scanResult['title'] ?? ''),
+            'message' => (string)($scanResult['message'] ?? ''),
+            'status' => in_array(($scanResult['status'] ?? ''), array('success', 'warning', 'error'), true) ? $scanResult['status'] : 'warning',
+            'html' => (string)($scanResult['html'] ?? ''),
+        ));
+    }
+
+    $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
+    include ICMS_ROOT_PATH . '/footer.php';
+    exit;
+}
+
 $orderHandler = simplecart_getHandler('order');
 $order = $orderId > 0 ? $orderHandler->get($orderId) : null;
 $isValidOrder = $order && !$order->isNew() && $order->hasValidScanToken($token);
@@ -80,6 +117,19 @@ if ($status === 'paid') {
 }
 
 $itemRows = $order->getItemRows();
+
+$scanBlocks = array();
+$renderEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
+    'order' => $order,
+    'context' => 'scan',
+));
+foreach ($renderEvent->getResults() as $result) {
+    $html = trim((string)($result['html'] ?? ''));
+    if ($html !== '') {
+        $scanBlocks[] = $html;
+    }
+}
+$icmsTpl->assign('simplecart_extension_blocks', $scanBlocks);
 $customerPhone = (string)$order->getVar('customer_phone', 'n');
 
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);

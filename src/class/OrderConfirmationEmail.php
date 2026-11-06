@@ -128,6 +128,11 @@ class OrderConfirmationEmail {
         );
         $text .= str_repeat('=', 70) . "\n\n";
 
+        // Extra sections supplied by add-ons
+        foreach ($this->getExtensionTexts() as $extensionText) {
+            $text .= $extensionText . "\n\n";
+        }
+
         // Payment Information Section
         if (!empty($this->sepaConfig['beneficiary_iban'])) {
             $text .= str_repeat('-', 70) . "\n";
@@ -148,6 +153,28 @@ class OrderConfirmationEmail {
         $text .= str_repeat('=', 70) . "\n";
 
         return $text;
+    }
+
+    /**
+     * Plain text blocks that add-ons want in the mail
+     *
+     * @return array<int, string>
+     */
+    private function getExtensionTexts() {
+        $event = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
+            'order' => $this->order,
+            'context' => 'mail',
+        ));
+
+        $texts = array();
+        foreach ($event->getResults() as $result) {
+            $text = trim((string)($result['text'] ?? ''));
+            if ($text !== '') {
+                $texts[] = $text;
+            }
+        }
+
+        return $texts;
     }
 
     private function formatCurrency($amount) {
