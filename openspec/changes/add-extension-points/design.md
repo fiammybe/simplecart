@@ -47,11 +47,11 @@ De huidige controles ("geen geldige items", "totaal > 0") worden aangepast: een 
 ### D5. Versiebeheer van de API
 `SIMPLECART_EXTENSION_API` (integer, nu 1). Semver-regels: toevoegen van events of optionele payloadvelden is compatibel; wijzigen/verwijderen verhoogt het hoofdnummer. Add-ons controleren de waarde bij installatie en gebruik.
 
-### D7. Succespagina enkel voor de eigen sessie
-`checkout.php?success=1&order_id=N` toont orderdetails zonder authenticatie (bestaand gedrag, niet gewijzigd). Add-on-uitvoer (`order.render`, context `page`) wordt daarom enkel getoond aan de sessie die de bestelling net plaatste.
-
 ### D6. Annulatie
 `order.cancelled` wordt uitgestuurd bij statuswijziging naar `cancelled` en bij verwijderen van een bestelling (`beforeDelete`).
+
+### D7. Succespagina enkel voor de eigen sessie
+`checkout.php?success=1&order_id=N` toont orderdetails zonder authenticatie (bestaand gedrag, niet gewijzigd). Add-on-uitvoer (`order.render`, context `page`) wordt daarom enkel getoond aan de sessie die de bestelling net plaatste.
 
 ## Risks / Trade-offs
 
