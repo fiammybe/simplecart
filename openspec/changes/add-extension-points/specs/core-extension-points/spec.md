@@ -62,3 +62,10 @@ Het systeem SHALL `scan.resolve` uitsturen voor scanverzoeken die niet bij een e
 #### Scenario: Onbekend verzoek
 - **WHEN** `scan.php` een verzoek krijgt dat de kern niet herkent en een luisteraar het afhandelt
 - **THEN** toont de pagina het resultaat van die luisteraar
+
+### Requirement: Versiecontract
+Het systeem SHALL de extension-API semantisch versioneren: het toevoegen van events of optionele payloadvelden verhoogt het hoofdnummer niet; het wijzigen of verwijderen van events of verplichte velden wel.
+
+#### Scenario: Compatibele uitbreiding
+- **WHEN** een nieuwe versie van simplecart een extra event toevoegt
+- **THEN** blijft `SIMPLECART_EXTENSION_API` gelijk en blijven bestaande add-ons werken

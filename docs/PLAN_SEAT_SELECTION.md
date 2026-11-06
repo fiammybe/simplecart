@@ -1,6 +1,6 @@
 # Plan: plaatskeuze op een zaalkaart (simplecart 3.0)
 
-> **Let op:** dit eerste plan is achterhaald. De plaatskeuze wordt een optionele add-on-module (`simplecartseats`) met kleine extension points in de kern; zie `openspec/changes/add-seat-selection-addon/`.
+> **Let op:** dit eerste plan is achterhaald. De plaatskeuze wordt een optionele add-on in de repository `fiammybe/simplecart-seats`; de kern krijgt enkel extension points, zie `openspec/changes/add-extension-points/`.
 
 ## 1. Doel
 
