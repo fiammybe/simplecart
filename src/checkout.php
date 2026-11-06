@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 throw new Exception(_MD_SIMPLECART_EMPTY_CART);
             }
 
-            $result = simplecart_placeOrderFromCustomerAndItems($customer, $cart);
+            $result = simplecart_getHandler('order')->placeOrder(is_array($customer) ? $customer : array(), $cart);
             simplecart_emptyCart();
             $redirectUrl = SIMPLECART_URL . 'checkout.php?success=1&order_id=' . (int)$result['order_id'];
             header('Location: ' . $redirectUrl);
@@ -63,7 +63,12 @@ if (!empty($_GET['success']) && $orderId > 0) {
     $orderDetails['order_id'] = $orderId;
 
     try {
-        $paymentInfo = simplecart_getOrderPaymentData($orderId);
+        $paymentOrder = simplecart_getHandler('order')->get($orderId);
+        if (!$paymentOrder || $paymentOrder->isNew()) {
+            throw new RuntimeException("Order {$orderId} was not found");
+        }
+
+        $paymentInfo = $paymentOrder->getPaymentData();
         $orderDetails['total'] = (float)($paymentInfo['amount'] ?? 0.0);
         $orderDetails['total_formatted'] = simplecart_formatMoney($orderDetails['total'], strtoupper((string)($paymentInfo['currency'] ?? 'EUR')));
     } catch (Exception $e) {

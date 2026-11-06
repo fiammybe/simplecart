@@ -75,7 +75,7 @@ $orders = [];
 foreach ($orderHandler->getOrdersByEmail($accessEmail) as $order) {
     $orderId = (int)$order->getVar('order_id');
     $status = (string)$order->getVar('status', 'n');
-    $itemRows = simplecart_getOrderItemRows($orderId);
+    $itemRows = $order->getItemRows();
 
     $orders[] = [
         'order_id' => $orderId,

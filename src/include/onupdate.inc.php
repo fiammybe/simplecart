@@ -1,57 +1,14 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+simplecart_prepareLegacyOrderTable();
+
 /**
- * Brings older installations up to the current product and order table layout
+ * Runs after the IPF upgrade, which has added the access_code column declared by the order object
  */
 function icms_module_update_simplecart($module): bool
 {
-    $db = icms::$xoopsDB;
-
-    $productColumns = [
-        'image' => "varchar(255) NOT NULL DEFAULT ''",
-    ];
-
-    if (!simplecart_addMissingColumns($module, $db->prefix('simplecart_product'), $productColumns)) {
-        return false;
-    }
-
-    $table = $db->prefix('simplecart_order');
-
-    $orderColumns = [
-        'scan_token' => "varchar(64) NOT NULL DEFAULT ''",
-        'scanned_at' => "int(10) unsigned NOT NULL DEFAULT '0'",
-        'scanned_by' => "int(10) unsigned NOT NULL DEFAULT '0'",
-        'customer_name' => "varchar(100) NOT NULL DEFAULT ''",
-        'customer_email' => "varchar(255) NOT NULL DEFAULT ''",
-        'customer_phone' => "varchar(50) NOT NULL DEFAULT ''",
-        'customer_address' => 'text',
-        'access_code' => "varchar(16) NOT NULL DEFAULT ''",
-    ];
-
-    if (!simplecart_addMissingColumns($module, $table, $orderColumns)) {
-        return false;
-    }
-
-    if (!simplecart_addMissingAccessCodes($table)) {
-        $module->setErrors("Could not generate access codes for existing orders in {$table}");
-
-        return false;
-    }
-
-    if (!simplecart_columnExists($table, 'customer_info')) {
-        return true;
-    }
-
-    if (!simplecart_migrateCustomerInfo($table)) {
-        $module->setErrors("Could not migrate customer_info in {$table}; the column was kept");
-
-        return false;
-    }
-
-    if (!$db->queryF("ALTER TABLE `{$table}` DROP COLUMN `customer_info`")) {
-        $module->setErrors("Could not drop column customer_info from {$table}");
-
+    if (! simplecart_addMissingAccessCodes($module)) {
         return false;
     }
 
@@ -59,9 +16,101 @@ function icms_module_update_simplecart($module): bool
 }
 
 /**
+ * The IPF upgrade drops every column that no object declares, so the legacy customer_info
+ * data has to be copied to the customer columns before that upgrade runs
+ */
+function simplecart_prepareLegacyOrderTable(): void
+{
+    $db = icms::$xoopsDB;
+    $table = $db->prefix('simplecart_order');
+
+    if (!simplecart_tableExists($table)) {
+        return;
+    }
+
+    $customerColumns = [
+        'customer_name' => "varchar(100) NOT NULL DEFAULT ''",
+        'customer_email' => "varchar(255) NOT NULL DEFAULT ''",
+        'customer_phone' => "varchar(50) NOT NULL DEFAULT ''",
+        'customer_address' => 'text',
+    ];
+
+    simplecart_addMissingColumns($table, $customerColumns);
+
+    if (simplecart_columnExists($table, 'customer_info') && ! simplecart_migrateCustomerInfo($table)) {
+        throw new RuntimeException("Could not migrate customer_info in {$table}; the update was stopped before the column could be dropped");
+    }
+
+    simplecart_replaceNullsWithEmptyStrings($table, ['customer_address', 'payment_ref', 'helpende_hand']);
+    simplecart_replaceNullsWithEmptyStrings($db->prefix('simplecart_product'), ['description']);
+}
+
+/**
+ * The IPF upgrade makes every column NOT NULL, which fails while a row still holds NULL
+ *
+ * @param array<int, string> $columns
+ */
+function simplecart_replaceNullsWithEmptyStrings(string $table, array $columns): void
+{
+    $db = icms::$xoopsDB;
+
+    foreach ($columns as $column) {
+        if (! simplecart_columnExists($table, $column)) {
+            continue;
+        }
+
+        $db->queryF("UPDATE `{$table}` SET `{$column}` = '' WHERE `{$column}` IS NULL");
+    }
+}
+
+/**
+ * Gives orders placed before access codes existed their own code
+ */
+function simplecart_addMissingAccessCodes($module): bool
+{
+    require_once dirname(__DIR__) . '/class/order.php';
+
+    $db = icms::$xoopsDB;
+    $table = $db->prefix('simplecart_order');
+
+    if (! simplecart_tableExists($table) || ! simplecart_columnExists($table, 'access_code')) {
+        return true;
+    }
+
+    $result = $db->queryF("SELECT `order_id` FROM `{$table}` WHERE `access_code` = ''");
+
+    if (! $result) {
+        $module->setErrors("Could not read the orders without an access code from {$table}");
+
+        return false;
+    }
+
+    while ($row = $db->fetchArray($result)) {
+        $orderId = (int)$row['order_id'];
+        $code = $db->quoteString(SimplecartOrderHandler::generateAccessCode());
+
+        if (! $db->queryF("UPDATE `{$table}` SET `access_code` = {$code} WHERE `order_id` = {$orderId}")) {
+            $module->setErrors("Could not generate an access code for order {$orderId}");
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function simplecart_tableExists(string $table): bool
+{
+    $db = icms::$xoopsDB;
+    $result = $db->queryF("SHOW TABLES LIKE '{$table}'");
+
+    return $result && $db->getRowsNum($result) > 0;
+}
+
+/**
  * @param array<string, string> $columns
  */
-function simplecart_addMissingColumns($module, string $table, array $columns): bool
+function simplecart_addMissingColumns(string $table, array $columns): void
 {
     $db = icms::$xoopsDB;
 
@@ -70,40 +119,10 @@ function simplecart_addMissingColumns($module, string $table, array $columns): b
             continue;
         }
 
-        if (!$db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
-            $module->setErrors("Could not add column {$column} to {$table}");
-
-            return false;
+        if (! $db->queryF("ALTER TABLE `{$table}` ADD `{$column}` {$definition}")) {
+            throw new RuntimeException("Could not add column {$column} to {$table}");
         }
     }
-
-    return true;
-}
-
-/**
- * Gives orders placed before access codes existed their own code
- */
-function simplecart_addMissingAccessCodes(string $table): bool
-{
-    require_once dirname(__DIR__) . '/class/order.php';
-
-    $db = icms::$xoopsDB;
-    $result = $db->queryF("SELECT `order_id` FROM `{$table}` WHERE `access_code` = ''");
-
-    if (!$result) {
-        return false;
-    }
-
-    while ($row = $db->fetchArray($result)) {
-        $orderId = (int)$row['order_id'];
-        $code = $db->quoteString(SimplecartOrderHandler::generateAccessCode());
-
-        if (!$db->queryF("UPDATE `{$table}` SET `access_code` = {$code} WHERE `order_id` = {$orderId}")) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 function simplecart_columnExists(string $table, string $column): bool

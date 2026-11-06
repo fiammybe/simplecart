@@ -26,7 +26,7 @@ switch ($clean_op) {
                 $icmsAdminTpl->assign('simplecart_order_scan_info', sprintf(_MD_SIMPLECART_SCAN_ALREADY_PROCESSED, $obj->getScannedAtFormatted(), $obj->getScannedByName()));
             }
 
-            $itemRows = simplecart_getOrderItemRows((int)$obj->getVar('order_id'));
+            $itemRows = $obj->getItemRows();
             $icmsAdminTpl->assign('simplecart_order_items', $itemRows['items']);
             $icmsAdminTpl->assign('simplecart_order_grand_total_fmt', $itemRows['grand_total_fmt']);
         } else {
@@ -71,7 +71,7 @@ switch ($clean_op) {
         $obj->ensureScanToken();
         $icms_order_handler->insert($obj, true);
 
-        $mailMessage = simplecart_sendPaymentReceivedEmail($obj, $order_id) ?
+        $mailMessage = $obj->sendPaymentReceivedEmail() ?
             _AM_SIMPLECART_PAYMENT_MAIL_SENT :
             _AM_SIMPLECART_PAYMENT_MAIL_FAILED;
         redirect_header('order.php', 3, "Order status updated. {$mailMessage}");
