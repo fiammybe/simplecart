@@ -40,13 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $checkoutError = _MD_SIMPLECART_CSRF_FAIL;
     } else {
         try {
+            // placeOrder() refuses an empty order, with or without add-on lines
             $cart = simplecart_getCart();
-            if (empty($cart)) {
-                throw new Exception(_MD_SIMPLECART_EMPTY_CART);
-            }
 
             $result = simplecart_getHandler('order')->placeOrder(is_array($customer) ? $customer : array(), $cart);
-            simplecart_emptyCart();
+            simplecart_emptyCart('order_placed');
+            // Add-on output on the success page is only shown to the visitor who placed the order
+            simplecart_sessionStart();
+            $_SESSION['simplecart_last_order_id'] = (int)$result['order_id'];
             $redirectUrl = SIMPLECART_URL . 'checkout.php?success=1&order_id=' . (int)$result['order_id'];
             header('Location: ' . $redirectUrl);
             exit;
@@ -117,7 +118,24 @@ if (!empty($_GET['success']) && $orderId > 0) {
     }
 }
 
+$extensionBlocks = array();
+simplecart_sessionStart();
+$isOwnOrder = $orderId > 0 && (int)($_SESSION['simplecart_last_order_id'] ?? 0) === $orderId;
+if ($checkoutSuccess && $isOwnOrder && isset($order) && $order && !$order->isNew()) {
+    $renderEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
+        'order' => $order,
+        'context' => 'page',
+    ));
+    foreach ($renderEvent->getResults() as $result) {
+        $html = trim((string)($result['html'] ?? ''));
+        if ($html !== '') {
+            $extensionBlocks[] = $html;
+        }
+    }
+}
+
 $cartSummary = simplecart_getCartSummary();
+$icmsTpl->assign('simplecart_extension_blocks', $extensionBlocks);
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_order_token', icms::$security->createToken(3600, 'simplecart_checkout'));
 $icmsTpl->assign('simplecart_customer', $customer);

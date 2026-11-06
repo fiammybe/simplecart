@@ -384,6 +384,12 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
 
     private const ACCESS_CODE_LENGTH = 10;
 
+    /** @var array<int, string|null> status as stored before an update, to detect a cancellation */
+    private $previousStatus = array();
+
+    /** @var bool|null */
+    private $transactional = null;
+
     public function __construct(&$db) {
         parent::__construct($db, 'order', 'order_id', 'order_id', 'customer_name', 'simplecart');
         // Avoid using reserved keyword "order" as SQL alias; use a safe alias instead
@@ -418,10 +424,31 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
     public function beforeUpdate(&$obj) {
         $obj->ensureAccessCode();
         // Prevent editing orders via admin (enforce read-only by ignoring admin saves)
+        $orderId = (int)$obj->getVar('order_id');
+        if ($orderId > 0 && SimplecartExtension::hasListeners(SimplecartExtension::EVENT_CANCELLED)) {
+            $this->previousStatus[$orderId] = $this->getStoredStatus($orderId);
+        }
+        return true;
+    }
+
+    public function afterUpdate(&$obj) {
+        $orderId = (int)$obj->getVar('order_id');
+        $previous = $this->previousStatus[$orderId] ?? null;
+        unset($this->previousStatus[$orderId]);
+
+        if ($previous !== null && $previous !== 'cancelled' && (string)$obj->getVar('status', 'n') === 'cancelled') {
+            SimplecartExtension::dispatch(SimplecartExtension::EVENT_CANCELLED, array('order' => $obj, 'reason' => 'status'));
+        }
+
         return true;
     }
 
     public function beforeDelete(&$obj) {
+        // Let add-ons release what they hold for this order while it still exists
+        if ((int)$obj->getVar('order_id') > 0 && (string)$obj->getVar('status', 'n') !== 'cancelled') {
+            SimplecartExtension::dispatch(SimplecartExtension::EVENT_CANCELLED, array('order' => $obj, 'reason' => 'deleted'));
+        }
+
         // Delete all order items associated with this order
         $orderId = (int)$obj->getVar('order_id');
         if ($orderId > 0) {
@@ -491,6 +518,20 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
         return false;
     }
 
+    private function getStoredStatus(int $orderId): ?string
+    {
+        $table = $this->db->prefix('simplecart_order');
+        $result = $this->db->queryF("SELECT `status` FROM `{$table}` WHERE `order_id` = {$orderId}");
+
+        if (! $result) {
+            return null;
+        }
+
+        $row = $this->db->fetchArray($result);
+
+        return $row ? (string)$row['status'] : null;
+    }
+
     /**
      * @param array<string, mixed> $customer
      * @param array<int|string, array<string, mixed>> $items
@@ -498,12 +539,28 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
      */
     public function placeOrder(array $customer, array $items): array
     {
+        $transactionStarted = false;
+
         try {
-            if (empty($items)) {
+            $extensionLines = $this->collectExtensionLines($customer, $items);
+
+            if (empty($items) && empty($extensionLines)) {
                 throw new Exception(_MD_SIMPLECART_EMPTY_CART);
             }
 
             $this->validateCustomer($customer);
+
+            SimplecartExtension::dispatch(SimplecartExtension::EVENT_BEFORE_PLACE, [
+                'customer' => $customer,
+                'items' => $items,
+                'lines' => $extensionLines,
+            ]);
+
+            // Add-ons need the order and their own changes to succeed or fail together
+            if (! empty($extensionLines) || SimplecartExtension::hasListeners(SimplecartExtension::EVENT_AFTER_PLACE)) {
+                $this->beginTransaction();
+                $transactionStarted = true;
+            }
 
             $productHandler = simplecart_getHandler('product');
             $orderItemHandler = simplecart_getHandler('orderitem');
@@ -566,6 +623,32 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
                 $validItemCount++;
             }
 
+            $placedLines = [];
+
+            foreach ($extensionLines as $line) {
+                $orderItem = $orderItemHandler->create();
+                $orderItem->setVar('order_id', $orderId);
+                $orderItem->setVar('product_name', $line['name']);
+                $orderItem->setVar('product_price', $line['price']);
+                $orderItem->setVar('quantity', $line['quantity']);
+
+                if (! $orderItemHandler->insert($orderItem, true)) {
+                    throw new Exception(_MD_SIMPLECART_ORDERITEM_CREATE_FAIL);
+                }
+
+                $total += $line['quantity'] * $line['price'];
+                $validItemCount++;
+
+                $placedLines[] = [
+                    'orderitem_id' => (int)$orderItem->getVar('orderitem_id'),
+                    'name' => $line['name'],
+                    'price' => $line['price'],
+                    'quantity' => $line['quantity'],
+                    'meta' => $line['meta'],
+                    'source' => $line['source'],
+                ];
+            }
+
             if ($validItemCount === 0) {
                 throw new Exception('No valid items in cart. Order cannot be placed.');
             }
@@ -575,7 +658,21 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             }
 
             $order->setVar('total_amount', $total);
-            $this->insert($order, true);
+
+            if (! $this->insert($order, true) && $transactionStarted) {
+                throw new Exception(_MD_SIMPLECART_ORDER_CREATE_FAIL);
+            }
+
+            if ($transactionStarted) {
+                SimplecartExtension::dispatch(SimplecartExtension::EVENT_AFTER_PLACE, [
+                    'order' => $order,
+                    'lines' => $placedLines,
+                    'customer' => $customer,
+                ]);
+
+                $this->commitTransaction();
+                $transactionStarted = false;
+            }
 
             $emailResult = $order->sendConfirmationEmail();
             simplecart_debugLog("Checkout submission email result for order {$orderId}: " . ($emailResult ? 'TRUE' : 'FALSE'));
@@ -585,10 +682,92 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
                 'total' => $total,
             ];
         } catch (Exception $e) {
+            if ($transactionStarted) {
+                $this->rollbackTransaction();
+            }
+
             throw $e;
         } catch (Throwable $e) {
+            if ($transactionStarted) {
+                $this->rollbackTransaction();
+            }
+
             throw new RuntimeException("Failed to place order: {$e->getMessage()}", 0, $e);
         }
+    }
+
+    /**
+     * Asks add-ons for order lines; refuses invalid lines and add-on lines without transaction support
+     *
+     * @param array<string, mixed> $customer
+     * @param array<int|string, array<string, mixed>> $items
+     * @return array<int, array{name: string, price: float, quantity: int, meta: mixed, source: string, html: string}>
+     */
+    private function collectExtensionLines(array $customer, array $items): array
+    {
+        $event = SimplecartExtension::dispatch(SimplecartExtension::EVENT_COLLECT_LINES, [
+            'customer' => $customer,
+            'items' => $items,
+        ]);
+
+        $lines = [];
+
+        foreach ($event->getResults() as $result) {
+            $line = SimplecartExtension::normalizeLine($result);
+
+            if ($line === null) {
+                throw new Exception(_MD_SIMPLECART_EXTENSION_LINE_INVALID);
+            }
+
+            $lines[] = $line;
+        }
+
+        if (! empty($lines) && ! $this->supportsTransactions()) {
+            throw new Exception(_MD_SIMPLECART_EXTENSION_NO_TRANSACTIONS);
+        }
+
+        return $lines;
+    }
+
+    private function supportsTransactions(): bool
+    {
+        if ($this->transactional !== null) {
+            return $this->transactional;
+        }
+
+        $this->transactional = true;
+
+        foreach (['simplecart_order', 'simplecart_orderitem'] as $name) {
+            $table = $this->db->prefix($name);
+            $result = $this->db->queryF("SHOW TABLE STATUS LIKE '{$table}'");
+            $row = $result ? $this->db->fetchArray($result) : false;
+            $engine = $row ? (string)($row['Engine'] ?? $row['engine'] ?? '') : '';
+
+            if (strcasecmp($engine, 'InnoDB') !== 0) {
+                $this->transactional = false;
+            }
+        }
+
+        return $this->transactional;
+    }
+
+    private function beginTransaction(): void
+    {
+        if (! $this->db->queryF('START TRANSACTION')) {
+            throw new RuntimeException('Could not start a database transaction');
+        }
+    }
+
+    private function commitTransaction(): void
+    {
+        if (! $this->db->queryF('COMMIT')) {
+            throw new RuntimeException('Could not commit the database transaction');
+        }
+    }
+
+    private function rollbackTransaction(): void
+    {
+        $this->db->queryF('ROLLBACK');
     }
 
     /** @param array<string, mixed> $customer */

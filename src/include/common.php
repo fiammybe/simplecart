@@ -16,6 +16,8 @@ if (!defined('SIMPLECART_DIRNAME')) {
     define('SIMPLECART_ORDER_ACCESS_LOCKOUT', 900);
 }
 
+require_once dirname(__DIR__) . '/class/Extension.php';
+
 icms_loadLanguageFile('simplecart', 'main');
 icms_loadLanguageFile('simplecart', 'admin');
 icms_loadLanguageFile('simplecart', 'modinfo');
@@ -217,8 +219,13 @@ function simplecart_saveCart($cart) {
     return $normalized;
 }
 
-function simplecart_emptyCart() {
-    return simplecart_saveCart(array());
+/**
+ * @param string $reason 'manual' when the visitor empties the cart, 'order_placed' after a successful checkout
+ */
+function simplecart_emptyCart($reason = 'manual') {
+    $cart = simplecart_saveCart(array());
+    SimplecartExtension::dispatch(SimplecartExtension::EVENT_CART_EMPTIED, array('reason' => (string)$reason));
+    return $cart;
 }
 
 function simplecart_addProductToCart($productId, $quantity = 1) {
@@ -314,6 +321,37 @@ function simplecart_getCartSummary() {
             'quantity' => $quantity,
             'subtotal' => $subtotal,
             'subtotal_formatted' => simplecart_formatMoney($subtotal),
+            'is_extension' => false,
+            'extra_html' => '',
+        );
+    }
+
+    $event = SimplecartExtension::dispatch(SimplecartExtension::EVENT_CART_SUMMARY, array(
+        'items' => $items,
+        'total' => $total,
+        'count' => $count,
+    ));
+
+    foreach ($event->getResults() as $result) {
+        $line = SimplecartExtension::normalizeLine($result);
+        if ($line === null) {
+            continue;
+        }
+
+        $subtotal = $line['price'] * $line['quantity'];
+        $total += $subtotal;
+        $count += $line['quantity'];
+
+        $items[] = array(
+            'product_id' => 0,
+            'name' => $line['name'],
+            'price' => $line['price'],
+            'price_formatted' => simplecart_formatMoney($line['price']),
+            'quantity' => $line['quantity'],
+            'subtotal' => $subtotal,
+            'subtotal_formatted' => simplecart_formatMoney($subtotal),
+            'is_extension' => true,
+            'extra_html' => $line['html'],
         );
     }
 

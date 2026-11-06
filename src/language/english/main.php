@@ -13,6 +13,8 @@ define('_MD_SIMPLECART_EMPTY_CART', 'Your cart is empty');
 define('_MD_SIMPLECART_CSRF_FAIL', 'Security validation failed. Please refresh the page and try again.');
 define('_MD_SIMPLECART_ORDER_CREATE_FAIL', 'Could not create the order');
 define('_MD_SIMPLECART_ORDERITEM_CREATE_FAIL', 'Could not add an item to the order');
+define('_MD_SIMPLECART_EXTENSION_LINE_INVALID', 'An add-on supplied an invalid order line. The order was not placed.');
+define('_MD_SIMPLECART_EXTENSION_NO_TRANSACTIONS', 'This order contains add-on items that require InnoDB database tables. The order was not placed.');
 
 define('_MD_SIMPLECART_ORDER_CONFIRMED', 'Order Confirmed');
 define('_MD_SIMPLECART_ORDER_THANKS', 'Thank you for your order!');
