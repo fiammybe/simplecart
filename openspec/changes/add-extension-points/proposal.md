@@ -4,8 +4,8 @@ Simplecart wordt uitgebreid met een optionele add-on voor plaatskeuze op een zaa
 
 ## What Changes
 
-- Nieuwe klasse `SimplecartExtension` die events dispatcht via de ImpressCMS preload-handler, plus een API-versie `SIMPLECART_EXTENSION_API`.
-- Events `cart.summary`, `order.collectLines`, `order.beforePlace`, `order.afterPlace`, `order.cancelled`, `order.render` en `scan.resolve`.
+- Nieuwe klasse `SimplecartExtension` met een eigen listener-registratie (add-ons leveren `simplecart_extension.php` in hun modulemap), plus een API-versie `SIMPLECART_EXTENSION_API`.
+- Events `cart.summary`, `cart.emptied`, `order.collectLines`, `order.beforePlace`, `order.afterPlace`, `order.cancelled`, `order.render` en `scan.resolve`.
 - `placeOrder()` aanvaardt ook bestellingen die enkel uit add-onregels bestaan en rondt af binnen één transactie.
 - Documentatie van het contract in `docs/EXTENSION_POINTS.md` met compatibiliteitsmatrix.
 - Zonder add-on blijft het gedrag identiek aan 2.2.0: geen databasewijzigingen, geen gedragswijziging. Versie 2.3.0.

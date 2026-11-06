@@ -9,7 +9,7 @@ Het systeem SHALL zich zonder geïnstalleerde add-ons identiek gedragen aan vers
 - **AND** worden geen tabellen of kolommen toegevoegd of gewijzigd
 
 ### Requirement: Extension-eventsysteem
-Het systeem SHALL events uitsturen met een vaste naam en gedocumenteerde payload (`cart.summary`, `order.collectLines`, `order.beforePlace`, `order.afterPlace`, `order.cancelled`, `order.render`, `scan.resolve`) en SHALL een API-versie (`SIMPLECART_EXTENSION_API`) publiceren.
+Het systeem SHALL events uitsturen met een vaste naam en gedocumenteerde payload (`cart.summary`, `cart.emptied`, `order.collectLines`, `order.beforePlace`, `order.afterPlace`, `order.cancelled`, `order.render`, `scan.resolve`) en SHALL een API-versie (`SIMPLECART_EXTENSION_API`) publiceren.
 
 #### Scenario: Geen luisteraars
 - **WHEN** een event wordt uitgestuurd en er zijn geen luisteraars
@@ -69,3 +69,28 @@ Het systeem SHALL de extension-API semantisch versioneren: het toevoegen van eve
 #### Scenario: Compatibele uitbreiding
 - **WHEN** een nieuwe versie van simplecart een extra event toevoegt
 - **THEN** blijft `SIMPLECART_EXTENSION_API` gelijk en blijven bestaande add-ons werken
+
+### Requirement: Registratie van add-ons
+Het systeem SHALL voor elke actieve module een bestand `simplecart_extension.php` in de modulemap laden (eenmalig per aanvraag, lui bij het eerste gebruik van een event) zodat de module luisteraars kan registreren, en SHALL een defect bestand loggen zonder de aanvraag te breken.
+
+#### Scenario: Actieve add-on
+- **WHEN** een actieve module `simplecart_extension.php` bevat
+- **THEN** worden haar luisteraars geregistreerd vóór het eerste event wordt verwerkt
+
+#### Scenario: Defecte add-on
+- **WHEN** het bestand een uitzondering gooit
+- **THEN** wordt de fout gelogd en werkt simplecart verder
+
+### Requirement: Winkelwagen leegmaken
+Het systeem SHALL `cart.emptied` uitsturen wanneer de winkelwagen leeggemaakt wordt, met reden `manual` (bezoeker) of `order_placed` (na een geslaagde bestelling).
+
+#### Scenario: Bezoeker maakt de winkelwagen leeg
+- **WHEN** een bezoeker de winkelwagen leegt
+- **THEN** ontvangen luisteraars `cart.emptied` met reden `manual`
+
+### Requirement: Transactie en InnoDB
+Het systeem SHALL bij add-onregels de bestelling in een databasetransactie plaatsen en SHALL de bestelling weigeren als de bestel- of orderitemtabel geen InnoDB gebruikt.
+
+#### Scenario: MyISAM-tabellen
+- **WHEN** een add-on regels levert en de tabellen geen transacties ondersteunen
+- **THEN** wordt de bestelling geweigerd met een duidelijke melding en wordt niets opgeslagen

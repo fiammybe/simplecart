@@ -13,6 +13,8 @@ define('_MD_SIMPLECART_EMPTY_CART', 'Het winkelmandje leegmaken');
 define('_MD_SIMPLECART_CSRF_FAIL', 'Security check gefaald. Herlaad de pagina en probeer het opnieuw.');
 define('_MD_SIMPLECART_ORDER_CREATE_FAIL', 'De bestelling kon niet aangemaakt worden');
 define('_MD_SIMPLECART_ORDERITEM_CREATE_FAIL', 'Een onderdeel van de bestelling kon niet worden toegevoegd');
+define('_MD_SIMPLECART_EXTENSION_LINE_INVALID', 'Een add-on leverde een ongeldige bestelregel. De bestelling is niet geplaatst.');
+define('_MD_SIMPLECART_EXTENSION_NO_TRANSACTIONS', 'Deze bestelling bevat add-on-onderdelen die InnoDB-databasetabellen vereisen. De bestelling is niet geplaatst.');
 
 define('_MD_SIMPLECART_ORDER_CONFIRMED', 'Bestelling ontvangen');
 define('_MD_SIMPLECART_ORDER_THANKS', 'Dank u voor uw bestelling!');

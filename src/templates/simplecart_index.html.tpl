@@ -53,6 +53,12 @@
           <tbody>
             <{foreach from=$simplecart_cart_items item=item}>
             <tr>
+              <{if $item.is_extension}>
+              <td><{$item.name|escape:html}> <span class="tag is-light"><{$item.price_formatted}></span><{if $item.extra_html}><div><{$item.extra_html}></div><{/if}></td>
+              <td class="has-text-right"><{$item.subtotal_formatted}></td>
+              <td class="has-text-centered"><{$item.quantity}></td>
+              <td></td>
+              <{else}>
               <td><{$item.name}> <span class="tag is-light"><{$item.price_formatted}></span></td>
               <td class="has-text-right"><{$item.subtotal_formatted}></td>
               <td class="has-text-centered">
@@ -70,6 +76,7 @@
                   <button type="submit" class="button is-text is-small"><{$smarty.const._MD_SIMPLECART_REMOVE}></button>
                 </form>
               </td>
+              <{/if}>
             </tr>
             <{/foreach}>
           </tbody>
