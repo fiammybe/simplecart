@@ -1,40 +1,26 @@
 ## Why
 
-Simplecart verkoopt producten met een aantal. Voor optredens in een zaal moeten bezoekers hun plaatsen op een zaalkaart kunnen kiezen. Een plaats is uniek en hoort bij één optreden, dus het model "product × aantal" volstaat niet. Niet elke simplecart-installatie heeft dit nodig (veel gebruikers verkopen enkel producten), en de kern moet eenvoudig blijven. Daarom wordt plaatskeuze een **optionele add-on**: een aparte ImpressCMS-module in een **eigen repository** (`simplecart-seats`) die alleen werkt als ze geïnstalleerd wordt, en simplecart zonder de add-on gedraagt zich exact zoals nu.
+Simplecart wordt uitgebreid met een optionele add-on voor plaatskeuze op een zaalkaart (repository `fiammybe/simplecart-seats`). De kern mag daarvoor niets over zalen of plaatsen weten, maar moet add-ons wel toelaten eigen regels aan winkelwagen en bestelling toe te voegen, bestellingen te valideren en af te ronden, annulaties te volgen en scans af te handelen. Dit voorstel voegt die generieke extension points toe; ze zijn ook door andere add-ons bruikbaar.
 
 ## What Changes
 
-**Kern (simplecart, kleine, generieke uitbreiding)**
-- Extension points (events) in winkelwagen, bestelling, annulatie en scan, zodat add-ons eigen regels kunnen aanleveren en valideren zonder dat de kern iets over plaatsen weet.
-- `placeOrder()` aanvaardt ook regels van add-ons (een bestelling met enkel add-onregels is geldig).
-- Geen databasewijzigingen in de kern: geen nieuwe kolommen, geen migratie van bestaande bestellingen.
-
-**Add-on `simplecartseats` (nieuwe module in eigen repository `fiammybe/simplecart-seats`, vereist simplecart)**
-- Eigen objecten: zaal (`venue`), optreden (`event`), prijszone (`seatzone`), plaats (`seat`), plaatsstatus per optreden (`eventseat`) en koppeling naar bestelregels (`orderseat`).
-- Zaalkaart als inline SVG met interactieve plaatskeuze (progressive enhancement, fallback per zone zonder JavaScript).
-- Tijdelijke vasthouding van plaatsen (standaard 15 minuten), atomaire reservatie, eigen winkelwagensectie in de sessie.
-- Prijs server-side uit de zone; onbetaalde bestellingen vervallen na een instelbare termijn.
-- QR per plaats voor toegangscontrole.
-- Eigen beheerschermen, configuratie, taalbestanden en versienummering.
-- Uitschakelen of deïnstalleren laat verkochte bestellingen en orderitems in de kern intact.
+- Nieuwe klasse `SimplecartExtension` die events dispatcht via de ImpressCMS preload-handler, plus een API-versie `SIMPLECART_EXTENSION_API`.
+- Events `cart.summary`, `order.collectLines`, `order.beforePlace`, `order.afterPlace`, `order.cancelled`, `order.render` en `scan.resolve`.
+- `placeOrder()` aanvaardt ook bestellingen die enkel uit add-onregels bestaan en rondt af binnen één transactie.
+- Documentatie van het contract in `docs/EXTENSION_POINTS.md` met compatibiliteitsmatrix.
+- Zonder add-on blijft het gedrag identiek aan 2.2.0: geen databasewijzigingen, geen gedragswijziging. Versie 2.3.0.
 
 ## Capabilities
 
 ### New Capabilities
 - `core-extension-points`: generieke hooks in simplecart waarop add-ons kunnen aanhaken.
-- `addon-packaging`: installatie, afhankelijkheden, activatie en deïnstallatie van de add-on.
-- `venue-management`: zalen, optredens, zones en plaatsen beheren en publiceren.
-- `seat-map`: zaalkaart renderen en beschikbaarheid tonen.
-- `seat-reservation`: plaatsen vasthouden en vrijgeven.
-- `seat-checkout`: plaatsen in winkelwagen, bestelling en betaling.
-- `ticket-validation`: toegang per plaats scannen.
 
 ### Modified Capabilities
-Geen: er bestaan nog geen OpenSpec-specs voor de huidige simplecart-functionaliteit. Het ongewijzigd blijven van de bestaande flow is vastgelegd in `core-extension-points`.
+Geen: er bestaan nog geen OpenSpec-specs voor de huidige functionaliteit.
 
 ## Impact
 
-- Kern (`src/`): `include/common.php` (cart-summary hook), `class/order.php` (`placeOrder`, annulatie), `scan.php`, `checkout.php` en templates (render van extra regels), `class/OrderConfirmationEmail.php`, nieuw `class/Extension.php` (registratie en dispatch). Versie 2.3.0.
-- Add-on (nieuwe repository `simplecart-seats`): eigen `src/icms_version.php`, `class/*`, `preload/`, `ajax/`, `assets/`, `templates/`, `language/`, `admin/`, eigen CI en release-pakket, eigen `openspec/`. De specs `addon-packaging`, `venue-management`, `seat-map`, `seat-reservation`, `seat-checkout` en `ticket-validation` verhuizen daarheen zodra de repository bestaat; in deze repository blijft `core-extension-points`.
-- Database: enkel de add-on voegt tabellen toe (met unieke index `(event_id, seat_id)`); vereist InnoDB.
-- Documentatie: README van simplecart verwijst naar de add-on als optionele uitbreiding; de uitspraak "geen client-side JavaScript" geldt voor de kern, niet voor de add-on.
+- Code: `src/include/common.php`, `src/class/order.php`, `src/class/OrderConfirmationEmail.php`, `src/scan.php`, `src/checkout.php`, `src/index.php` en templates; nieuw `src/class/Extension.php`; `src/icms_version.php` (versie 2.3.0).
+- Documentatie: `docs/EXTENSION_POINTS.md`, README.
+- Geen databasewijzigingen.
+- Gerelateerd: add-on-specificatie in `fiammybe/simplecart-seats` (`openspec/changes/add-seat-selection/`). Simplecart 2.3.0 moet vóór add-on 1.0.0 uitkomen.

@@ -44,13 +44,13 @@ De huidige controles ("geen geldige items", "totaal > 0") worden aangepast: een 
 `SIMPLECART_EXTENSION_API` (integer, nu 1). Semver-regels: toevoegen van events of optionele payloadvelden is compatibel; wijzigen/verwijderen verhoogt het hoofdnummer. Add-ons controleren de waarde bij installatie en gebruik.
 
 ### D6. Annulatie
-`order.cancelled` wordt uitgestuurd bij statuswijziging naar `cancelled`, bij verwijderen van een bestelling (`beforeDelete`) en na het vervallen van onbetaalde bestellingen indien de kern dat later introduceert.
+`order.cancelled` wordt uitgestuurd bij statuswijziging naar `cancelled` en bij verwijderen van een bestelling (`beforeDelete`).
 
 ## Risks / Trade-offs
 
 - **Te beperkte of instabiele API** → klein houden, documenteren, contracttests, semver.
 - **Preload-API verschilt per ImpressCMS-versie** → vroeg verifiëren (taak 0.1), terugval op eigen registratie.
-- **Tweede systeem van cart/order-regels** → add-onregels zijn tijdelijk (sessie) en worden gewone orderitems; geen parallelle opslag in de kern.
+- **Add-onregels in de kern** → ze zijn tijdelijk (sessie/aanvraag) en worden gewone orderitems; geen parallelle opslag in de kern.
 - **MyISAM zonder transacties** → documenteren, add-on weigert installatie.
 - **Regressies in de productflow** → regressietests dat zonder luisteraars alles identiek werkt.
 
