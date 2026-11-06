@@ -1,7 +1,8 @@
 ## 0. Voorbereiding
 - [ ] 0.1 Open vragen uit design.md beantwoorden en scope bevestigen
 - [ ] 0.2 Preload-handler van de ondersteunde ImpressCMS-versie verifiëren (custom events, luisteraars per module)
-- [ ] 0.3 Testomgeving met ImpressCMS, InnoDB-controle en demo-zaal
+- [ ] 0.3 Repository `fiammybe/simplecart-seats` laten aanmaken (door de eigenaar), met licentie, README en toegang voor deze sessie
+- [ ] 0.4 Testomgeving met ImpressCMS, InnoDB-controle en demo-zaal
 
 ## 1. Kern: extension points (simplecart 2.3.0)
 - [ ] 1.1 `SimplecartExtension`-klasse met dispatch en `SIMPLECART_EXTENSION_API`
@@ -12,16 +13,19 @@
 - [ ] 1.6 Event `order.render` in bevestigingsmail en succespagina
 - [ ] 1.7 Event `scan.resolve` in `scan.php`
 - [ ] 1.8 Contracttests en regressietest: zonder luisteraars is het gedrag identiek aan 2.2.0
-- [ ] 1.9 Documentatie van de extension points in `docs/EXTENSION_POINTS.md`
+- [ ] 1.9 Documentatie van de extension points in `docs/EXTENSION_POINTS.md`, inclusief compatibiliteitsmatrix
+- [ ] 1.10 Testdouble/stub van `SimplecartExtension` voor add-on-tests publiceren
+- [ ] 1.11 Release 2.3.0 vóór de add-on 1.0.0 vrijgeven
 
-## 2. Add-on: skelet en datamodel
-- [ ] 2.1 Map `addons/simplecartseats/` met `icms_version.php`, afhankelijkheidscontrole op simplecart ≥ 2.3.0
+## 2. Add-on (repository `simplecart-seats`): skelet en datamodel
+- [ ] 2.0 Repository opzetten: structuur `src/`, `openspec/`, CI (lint, tests, release-pakket), `.gitignore`; specs `addon-packaging`, `venue-management`, `seat-map`, `seat-reservation`, `seat-checkout`, `ticket-validation` uit deze wijziging verplaatsen naar een change `add-seat-selection` daar
+- [ ] 2.1 `src/icms_version.php` met afhankelijkheidscontrole op simplecart ≥ 2.3.0 en extension-API ≥ 1
 - [ ] 2.2 IPF-klassen `venue`, `event`, `seatzone`, `seat`, `eventseat`, `orderseat`
 - [ ] 2.3 Installatiehook: InnoDB-controle, unieke index `(event_id, seat_id)`
 - [ ] 2.4 Deïnstallatiehook met bevestiging; configuratie (hold-duur, betalingstermijn, maximum plaatsen)
 - [ ] 2.5 Taalstrings (`english`, `nederlands`)
 - [ ] 2.6 Preload-klasse die op de kern-events luistert
-- [ ] 2.7 Release-builder uitbreiden voor het add-on-pakket
+- [ ] 2.7 Release-builder (GitHub Actions) voor het add-on-pakket, naar het voorbeeld van simplecart
 
 ## 3. Add-on: beheer van zalen en optredens
 - [ ] 3.1 Admin CRUD voor zalen met rijengenerator en live SVG-preview
@@ -57,6 +61,7 @@
 - [ ] 8.1 Concurrentietests (parallelle holds en `placeOrder`)
 - [ ] 8.2 Tests: verlopen hold, deels bezette selectie, prijsmanipulatie, annulatie, add-on uitgeschakeld
 - [ ] 8.3 Test: kern 2.3.0 zonder add-on, en upgrade van 2.2.0 met bestaande bestellingen
+- [ ] 8.3b CI-matrix van de add-on tegen laagste en hoogste ondersteunde simplecart
 - [ ] 8.4 Browsertests (desktop, telefoon, toetsenbord, zonder JS)
 - [ ] 8.5 Prestatietest 2 000 plaatsen
-- [ ] 8.6 README, release notes, versies kern 2.3.0 en add-on 1.0.0
+- [ ] 8.6 README's (beide repositories), release notes, versies kern 2.3.0 en add-on 1.0.0

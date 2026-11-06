@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Aparte optionele module
-De plaatskeuze SHALL geleverd worden als aparte ImpressCMS-module (`simplecartseats`) met eigen versie, installatie, configuratie, tabellen en release-pakket, los van simplecart.
+De plaatskeuze SHALL geleverd worden als aparte ImpressCMS-module (`simplecartseats`) met eigen repository, versie, installatie, configuratie, tabellen en release-pakket, los van simplecart.
 
 #### Scenario: Zonder de add-on
 - **WHEN** enkel simplecart geïnstalleerd is
@@ -43,3 +43,10 @@ De add-on SHALL bij elke aanvraag controleren of simplecart actief is en de vere
 #### Scenario: Simplecart later uitgeschakeld
 - **WHEN** simplecart wordt gedeactiveerd terwijl de add-on actief blijft
 - **THEN** toont de add-on geen verkoopfuncties en meldt beheerders de oorzaak
+
+### Requirement: Versiecontract tussen repositories
+De add-on SHALL declareren welke minimale simplecart-versie en extension-API-versie vereist zijn, en SHALL bij een hoger hoofdnummer van de extension-API dan ondersteund inactief blijven met een melding.
+
+#### Scenario: Niet-ondersteunde API
+- **WHEN** simplecart een extension-API met een hoger hoofdnummer aanbiedt dan de add-on kent
+- **THEN** blijft de add-on inactief en meldt beheerders welke versie van de add-on nodig is

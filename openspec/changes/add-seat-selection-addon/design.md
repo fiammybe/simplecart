@@ -21,11 +21,13 @@ Plaatskeuze is niet voor iedereen nodig en brengt aanzienlijke complexiteit (con
 
 ## Decisions
 
-### D1. Aparte ImpressCMS-module in dezelfde repository
-De add-on is een eigen module (`dirname = simplecartseats`) onder `addons/simplecartseats/`, met eigen versie en release-pakket.
-- Voordeel: aparte installatie/deïnstallatie, eigen tabellen en configuratie, gemakkelijk optioneel.
+### D1. Aparte ImpressCMS-module in een eigen repository
+De add-on is een eigen module (`dirname = simplecartseats`) in de repository `fiammybe/simplecart-seats`, met eigen versie, issues, CI en release-pakket. Simplecart bevat enkel de extension points en hun documentatie.
+- Voordeel: onafhankelijke release-cyclus, kern blijft klein, bijdragers en issues gescheiden, duidelijk optioneel.
 - Alternatief verworpen: featureschakelaar in de kern — tabellen en code zouden altijd meegeleverd worden en migraties raken alle gebruikers.
-- Alternatief verworpen: aparte repository — meer overhead zolang de extension points nog evolueren. Later verplaatsbaar.
+- Alternatief verworpen: add-on in dezelfde repository — koppelt releases en CI aan elkaar.
+- Gevolg: het contract tussen beide repositories is de extension-API (`SIMPLECART_EXTENSION_API`) en moet strikt versiebeheerd zijn; de add-on declareert welke API-versie hij nodig heeft.
+- Gevolg: de add-on heeft een eigen kopie van de ImpressCMS-testopzet; de kern levert een stub/testdouble van `SimplecartExtension` mee voor contracttests.
 
 ### D2. Extension points via ImpressCMS-preload-events
 De kern dispatcht events via de ImpressCMS preload-handler (`icms::$preload->triggerEvent(...)`); de add-on luistert met een preload-klasse in `preload/`. Een dunne klasse `SimplecartExtension` in de kern verpakt de dispatch zodat de eventnamen en payloads op één plek gedocumenteerd en getest zijn. Zijn er geen luisteraars, dan doen de events niets.
@@ -73,7 +75,8 @@ De add-on controleert bij installatie en bij elke aanvraag dat simplecart actief
 
 ## Risks / Trade-offs
 
-- **Extension points te beperkt of instabiel** → klein houden, documenteren, versiebeheer (`SIMPLECART_EXTENSION_API = 1`) en contracttests in de kern.
+- **Extension points te beperkt of instabiel** → klein houden, documenteren, strikt versiebeheer (`SIMPLECART_EXTENSION_API = 1`, semver-regels: breuk = nieuw hoofdnummer) en contracttests in de kern.
+- **Versies lopen uit de pas tussen twee repositories** → de add-on controleert API-versie en kernversie bij installatie en gebruik; compatibiliteitsmatrix in beide README's; CI van de add-on test tegen de laagste en hoogste ondersteunde simplecart.
 - **Preload-API verschilt per ImpressCMS-versie** → verificatie in taak 0.2; terugval op een eigen eenvoudige listener-registratie in `SimplecartExtension`.
 - **Dubbele verkoop** → unieke index, atomaire UPDATE, transactie, concurrency-tests.
 - **Add-on uitgeschakeld terwijl plaatsen gehouden worden** → holds verlopen vanzelf; verkochte plaatsen blijven verkocht.
@@ -84,7 +87,7 @@ De add-on controleert bij installatie en bij elke aanvraag dat simplecart actief
 ## Migration Plan
 
 1. Kern 2.3.0: extension points toevoegen; geen databasewijzigingen en geen gedragswijziging zonder add-on.
-2. Add-on 1.0.0: afzonderlijk te installeren; maakt eigen tabellen en index aan.
+2. Add-on 1.0.0 (eigen repository en release): afzonderlijk te installeren; maakt eigen tabellen en index aan.
 3. Rollback add-on: deïnstalleren verwijdert enkel add-on-tabellen na een bevestiging; bestellingen in de kern blijven bestaan.
 4. Back-up van de database vóór installatie van de add-on wordt aanbevolen.
 
@@ -98,4 +101,4 @@ De add-on controleert bij installatie en bij elke aanvraag dat simplecart actief
 6. Definitieve waarden voor hold-duur (voorstel 15 min) en betalingstermijn (voorstel 7 dagen)?
 7. Regels voor rolstoelplaatsen (begeleider koppelen)?
 8. Is een sleep-editor vereist voor de eerste release?
-9. Blijft de add-on in dezelfde repository of komt er een aparte?
+9. Naam en eigenaar van de nieuwe repository (voorstel `fiammybe/simplecart-seats`) en licentie (voorstel MIT, zoals simplecart)?
