@@ -79,7 +79,7 @@ if ($status === 'paid') {
     ]);
 }
 
-$itemRows = simplecart_getOrderItemRows($orderId);
+$itemRows = $order->getItemRows();
 $customerPhone = (string)$order->getVar('customer_phone', 'n');
 
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);

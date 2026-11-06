@@ -22,13 +22,17 @@ $modversion['system_menu'] = 1;
 $modversion['adminindex'] = 'admin/index.php';
 $modversion['adminmenu'] = 'admin/menu.php';
 
-$modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
+if (!defined('SIMPLECART_DB_VERSION')) {
+    define('SIMPLECART_DB_VERSION', 1);
+}
+
+$modversion['object_items'] = array(
+    'product',
+    'order',
+    'orderitem'
+);
+$modversion['onInstall'] = 'include/oninstall.inc.php';
 $modversion['onUpdate'] = 'include/onupdate.inc.php';
-//$modversion['object_items'] = array(
-//    'simplecart_product',
-//    'simplecart_order',
-//    'simplecart_orderitem'
-//);
 
 
 $modversion['templates'][] = array('file' => 'simplecart_index.html.tpl', 'description' => 'SimpleCart Front Index');
