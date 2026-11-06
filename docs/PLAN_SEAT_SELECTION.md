@@ -1,5 +1,7 @@
 # Plan: plaatskeuze op een zaalkaart (simplecart 3.0)
 
+> **Let op:** dit eerste plan is achterhaald. De plaatskeuze wordt een optionele add-on-module (`simplecartseats`) met kleine extension points in de kern; zie `openspec/changes/add-seat-selection-addon/`.
+
 ## 1. Doel
 
 Bezoekers kiezen voor een optreden in een zaal hun plaatsen rechtstreeks op een kaart (zaalplan), leggen die in de winkelwagen en rekenen af via de bestaande SEPA-checkout. Beheerders bouwen zaalplannen, koppelen ze aan optredens en volgen bezetting en toegangscontrole op.

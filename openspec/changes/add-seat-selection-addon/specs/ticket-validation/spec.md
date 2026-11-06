@@ -1,14 +1,14 @@
 ## ADDED Requirements
 
 ### Requirement: Ticket per plaats
-Het systeem SHALL voor elke verkochte plaats een uniek ticket-token genereren en een QR-code aanbieden die naar de scanpagina verwijst.
+De add-on SHALL voor elke verkochte plaats een uniek ticket-token genereren en een QR-code aanbieden die naar de scanpagina verwijst.
 
 #### Scenario: Token aanmaken
 - **WHEN** een plaats `sold` wordt
 - **THEN** bestaat er een niet-raadbaar `ticket_token` voor die plaats
 
 ### Requirement: Scannen van een plaats
-Het systeem SHALL enkel ingelogde beheerders van de module toelaten een ticket te scannen en SHALL de eerste scan atomair registreren met tijdstip en gebruiker.
+De add-on SHALL via `scan.resolve` enkel ingelogde beheerders van de module toelaten een ticket te scannen en SHALL de eerste scan atomair registreren met tijdstip en gebruiker.
 
 #### Scenario: Eerste scan
 - **WHEN** een beheerder een geldig ticket voor het eerst scant
@@ -28,7 +28,7 @@ Het systeem SHALL enkel ingelogde beheerders van de module toelaten een ticket t
 - **THEN** weigert het systeem met een duidelijke melding
 
 ### Requirement: Bestelscan blijft werken
-Het systeem SHALL de bestaande QR per bestelling blijven ondersteunen en daarbij de scanstatus van alle plaatsen van de bestelling tonen.
+De kern SHALL de bestaande QR per bestelling blijven ondersteunen en de add-on SHALL via `order.render` daarbij de scanstatus van alle plaatsen van de bestelling tonen.
 
 #### Scenario: Bestelling scannen
 - **WHEN** een beheerder de QR van een bestelling met 3 plaatsen scant

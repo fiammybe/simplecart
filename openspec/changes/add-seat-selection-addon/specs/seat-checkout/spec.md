@@ -1,14 +1,18 @@
 ## ADDED Requirements
 
 ### Requirement: Productflow blijft werken
-Het systeem SHALL de bestaande flow voor gewone producten (toevoegen, aanpassen, verwijderen, afrekenen met SEPA) ongewijzigd laten werken, ook voor bestaande bestellingen.
+De add-on SHALL de bestaande productflow van simplecart (toevoegen, aanpassen, verwijderen, afrekenen met SEPA) niet verstoren, ook niet voor bestaande bestellingen of gemengde winkelwagens met producten en plaatsen.
+
+#### Scenario: Gemengde winkelwagen
+- **WHEN** een bezoeker producten en plaatsen in de winkelwagen heeft en afrekent
+- **THEN** bevat de bestelling beide soorten regels en klopt het totaal
 
 #### Scenario: Bestaande bestelling
-- **WHEN** na de update een bestelling van vóór de update wordt geopend
+- **WHEN** een bestelling van vóór de installatie van de add-on wordt geopend
 - **THEN** worden de regels getoond als producten met hun oorspronkelijke bedragen
 
 ### Requirement: Plaatsen in winkelwagen
-Het systeem SHALL plaatsen van één optreden in de winkelwagen opnemen, met optreden, rij, nummer, zone en prijs per plaats, naast eventuele producten.
+De add-on SHALL via het event `cart.summary` plaatsen van één optreden in de winkelwagen opnemen, met optreden, rij, nummer, zone en prijs per plaats, naast eventuele producten.
 
 #### Scenario: Plaatsen tonen
 - **WHEN** een bezoeker 3 geldig vastgehouden plaatsen heeft
@@ -19,7 +23,7 @@ Het systeem SHALL plaatsen van één optreden in de winkelwagen opnemen, met opt
 - **THEN** weigert het systeem en vraagt eerst af te rekenen of de winkelwagen te legen
 
 ### Requirement: Bestelling plaatsen
-Het systeem SHALL bij het plaatsen van de bestelling alle plaatsen in één transactie op `sold` zetten voor de huidige sessie, de prijs server-side uit de zone bepalen en per plaats een orderitem met snapshot (titel, plaatslabel, prijs, aantal 1) bewaren.
+De add-on SHALL via `order.collectLines`, `order.beforePlace` en `order.afterPlace` bij het plaatsen van de bestelling alle plaatsen in dezelfde transactie op `sold` zetten voor de huidige sessie, de prijs server-side uit de zone bepalen en per plaats een orderitem (titel + plaatslabel, prijs, aantal 1) laten aanmaken, gekoppeld via `orderseat`.
 
 #### Scenario: Succesvolle bestelling
 - **WHEN** een bezoeker met geldige holds de checkout bevestigt
@@ -36,18 +40,18 @@ Het systeem SHALL bij het plaatsen van de bestelling alle plaatsen in één tran
 - **THEN** negeert het systeem die waarden en gebruikt de zoneprijs
 
 ### Requirement: Betalingstermijn en vervallen bestellingen
-Het systeem SHALL bestellingen met plaatsen die binnen de betalingstermijn (standaard 7 dagen, instelbaar) niet betaald zijn laten vervallen en hun plaatsen vrijgeven.
+De add-on SHALL bestellingen met plaatsen die binnen de betalingstermijn (standaard 7 dagen, instelbaar) niet betaald zijn laten vervallen en hun plaatsen vrijgeven.
 
 #### Scenario: Bestelling vervalt
 - **WHEN** een bestelling in status `pending` of `awaiting_payment` de termijn overschrijdt
 - **THEN** krijgt ze status `cancelled` en worden haar plaatsen `available`
 
 #### Scenario: Handmatige annulatie
-- **WHEN** een beheerder een bestelling annuleert of terugbetaalt
-- **THEN** biedt het systeem aan de plaatsen vrij te geven en doet dat bij bevestiging
+- **WHEN** een bestelling met plaatsen wordt geannuleerd (event `order.cancelled`)
+- **THEN** geeft de add-on de plaatsen automatisch vrij
 
 ### Requirement: Verkoopgrenzen
-Het systeem SHALL geen plaatsen verkopen buiten het verkoopvenster of na het begin van het optreden, en niet meer dan het ingestelde maximum per bestelling.
+De add-on SHALL geen plaatsen verkopen buiten het verkoopvenster of na het begin van het optreden, en niet meer dan het ingestelde maximum per bestelling.
 
 #### Scenario: Verkoop gesloten
 - **WHEN** een bezoeker een plaats probeert vast te houden na `sales_close_at`

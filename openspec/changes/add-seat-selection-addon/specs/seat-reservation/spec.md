@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Atomaire vasthouding
-Het systeem SHALL plaatsen vasthouden met een voorwaardelijke databaseupdate zodat een plaats nooit aan twee sessies tegelijk wordt toegewezen. Een aanvraag voor meerdere plaatsen SHALL alles of niets slagen.
+De add-on SHALL plaatsen vasthouden met een voorwaardelijke databaseupdate zodat een plaats nooit aan twee sessies tegelijk wordt toegewezen. Een aanvraag voor meerdere plaatsen SHALL alles of niets slagen.
 
 #### Scenario: Gelijktijdige aanvraag
 - **WHEN** twee sessies op hetzelfde moment dezelfde beschikbare plaats vasthouden
@@ -14,7 +14,7 @@ Het systeem SHALL plaatsen vasthouden met een voorwaardelijke databaseupdate zod
 - **AND** meldt het systeem welke plaats niet beschikbaar is
 
 ### Requirement: Vasthoudduur
-Het systeem SHALL vastgehouden plaatsen standaard 15 minuten reserveren (instelbaar) en de resterende tijd tonen met een timer.
+De add-on SHALL vastgehouden plaatsen standaard 15 minuten reserveren (instelbaar) en de resterende tijd tonen met een timer.
 
 #### Scenario: Hold verloopt
 - **WHEN** de vasthoudtijd verstrijkt zonder afgeronde bestelling
@@ -26,14 +26,14 @@ Het systeem SHALL vastgehouden plaatsen standaard 15 minuten reserveren (instelb
 - **THEN** wordt de vasthoudtijd eenmalig verlengd
 
 ### Requirement: Vrijgeven
-Het systeem SHALL vastgehouden plaatsen vrijgeven wanneer de bezoeker ze uit de winkelwagen verwijdert of de winkelwagen leegt.
+De add-on SHALL vastgehouden plaatsen vrijgeven wanneer de bezoeker ze uit de winkelwagen verwijdert of de winkelwagen leegt.
 
 #### Scenario: Plaats verwijderen
 - **WHEN** een bezoeker een plaats uit de winkelwagen verwijdert
 - **THEN** wordt de plaats onmiddellijk `available`
 
 ### Requirement: Beveiliging van reservatie-eindpunten
-Het systeem SHALL de reservatie-eindpunten beschermen met een CSRF-token, ids valideren tegen het optreden en het aantal aanvragen per sessie beperken.
+De add-on SHALL de reservatie-eindpunten beschermen met een CSRF-token, ids valideren tegen het optreden en het aantal aanvragen per sessie beperken.
 
 #### Scenario: Ongeldig token
 - **WHEN** een aanvraag zonder geldig CSRF-token wordt verstuurd

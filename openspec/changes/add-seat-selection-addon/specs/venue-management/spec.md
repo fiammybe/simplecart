@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Zalen beheren
-Het systeem SHALL beheerders toelaten zalen aan te maken, te bewerken, te kopiëren en te verwijderen, elk met een zaalkaart gedefinieerd door rijen en secties.
+De add-on SHALL beheerders toelaten zalen aan te maken, te bewerken, te kopiëren en te verwijderen, elk met een zaalkaart gedefinieerd door rijen en secties.
 
 #### Scenario: Zaal aanmaken met rijengenerator
 - **WHEN** een beheerder een zaal opslaat met een sectie van 10 rijen van 20 plaatsen
@@ -13,7 +13,7 @@ Het systeem SHALL beheerders toelaten zalen aan te maken, te bewerken, te kopië
 - **THEN** weigert het systeem de verwijdering met een melding
 
 ### Requirement: Optredens met zones en prijzen
-Het systeem SHALL een optreden aan één zaal koppelen, met een startmoment, verkoopvenster en minstens één prijszone; elke plaats SHALL aan precies één zone toegewezen worden.
+De add-on SHALL een optreden aan één zaal koppelen, met een startmoment, verkoopvenster en minstens één prijszone; elke plaats SHALL aan precies één zone toegewezen worden.
 
 #### Scenario: Publiceren zonder volledige zone-toewijzing
 - **WHEN** een beheerder een optreden publiceert waarbij plaatsen geen zone hebben
@@ -25,7 +25,7 @@ Het systeem SHALL een optreden aan één zaal koppelen, met een startmoment, ver
 - **AND** is het optreden zichtbaar op de frontend binnen het verkoopvenster
 
 ### Requirement: Plaatsen blokkeren en vrijgeven
-Het systeem SHALL beheerders toelaten plaatsen per optreden te blokkeren en geblokkeerde of gehouden plaatsen handmatig vrij te geven.
+De add-on SHALL beheerders toelaten plaatsen per optreden te blokkeren en geblokkeerde of gehouden plaatsen handmatig vrij te geven.
 
 #### Scenario: Geblokkeerde plaats
 - **WHEN** een beheerder een plaats blokkeert
@@ -33,7 +33,7 @@ Het systeem SHALL beheerders toelaten plaatsen per optreden te blokkeren en gebl
 - **AND** toont de kaart de plaats als niet beschikbaar
 
 ### Requirement: Bezetting en export
-Het systeem SHALL per optreden een bezettingsoverzicht, dashboardcijfers en een CSV-export van bezette plaatsen bieden.
+De add-on SHALL per optreden een bezettingsoverzicht, dashboardcijfers en een CSV-export van bezette plaatsen bieden.
 
 #### Scenario: CSV-export
 - **WHEN** een beheerder de export van een optreden vraagt
