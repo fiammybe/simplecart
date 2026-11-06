@@ -31,15 +31,25 @@ jobs:
           VERSION="${TAG#v}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      # The module (and its composer.json) lives in src/, not in the repository root
+      - name: Check that the release tag matches the module version
+        run: |
+          MODULE_VERSION=$(sed -n "s/^\$modversion\['version'\] = '\(.*\)';/\1/p" src/icms_version.php)
+          if [ "${MODULE_VERSION}" != "${VERSION}" ]; then
+            echo "::error::Release ${VERSION} does not match the version in src/icms_version.php (${MODULE_VERSION})"
+            exit 1
+          fi
+
       - name: Install Composer dependencies (no dev)
-        run: composer install --no-dev --optimize-autoloader
+        working-directory: src
+        run: composer install --no-dev --no-interaction --optimize-autoloader
 
       - name: Prepare build directory
         run: |
           rm -rf build
           mkdir -p build/$MODULE_NAME
-          cp -R src/* build/$MODULE_NAME/
-          cp -R vendor build/$MODULE_NAME/vendor
+          # "src/." (not "src/*") so that hidden files such as .htaccess are included, together with src/vendor
+          cp -R src/. build/$MODULE_NAME/
           echo "${VERSION}" > build/$MODULE_NAME/VERSION
 
       - name: Create ZIP package
