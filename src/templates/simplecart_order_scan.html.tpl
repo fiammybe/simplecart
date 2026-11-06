@@ -6,6 +6,12 @@
 
         <{if isset($simplecart_scan_error)}>
             <div class="notification is-danger"><{$simplecart_scan_error|escape}></div>
+        <{elseif isset($simplecart_scan_extension)}>
+            <div class="notification <{if $simplecart_scan_extension.status == 'success'}>is-success<{elseif $simplecart_scan_extension.status == 'error'}>is-danger<{else}>is-warning<{/if}>">
+                <{if $simplecart_scan_extension.title}><p class="title is-5"><{$simplecart_scan_extension.title|escape}></p><{/if}>
+                <strong><{$simplecart_scan_extension.message|escape}></strong>
+            </div>
+            <{if $simplecart_scan_extension.html}><div class="box"><{$simplecart_scan_extension.html}></div><{/if}>
         <{else}>
             <div class="notification <{if $simplecart_scan_first}>is-success<{else}>is-warning<{/if}>">
                 <strong><{$simplecart_scan_message|escape}></strong>
@@ -80,6 +86,10 @@
                     </table>
                 </div>
             </div>
+
+            <{foreach from=$simplecart_extension_blocks item=block}>
+                <div class="box"><{$block}></div>
+            <{/foreach}>
 
             <a class="button is-link is-light" href="<{$simplecart_scan_order.admin_url}>"><{$smarty.const._MD_SIMPLECART_SCAN_ADMIN_LINK}></a>
         <{/if}>
