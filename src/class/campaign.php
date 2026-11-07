@@ -98,6 +98,8 @@ class SimplecartCampaignHandler extends icms_ipf_Handler {
         $criteria->add(new icms_db_criteria_Item('campaign_id', (int)$obj->getVar('campaign_id')));
         $productHandler->updateAll('campaign_id', 0, $criteria, true);
 
+        simplecart_getHandler('question')->deleteByCampaign((int)$obj->getVar('campaign_id'));
+
         return true;
     }
 

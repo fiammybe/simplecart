@@ -146,3 +146,27 @@ function simplecart_decodeLegacyCustomerInfo(string $json): array
         'address' => trim((string)($customer['address'] ?? '')),
     ];
 }
+
+/**
+ * Runs after the IPF sync, so the question and answer tables exist
+ */
+function icms_module_update_simplecart($module, $previousVersion = null): bool
+{
+    require_once dirname(__DIR__) . '/include/common.php';
+    require_once dirname(__DIR__) . '/class/SimplecartLegacyHelpMigration.php';
+
+    try {
+        $migration = new SimplecartLegacyHelpMigration(
+            simplecart_getHandler('question'),
+            simplecart_getHandler('orderanswer'),
+            simplecart_getHandler('order')
+        );
+        $migration->run();
+    } catch (Throwable $e) {
+        simplecart_debugLog('Converting "Helpende hand" failed: ' . $e->getMessage());
+
+        return false;
+    }
+
+    return true;
+}

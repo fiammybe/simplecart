@@ -57,3 +57,17 @@ define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Name');
 define('_MI_SIMPLECART_CAMPAIGN_START', 'Start');
 define('_MI_SIMPLECART_CAMPAIGN_END', 'End (leave empty for no end)');
 define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campaign');
+
+// Questions and customer language
+define('_MI_SIMPLECART_ORDER_CUSTOMER_LANGUAGE', 'Language of the customer');
+define('_MI_SIMPLECART_QUESTION_CAMPAIGN', 'Campaign');
+define('_MI_SIMPLECART_QUESTION_LABEL', 'Question');
+define('_MI_SIMPLECART_QUESTION_LABEL_DSC', 'Use [en]English[/en][nl]Nederlands[/nl] to give the question in more than one language.');
+define('_MI_SIMPLECART_QUESTION_HELP', 'Explanation');
+define('_MI_SIMPLECART_QUESTION_HELP_DSC', 'Shown below the question. Language tags work here too.');
+define('_MI_SIMPLECART_QUESTION_FORMAT', 'Format of the answer');
+define('_MI_SIMPLECART_QUESTION_OPTIONS', 'Options');
+define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Only for radio buttons and a selection list: one option per line. Language tags work per option.');
+define('_MI_SIMPLECART_QUESTION_REQUIRED', 'Answer');
+define('_MI_SIMPLECART_QUESTION_WEIGHT', 'Order (lowest first)');
+define('_MI_SIMPLECART_QUESTION_ACTIVE', 'Active');

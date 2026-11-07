@@ -91,3 +91,12 @@ define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Bestelling openen in het beheer');
 
 
 define('_MD_SIMPLECART_ITEMS_REMOVED', 'Deze producten zijn niet meer beschikbaar en werden uit uw winkelmandje verwijderd:');
+
+// Questions and customer language
+define('_MD_SIMPLECART_QUESTIONS_HEADING', 'Nog een paar vragen');
+define('_MD_SIMPLECART_QUESTION_REQUIRED_TAG', 'verplicht');
+define('_MD_SIMPLECART_QUESTION_CHOOSE', 'Maak een keuze...');
+define('_MD_SIMPLECART_QUESTION_ERR_REQUIRED', '"%s" is verplicht.');
+define('_MD_SIMPLECART_QUESTION_ERR_INVALID', 'Het antwoord op "%s" is niet geldig.');
+define('_MD_SIMPLECART_ANSWER_SAVE_FAIL', 'Uw antwoorden konden niet worden bewaard. De bestelling is niet geplaatst.');
+define('_MD_SIMPLECART_ANSWERS_HEADING', 'Antwoorden');

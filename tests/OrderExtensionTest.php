@@ -16,13 +16,18 @@ function makeShop(): array
     $product->setVar('active', 1);
     $products->insert($product, true);
 
-    $GLOBALS['__handlers'] = ['order' => $orders, 'orderitem' => $items, 'product' => $products];
+    $GLOBALS['__handlers'] = [
+        'order' => $orders,
+        'orderitem' => $items,
+        'product' => $products,
+        'question' => new SimplecartQuestionHandler($db),
+        'orderanswer' => new SimplecartOrderanswerHandler($db),
+        'campaign' => new SimplecartCampaignHandler($db),
+    ];
 
     return ['db' => $db, 'orders' => $orders, 'items' => $items];
 }
 
-$customer = ['name' => 'Jan', 'email' => 'jan@example.com', 'phone' => '', 'address' => '', 'helpendehanden' => ''];
-$cart = [1 => ['product_id' => 1, 'quantity' => 2]];
 
 test('without add-ons placeOrder behaves as before and uses no transaction', function () use ($customer, $cart) {
     $shop = makeShop();

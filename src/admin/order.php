@@ -26,6 +26,8 @@ switch ($clean_op) {
                 $icmsAdminTpl->assign('simplecart_order_scan_info', sprintf(_MD_SIMPLECART_SCAN_ALREADY_CLOSED, $obj->getScannedAtFormatted(), $obj->getScannedByName()));
             }
 
+            $icmsAdminTpl->assign('simplecart_order_answers', $obj->getAnswerHtmlRows());
+
             $itemRows = $obj->getItemRows();
             $icmsAdminTpl->assign('simplecart_order_items', $itemRows['items']);
             $icmsAdminTpl->assign('simplecart_order_grand_total_fmt', $itemRows['grand_total_fmt']);

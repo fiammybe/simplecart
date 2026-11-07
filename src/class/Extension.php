@@ -73,6 +73,9 @@ class SimplecartExtension
 {
     public const API_VERSION = 1;
 
+    /** Rises with every additive change, so an add-on can check what the core offers: 2 adds `language` to the mail payload of order.render */
+    public const API_REVISION = 2;
+
     public const EVENT_CART_SUMMARY = 'cart.summary';
     public const EVENT_CART_EMPTIED = 'cart.emptied';
     public const EVENT_COLLECT_LINES = 'order.collectLines';
