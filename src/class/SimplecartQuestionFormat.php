@@ -45,10 +45,13 @@ final class SimplecartQuestionFormat
         return $format === self::RADIO || $format === self::SELECT;
     }
 
+    /**
+     * A text area is checked as plain text: XOBJ_DTYPE_TXTAREA purifies HTML and appends
+     * "<!-- filtered with htmlpurifier -->" comments to the value, which has no place in a plain answer
+     */
     public static function ipfType(string $format): int
     {
         return match ($format) {
-            self::TEXTAREA => XOBJ_DTYPE_TXTAREA,
             self::EMAIL => XOBJ_DTYPE_EMAIL,
             self::URL => XOBJ_DTYPE_URL,
             self::INTEGER => XOBJ_DTYPE_INT,

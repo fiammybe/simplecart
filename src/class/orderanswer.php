@@ -33,7 +33,7 @@ class SimplecartOrderanswer extends icms_ipf_Object {
     }
 
     /** The label of a chosen option is written by an administrator and has language tags; free text never does */
-    public function getValueFor(string $language = ''): string
+    public function getAnswerFor(string $language = ''): string
     {
         $value = (string)$this->getVar('answer_value', 'n');
 
@@ -47,7 +47,7 @@ class SimplecartOrderanswer extends icms_ipf_Object {
     {
         return [
             'label' => $this->getLabelFor($language),
-            'value' => $this->getValueFor($language),
+            'value' => $this->getAnswerFor($language),
         ];
     }
 

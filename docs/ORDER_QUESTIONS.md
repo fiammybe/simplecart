@@ -26,7 +26,7 @@ De formaten volgen de datatypes van IPF; de controles van IPF gelden waar ze bes
 | Formaat | IPF-datatype | Wat wordt gecontroleerd |
 |---|---|---|
 | Tekst (één regel) | tekst | maximaal 255 tekens |
-| Tekst (meerdere regels) | tekstvak | maximaal 5000 tekens |
+| Tekst (meerdere regels) | tekst | maximaal 5000 tekens; HTML wordt niet opgeschoond maar bij weergave geëscaped |
 | E-mailadres | e-mail | geldig e-mailadres (IPF) |
 | Webadres | url | `http://` wordt toegevoegd (IPF), daarna een geldig adres |
 | Geheel getal | geheel getal | enkel cijfers, met eventueel een min-teken |

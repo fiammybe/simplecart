@@ -22,7 +22,7 @@ define('_AM_SIMPLECART_CAMPAIGN_FORM', 'Campaign');
 define('_AM_SIMPLECART_CAMPAIGN_CREATE', 'Create Campaign');
 define('_AM_SIMPLECART_CAMPAIGN_CREATED', 'Campaign created successfully');
 define('_AM_SIMPLECART_CAMPAIGN_UPDATED', 'Campaign updated successfully');
-define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Are you sure you want to delete this campaign? Linked products are kept but unlinked.');
+define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Are you sure you want to delete this campaign? Linked products are kept but unlinked. The questions of this campaign are deleted; answers on existing orders are kept.');
 define('_AM_SIMPLECART_CAMPAIGN_NONE', '- No campaign -');
 define('_AM_SIMPLECART_CAMPAIGN_STATUS_ACTIVE', 'Active');
 define('_AM_SIMPLECART_CAMPAIGN_STATUS_INACTIVE', 'Not active');

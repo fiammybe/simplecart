@@ -209,7 +209,7 @@ test('placeOrder stores a snapshot of each answer', function () use ($customer, 
     assertSame($result['order_id'], (int)$stored[0]->getVar('order_id'));
     assertSame('[en]Your email[/en][nl]Uw e-mail[/nl]', $stored[0]->getVar('question_label'));
     assertSame('email', $stored[0]->getVar('question_format'));
-    assertSame(3, (int)$stored[0]->getVar('weight'));
+    assertSame(1, (int)$stored[0]->getVar('weight'), 'the position in which the question was asked');
     assertSame('jan@example.com', $stored[0]->getVar('answer_value'));
 });
 
@@ -376,4 +376,38 @@ test('deleting a campaign deletes its questions but not the answers already give
     $remaining = array_map(fn ($question) => $question->getVar('label'), array_values($GLOBALS['__handlers']['question']->stored));
     assertSame(['For every order'], $remaining);
     assertSame(1, count($answer->stored));
+});
+
+test('answers keep the order in which the questions were asked, not the weight of each question', function () use ($customer) {
+    makeCampaignShop();
+    $orders = $GLOBALS['__handlers']['order'];
+    $questions = $GLOBALS['__handlers']['question'];
+    $cart = [1 => ['product_id' => 1, 'quantity' => 1], 2 => ['product_id' => 2, 'quantity' => 1]];
+
+    makeQuestion(['label' => 'Guests', 'campaign_id' => 1, 'weight' => 1, 'format' => 'integer', 'is_required' => 1]);
+    makeQuestion(['label' => 'Allergies', 'weight' => 50, 'is_required' => 1]);
+
+    $asked = $questions->getForCart($cart);
+    $posted = [];
+    foreach ($asked as $question) {
+        $posted[field($question)] = $question->getFormat() === 'integer' ? '2' : 'text';
+    }
+
+    $result = $orders->placeOrder(['answers' => $posted] + $customer, $cart);
+    $labels = array_map(fn ($row) => $row['label'], $orders->get($result['order_id'])->getAnswerRows('english'));
+
+    assertSame(array_map(fn ($question) => $question->getVar('label'), $asked), $labels);
+    assertTrue(array_search('Allergies', $labels, true) < array_search('Guests', $labels, true), 'general questions are shown before those of the campaign');
+});
+
+test('a text area answer is cleaned as plain text, because the IPF text area type purifies HTML and adds comments', function () {
+    assertSame(XOBJ_DTYPE_TXTBOX, SimplecartQuestionFormat::ipfType('textarea'));
+    assertSame(XOBJ_DTYPE_EMAIL, SimplecartQuestionFormat::ipfType('email'));
+    assertSame(XOBJ_DTYPE_URL, SimplecartQuestionFormat::ipfType('url'));
+
+    makeShop();
+    $question = makeQuestion(['format' => 'textarea']);
+    $text = "<b>bold</b> & more\nsecond line";
+
+    assertSame($text, answerValue(answersFor([$question], [field($question) => $text]), $question));
 });

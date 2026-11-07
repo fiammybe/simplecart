@@ -80,8 +80,10 @@ final class SimplecartAnswerValidator
     public function validate(array $questions, array $submitted): SimplecartAnswerResult
     {
         $result = new SimplecartAnswerResult();
+        $position = 0;
 
         foreach ($questions as $question) {
+            $position++;
             $questionId = (int)$question->getVar('question_id', 'n');
             $raw = $submitted[self::fieldName($questionId)] ?? '';
             $value = is_scalar($raw) ? trim((string)$raw) : '';
@@ -109,7 +111,7 @@ final class SimplecartAnswerValidator
                 'question_id' => $questionId,
                 'question_label' => (string)$question->getVar('label', 'n'),
                 'question_format' => $question->getFormat(),
-                'weight' => $question->getWeight(),
+                'weight' => $position,
                 'answer_value' => $answerValue,
             ];
         }

@@ -23,7 +23,7 @@ define('_AM_SIMPLECART_CAMPAIGN_FORM', 'Campagne');
 define('_AM_SIMPLECART_CAMPAIGN_CREATE', 'Campagne aanmaken');
 define('_AM_SIMPLECART_CAMPAIGN_CREATED', 'Campagne met succes aangemaakt');
 define('_AM_SIMPLECART_CAMPAIGN_UPDATED', 'Campagne met succes gewijzigd');
-define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Ben je zeker dat je deze campagne wil verwijderen? De gekoppelde producten blijven bestaan maar worden losgekoppeld.');
+define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Ben je zeker dat je deze campagne wil verwijderen? De gekoppelde producten blijven bestaan maar worden losgekoppeld. De vragen van deze campagne worden verwijderd; antwoorden op bestaande bestellingen blijven bewaard.');
 define('_AM_SIMPLECART_CAMPAIGN_NONE', '- Geen campagne -');
 define('_AM_SIMPLECART_CAMPAIGN_STATUS_ACTIVE', 'Actief');
 define('_AM_SIMPLECART_CAMPAIGN_STATUS_INACTIVE', 'Niet actief');
