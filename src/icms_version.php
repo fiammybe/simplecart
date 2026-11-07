@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '2.3.1';
+$modversion['version'] = '2.4.0';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'David Janssens (fiammybe)';
 $modversion['credits'] = 'ImpressCMS, IPF';
@@ -11,10 +11,10 @@ $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
 
-$modversion['status_version'] = "2.3.1";
+$modversion['status_version'] = "2.4.0";
 $modversion['status'] = "Final";
 $modversion['date'] = "7 Nov 2026";
-$modversion['author_word'] = "Close orders from the order scan page";
+$modversion['author_word'] = "Let customers view their orders with an access code";
 
 $modversion['hasMain'] = 1;
 $modversion['hasAdmin'] = 1;
@@ -41,6 +41,9 @@ $modversion['templates'][] = array('file' => 'simplecart_admin_product.html.tpl'
 $modversion['templates'][] = array('file' => 'simplecart_admin_order.html.tpl', 'description' => 'Admin - Orders');
 $modversion['templates'][] = array('file' => 'simplecart_admin_dashboard.html.tpl', 'description' => 'Admin - Dashboard');
 $modversion['templates'][] = array('file' => 'simplecart_order_scan.html.tpl', 'description' => 'SimpleCart Order Scan');
+$modversion['templates'][] = array('file' => 'simplecart_customer_orders.html.tpl', 'description' => 'SimpleCart Customer Orders');
+
+$modversion['sub'][] = array('name' => _MI_SIMPLECART_MY_ORDERS, 'url' => 'orders.php');
 
 $modversion['hasSearch'] = 0;
 $modversion['hasComments'] = 0;

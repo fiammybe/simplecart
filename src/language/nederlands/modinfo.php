@@ -25,6 +25,8 @@ define('_MI_SIMPLECART_ORDER_CUSTOMER_ADDRESS', 'Adres klant');
 define('_MI_SIMPLECART_ORDER_PAYMENT_REF', 'Betalingsreferentie');
 define('_MI_SIMPLECART_ORDER_SHIFT', 'Shift');
 define('_MI_SIMPLECART_ORDER_HELPENDE_HAND', 'Helpende hand');
+define('_MI_SIMPLECART_ORDER_ACCESS_CODE', 'Toegangscode klant');
+define('_MI_SIMPLECART_MY_ORDERS', 'Mijn bestellingen');
 
 // Order item fields
 define('_MI_SIMPLECART_ORDERITEM_ORDER_ID', 'Bestelling');
@@ -37,6 +39,10 @@ define('_MI_SIMPLECART_ORDERITEM_SUBTOTAL', 'Subtotaal');
 define('_MI_SIMPLECART_STATUS_PENDING', 'In Afwachting');
 define('_MI_SIMPLECART_STATUS_COMPLETED', 'Voltooid');
 define('_MI_SIMPLECART_STATUS_CANCELLED', 'Geannuleerd');
+define('_MI_SIMPLECART_STATUS_AWAITING_PAYMENT', 'Wacht op betaling');
+define('_MI_SIMPLECART_STATUS_PAID', 'Betaald');
+define('_MI_SIMPLECART_STATUS_REIMBURSED', 'Terugbetaald');
+define('_MI_SIMPLECART_STATUS_CLOSED', 'Afgesloten');
 
 // Configs
 define('_MI_SIMPLECART_SEPA_BENEFICIARY_NAME', 'Naam van de bestemmeling');

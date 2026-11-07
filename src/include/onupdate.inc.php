@@ -4,6 +4,18 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 simplecart_prepareLegacyOrderTable();
 
 /**
+ * Runs after the IPF upgrade, which has added the access_code column declared by the order object
+ */
+function icms_module_update_simplecart($module): bool
+{
+    if (! simplecart_addMissingAccessCodes($module)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * The IPF upgrade drops every column that no object declares, so the legacy customer_info
  * data has to be copied to the customer columns before that upgrade runs
  */
@@ -49,6 +61,42 @@ function simplecart_replaceNullsWithEmptyStrings(string $table, array $columns):
 
         $db->queryF("UPDATE `{$table}` SET `{$column}` = '' WHERE `{$column}` IS NULL");
     }
+}
+
+/**
+ * Gives orders placed before access codes existed their own code
+ */
+function simplecart_addMissingAccessCodes($module): bool
+{
+    require_once dirname(__DIR__) . '/class/order.php';
+
+    $db = icms::$xoopsDB;
+    $table = $db->prefix('simplecart_order');
+
+    if (! simplecart_tableExists($table) || ! simplecart_columnExists($table, 'access_code')) {
+        return true;
+    }
+
+    $result = $db->queryF("SELECT `order_id` FROM `{$table}` WHERE `access_code` = ''");
+
+    if (! $result) {
+        $module->setErrors("Could not read the orders without an access code from {$table}");
+
+        return false;
+    }
+
+    while ($row = $db->fetchArray($result)) {
+        $orderId = (int)$row['order_id'];
+        $code = $db->quoteString(SimplecartOrderHandler::generateAccessCode());
+
+        if (! $db->queryF("UPDATE `{$table}` SET `access_code` = {$code} WHERE `order_id` = {$orderId}")) {
+            $module->setErrors("Could not generate an access code for order {$orderId}");
+
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function simplecart_tableExists(string $table): bool
