@@ -16,3 +16,16 @@ define('_AM_SIMPLECART_ORDER_DELETE_CONFIRM', 'Are you sure you want to delete t
 define('_AM_SIMPLECART_ORDER_DELETED', 'Order and related items deleted successfully');
 define('_AM_SIMPLECART_PAYMENT_MAIL_SENT', 'Payment confirmation email with QR code sent to the customer.');
 define('_AM_SIMPLECART_PAYMENT_MAIL_FAILED', 'The payment confirmation email could not be sent.');
+
+define('_AM_SIMPLECART_CAMPAIGN_ADMIN', 'Manage Campaigns');
+define('_AM_SIMPLECART_CAMPAIGN_FORM', 'Campaign');
+define('_AM_SIMPLECART_CAMPAIGN_CREATE', 'Create Campaign');
+define('_AM_SIMPLECART_CAMPAIGN_CREATED', 'Campaign created successfully');
+define('_AM_SIMPLECART_CAMPAIGN_UPDATED', 'Campaign updated successfully');
+define('_AM_SIMPLECART_CAMPAIGN_DELETE_CONFIRM', 'Are you sure you want to delete this campaign? Linked products are kept but unlinked.');
+define('_AM_SIMPLECART_CAMPAIGN_NONE', '- No campaign -');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS_ACTIVE', 'Active');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS_INACTIVE', 'Not active');
+define('_AM_SIMPLECART_CAMPAIGN_START_REQUIRED', 'A start date is required.');
+define('_AM_SIMPLECART_CAMPAIGN_END_BEFORE_START', 'The end must be after the start.');
+define('_AM_SIMPLECART_CAMPAIGN_STATUS', 'Status');

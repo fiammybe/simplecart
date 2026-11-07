@@ -51,3 +51,9 @@ define('_MI_SIMPLECART_CONF_REF_PREFIX', 'Payment Reference Prefix');
 define('_MI_SIMPLECART_CONF_REF_PREFIX_DESC', 'Prefix for the auto-generated payment reference (e.g. ORD-)');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO', 'Kopie van orderbevestiging naar');
 define('_MI_SIMPLECART_DUPLICATE_ORDER_EMAIL_TO_DESC', 'Optioneel e-mailadres dat een extra kopie van elke orderbevestiging ontvangt. Gebruik een komma- of puntkomma-gescheiden lijst indien nodig.');
+
+// Campaign fields
+define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Naam');
+define('_MI_SIMPLECART_CAMPAIGN_START', 'Begin');
+define('_MI_SIMPLECART_CAMPAIGN_END', 'Einde (leeg laten voor onbeperkt)');
+define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campagne');
