@@ -2,30 +2,30 @@
 include_once dirname(__DIR__, 2) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
 
-$orderId = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
-$token = isset($_GET['token']) ? (string)$_GET['token'] : '';
+$orderId = isset($_REQUEST['order_id']) ? (int)$_REQUEST['order_id'] : 0;
+$token = isset($_REQUEST['token']) ? (string)$_REQUEST['token'] : '';
+// Scan links that belong to an add-on (e.g. a ticket) carry an 'addon' parameter and their own parameters
+$isAddonScan = isset($_GET['addon']);
+$scanUrl = SIMPLECART_URL . 'scan.php?' . http_build_query($isAddonScan ? $_GET : ['order_id' => $orderId, 'token' => $token]);
 
 if (!is_object(icms::$user)) {
-    // Add-on scan links carry their own parameters, which must survive the login redirect
-    $returnParams = isset($_GET['addon']) ? $_GET : ['order_id' => $orderId, 'token' => $token];
-    $returnUrl = SIMPLECART_URL . 'scan.php?' . http_build_query($returnParams);
-    redirect_header(ICMS_URL . '/user.php?xoops_redirect=' . urlencode($returnUrl), 3, _MD_SIMPLECART_SCAN_LOGIN_REQUIRED);
+    redirect_header(ICMS_URL . '/user.php?xoops_redirect=' . urlencode($scanUrl), 3, _MD_SIMPLECART_SCAN_LOGIN_REQUIRED);
     exit;
 }
-
-$xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
-include ICMS_ROOT_PATH . '/header.php';
 
 $moduleId = (int)icms::handler('icms_module')->getByDirname(SIMPLECART_DIRNAME)->getVar('mid');
+$isModuleAdmin = icms::$user->isAdmin($moduleId);
 
-if (!icms::$user->isAdmin($moduleId)) {
-    $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_NO_ACCESS);
-    include ICMS_ROOT_PATH . '/footer.php';
-    exit;
-}
+if ($isAddonScan) {
+    $xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
+    include ICMS_ROOT_PATH . '/header.php';
 
-// Scan links that belong to an add-on (e.g. a ticket) carry an 'addon' parameter
-if (isset($_GET['addon'])) {
+    if (!$isModuleAdmin) {
+        $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_NO_ACCESS);
+        include ICMS_ROOT_PATH . '/footer.php';
+        exit;
+    }
+
     $scanEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_SCAN_RESOLVE, array(
         'addon' => (string)$_GET['addon'],
         'params' => $_GET,
@@ -45,35 +45,75 @@ if (isset($_GET['addon'])) {
         ));
     }
 
+    $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
     include ICMS_ROOT_PATH . '/footer.php';
     exit;
 }
 
 $orderHandler = simplecart_getHandler('order');
 $order = $orderId > 0 ? $orderHandler->get($orderId) : null;
+$isValidOrder = $order && !$order->isNew() && $order->hasValidScanToken($token);
 
-if (!$order || $order->isNew() || !$order->hasValidScanToken($token)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!$isModuleAdmin) {
+        redirect_header($scanUrl, 3, _MD_SIMPLECART_SCAN_NO_ACCESS);
+        exit;
+    }
+
+    if (!$isValidOrder) {
+        redirect_header($scanUrl, 3, _MD_SIMPLECART_SCAN_INVALID);
+        exit;
+    }
+
+    $closeToken = isset($_POST['close_token']) ? (string)$_POST['close_token'] : '';
+
+    if (!icms::$security->check(true, $closeToken, 'simplecart_order_scan')) {
+        redirect_header($scanUrl, 3, _MD_SIMPLECART_SCAN_TOKEN_INVALID);
+        exit;
+    }
+
+    $isClosed = $orderHandler->closeScannedOrder($orderId, (int)icms::$user->getVar('uid'));
+
+    redirect_header($scanUrl, 2, $isClosed ? _MD_SIMPLECART_SCAN_CLOSED : _MD_SIMPLECART_SCAN_CLOSE_FAILED);
+    exit;
+}
+
+$xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
+include ICMS_ROOT_PATH . '/header.php';
+
+if (!$isModuleAdmin) {
+    $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_NO_ACCESS);
+    include ICMS_ROOT_PATH . '/footer.php';
+    exit;
+}
+
+if (!$isValidOrder) {
     $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_INVALID);
     include ICMS_ROOT_PATH . '/footer.php';
     exit;
 }
 
-$isFirstScan = $orderHandler->markScanned($orderId, (int)icms::$user->getVar('uid'));
-$order = $orderHandler->get($orderId);
-
-$icmsTpl->assign('simplecart_scan_first', $isFirstScan);
-$icmsTpl->assign(
-    'simplecart_scan_message',
-    $isFirstScan ?
-        _MD_SIMPLECART_SCAN_PROCESSED :
-        sprintf(_MD_SIMPLECART_SCAN_ALREADY_PROCESSED, $order->getScannedAtFormatted(), $order->getScannedByName())
-);
-
 $status = (string)$order->getVar('status', 'n');
 $statusLabels = $orderHandler->getStatusArray();
 
-if ($status !== 'paid') {
+if ($status === 'closed') {
+    $icmsTpl->assign(
+        'simplecart_scan_closed_message',
+        $order->isScanned() ?
+            sprintf(_MD_SIMPLECART_SCAN_ALREADY_CLOSED, $order->getScannedAtFormatted(), $order->getScannedByName()) :
+            _MD_SIMPLECART_SCAN_ALREADY_CLOSED_ADMIN
+    );
+}
+
+if (!in_array($status, ['paid', 'closed'], true)) {
     $icmsTpl->assign('simplecart_scan_status_warning', _MD_SIMPLECART_SCAN_NOT_PAID);
+}
+
+if ($status === 'paid') {
+    $icmsTpl->assign('simplecart_scan_close_form', [
+        'action' => $scanUrl,
+        'close_token' => icms::$security->createToken(3600, 'simplecart_order_scan'),
+    ]);
 }
 
 $itemRows = $order->getItemRows();
@@ -90,15 +130,20 @@ foreach ($renderEvent->getResults() as $result) {
     }
 }
 $icmsTpl->assign('simplecart_extension_blocks', $scanBlocks);
+$customerPhone = (string)$order->getVar('customer_phone', 'n');
 
+$icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_scan_order', [
     'order_id' => $orderId,
     'date' => (string)$order->getVar('timestamp'),
     'status' => $statusLabels[$status] ?? $status,
+    'status_key' => $status,
     'customer_name' => (string)$order->getVar('customer_name', 'n'),
     'customer_email' => (string)$order->getVar('customer_email', 'n'),
-    'customer_phone' => (string)$order->getVar('customer_phone', 'n'),
+    'customer_phone' => $customerPhone,
+    'customer_phone_href' => preg_replace('/[^0-9+]/', '', $customerPhone),
     'items' => $itemRows['items'],
+    'item_count' => array_sum(array_column($itemRows['items'], 'quantity')),
     'grand_total_fmt' => $itemRows['grand_total_fmt'],
     'currency' => strtoupper((string)simplecart_getSepaConfig('currency', 'EUR')),
     'admin_url' => SIMPLECART_URL . "admin/order.php?op=view&order_id={$orderId}",
