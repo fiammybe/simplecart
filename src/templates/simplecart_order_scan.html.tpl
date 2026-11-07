@@ -76,6 +76,15 @@
             </div>
         <{/if}>
 
+        <{if $simplecart_scan_order.answers|@count}>
+            <div class="box sc-scan-box">
+                <p class="has-text-weight-semibold mb-2"><{$smarty.const._MD_SIMPLECART_ANSWERS_HEADING}></p>
+                <{foreach from=$simplecart_scan_order.answers item=answer}>
+                    <p class="mb-1"><strong><{$answer.label}></strong><br><{$answer.value}></p>
+                <{/foreach}>
+            </div>
+        <{/if}>
+
         <{foreach from=$simplecart_extension_blocks item=block}>
             <div class="box sc-scan-box"><{$block}></div>
         <{/foreach}>

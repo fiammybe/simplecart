@@ -10,8 +10,9 @@ $customer = array(
     'email' => '',
     'phone' => '',
     'address' => '',
-    'helpendehanden' => '',
 );
+$answerValues = array();
+$questionErrors = array();
 $checkoutError = '';
 $removedItems = simplecart_pruneUnavailableCartItems();
 $checkoutSuccess = false;
@@ -21,6 +22,7 @@ $orderDetails = array(
     'order_id' => 0,
     'customer' => array(),
     'items' => array(),
+    'answers' => array(),
     'total' => 0.0,
     'total_formatted' => '',
 );
@@ -31,8 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         'email' => trim((string)($_POST['customer_email'] ?? '')),
         'phone' => trim((string)($_POST['customer_phone'] ?? '')),
         'address' => trim((string)($_POST['customer_address'] ?? '')),
-        'helpendehanden' => trim((string)($_POST['helpendehanden'] ?? '')),
+        'language' => SimplecartLanguage::current(),
+        'answers' => array(),
     );
+
+    foreach ($_POST as $field => $value) {
+        if (preg_match('/^q_\d+$/', (string)$field) && is_scalar($value)) {
+            $customer['answers'][$field] = trim((string)$value);
+        }
+    }
+
+    foreach ($customer['answers'] as $field => $value) {
+        $answerValues[(int)substr($field, 2)] = $value;
+    }
 
     $token = isset($_POST['simplecart_token']) ? (string)$_POST['simplecart_token'] : '';
     if (empty($customer['name']) || empty($customer['email'])) {
@@ -56,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $redirectUrl = SIMPLECART_URL . 'checkout.php?success=1&order_id=' . (int)$result['order_id'];
             header('Location: ' . $redirectUrl);
             exit;
+        } catch (SimplecartAnswersException $e) {
+            $questionErrors = $e->getResult()->errors;
+            $checkoutError = implode(' ', $questionErrors);
         } catch (Exception $e) {
             $checkoutError = $e->getMessage();
         }
@@ -94,6 +110,7 @@ if (!empty($_GET['success']) && $orderId > 0) {
                 'phone' => (string)$order->getVar('customer_phone', 'n'),
                 'address' => (string)$order->getVar('customer_address', 'n'),
             );
+            $orderDetails['answers'] = $order->getAnswerHtmlRows();
 
             $orderItemHandler = simplecart_getHandler('orderitem');
             $criteria = new icms_db_criteria_Compo();
@@ -140,6 +157,10 @@ if ($checkoutSuccess && $isOwnOrder && isset($order) && $order && !$order->isNew
 }
 
 $cartSummary = simplecart_getCartSummary();
+$questionRows = $checkoutSuccess ?
+    array() :
+    simplecart_getHandler('question')->getFormRows(simplecart_getCart(), $answerValues, $questionErrors, SimplecartLanguage::current());
+$icmsTpl->assign('simplecart_questions', $questionRows);
 $icmsTpl->assign('simplecart_extension_blocks', $extensionBlocks);
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_order_token', icms::$security->createToken(3600, 'simplecart_checkout'));

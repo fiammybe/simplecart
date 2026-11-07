@@ -1,18 +1,21 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+require_once __DIR__ . '/OrderEmailTrait.php';
+
 /**
  * OrderConfirmationEmail - Generates plain text confirmation emails for orders
  */
 
 class OrderConfirmationEmail {
+    use OrderEmailTrait;
+
     private $order;
     private $orderItems;
     private $customerEmail;
     private $customerName;
     private $customerPhone;
     private $customerAddress;
-    private $customerHelpendehanden;
     private $sepaConfig;
     private $currency;
 
@@ -21,6 +24,7 @@ class OrderConfirmationEmail {
         $this->orderItems = $orderItems;
         $this->sepaConfig = $sepaConfig;
         $this->currency = $currency;
+        $this->initLanguage($order);
 
         // Extract customer info from order
         $this->extractCustomerInfo();
@@ -37,9 +41,6 @@ class OrderConfirmationEmail {
         $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
         $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
         $this->customerAddress = trim((string)$this->order->getVar('customer_address', 'n'));
-
-        // Extract helpende_hand from order fields
-        $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');
     }
 
     public function getCustomerEmail() {
@@ -48,58 +49,55 @@ class OrderConfirmationEmail {
 
     public function getSubject() {
         $orderId = (int)$this->order->getVar('order_id');
-        return sprintf(_MD_SIMPLECART_EMAIL_SUBJECT, $orderId);
+        return sprintf($this->t('EMAIL_SUBJECT'), $orderId);
     }
 
     public function getTextContent() {
         $orderId = (int)$this->order->getVar('order_id');
         $totalAmount = (float)$this->order->getVar('total_amount');
-        // Get the pre-formatted timestamp from ImpressCMS XOBJ_DTYPE_LTIME
-        $orderDate = (string)$this->order->getVar('timestamp');
+        $orderDate = $this->formatDate();
 
         $text = '';
         $text .= str_repeat('=', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_GREETING . " " . $this->customerName . "\n\n";
-        $text .= _MD_SIMPLECART_EMAIL_THANK_YOU . "\n";
+        $text .= $this->t('EMAIL_GREETING') . " " . $this->customerName . "\n\n";
+        $text .= $this->t('EMAIL_THANK_YOU') . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
         // Order Details Section
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DETAILS . "\n";
+        $text .= $this->t('EMAIL_ORDER_DETAILS') . "\n";
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_ORDER_ID . ": #" . $orderId . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
+        $text .= $this->t('ORDER_ID') . ": #" . $orderId . "\n";
+        $text .= $this->t('EMAIL_ORDER_DATE') . ": " . $orderDate . "\n\n";
 
         // Customer Information Section
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_CUSTOMER_INFO . "\n";
+        $text .= $this->t('EMAIL_CUSTOMER_INFO') . "\n";
         $text .= str_repeat('-', 70) . "\n";
         if (!empty($this->customerName)) {
-            $text .= _MD_SIMPLECART_NAME . ": " . $this->customerName . "\n";
+            $text .= $this->t('NAME') . ": " . $this->customerName . "\n";
         }
         if (!empty($this->customerEmail)) {
-            $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+            $text .= $this->t('EMAIL') . ": " . $this->customerEmail . "\n";
         }
         if (!empty($this->customerPhone)) {
-            $text .= _MD_SIMPLECART_PHONE . ": " . $this->customerPhone . "\n";
-        }
-        if (!empty($this->customerHelpendehanden)) {
-            $helpText = $this->getHelpLabel($this->customerHelpendehanden);
-            $text .= _MD_SIMPLECART_HELP_MAIL . ": " . $helpText . "\n";
+            $text .= $this->t('PHONE') . ": " . $this->customerPhone . "\n";
         }
         $text .= "\n";
 
+        $text .= $this->getAnswersText();
+
         // Items Section
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ITEMS . "\n";
+        $text .= $this->t('EMAIL_ITEMS') . "\n";
         $text .= str_repeat('-', 70) . "\n";
 
         // Column headers
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_NAME,
-            _MD_SIMPLECART_EMAIL_UNIT_PRICE,
-            _MD_SIMPLECART_EMAIL_QUANTITY,
-            _MD_SIMPLECART_EMAIL_SUBTOTAL
+            $this->t('NAME'),
+            $this->t('EMAIL_UNIT_PRICE'),
+            $this->t('EMAIL_QUANTITY'),
+            $this->t('EMAIL_SUBTOTAL')
         );
         $text .= str_repeat('-', 70) . "\n";
 
@@ -121,7 +119,7 @@ class OrderConfirmationEmail {
         // Total
         $text .= str_repeat('-', 70) . "\n";
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_TOTAL . ":",
+            $this->t('TOTAL') . ":",
             "",
             "",
             $this->formatCurrency($totalAmount)
@@ -136,20 +134,20 @@ class OrderConfirmationEmail {
         // Payment Information Section
         if (!empty($this->sepaConfig['beneficiary_iban'])) {
             $text .= str_repeat('-', 70) . "\n";
-            $text .= _MD_SIMPLECART_PAYMENT_INFO . "\n";
+            $text .= $this->t('PAYMENT_INFO') . "\n";
             $text .= str_repeat('-', 70) . "\n";
-            $text .= _MD_SIMPLECART_BENEFICIARY . ": " . $this->sepaConfig['beneficiary_name'] . "\n";
-            $text .= _MD_SIMPLECART_IBAN . ": " . $this->sepaConfig['beneficiary_iban'] . "\n";
+            $text .= $this->t('BENEFICIARY') . ": " . $this->sepaConfig['beneficiary_name'] . "\n";
+            $text .= $this->t('IBAN') . ": " . $this->sepaConfig['beneficiary_iban'] . "\n";
             if (!empty($this->sepaConfig['beneficiary_bic'])) {
                 $text .= "BIC: " . $this->sepaConfig['beneficiary_bic'] . "\n";
             }
-            $text .= _MD_SIMPLECART_AMOUNT . ": " . $this->formatCurrency($totalAmount) . "\n\n";
-            $text .= _MD_SIMPLECART_MAIL_PAYMENTINFO . "\n\n";
+            $text .= $this->t('AMOUNT') . ": " . $this->formatCurrency($totalAmount) . "\n\n";
+            $text .= $this->t('MAIL_PAYMENTINFO') . "\n\n";
             $text .= str_repeat('-', 70) . "\n\n";
         }
 
         // Footer
-        $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
+        $text .= $this->t('EMAIL_FOOTER') . "\n\n";
         $text .= str_repeat('=', 70) . "\n";
 
         return $text;
@@ -164,6 +162,7 @@ class OrderConfirmationEmail {
         $event = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
             'order' => $this->order,
             'context' => 'mail',
+            'language' => $this->language,
         ));
 
         $texts = array();
@@ -179,29 +178,6 @@ class OrderConfirmationEmail {
 
     private function formatCurrency($amount) {
         return number_format((float)$amount, 2, '.', ',') . ' ' . $this->currency;
-    }
-
-    /**
-     * Map helpende handen value to translated label
-     *
-     * @param string $help The helpende handen value
-     * @return string The translated help label
-     */
-    private function getHelpLabel($help) {
-        $help = trim($help);
-
-        // Map help values to language constants
-        if (strpos($help, '1') !== false) {
-            return defined('_MD_SIMPLECART_HELP_1') ? _MD_SIMPLECART_HELP_1 : $help;
-        } elseif (strpos($help, '2') !== false) {
-            return defined('_MD_SIMPLECART_HELP_2') ? _MD_SIMPLECART_HELP_2 : $help;
-        } elseif (strpos($help, '3') !== false) {
-            return defined('_MD_SIMPLECART_HELP_3') ? _MD_SIMPLECART_HELP_3 : $help;
-        } elseif (strpos($help, '4') !== false) {
-            return defined('_MD_SIMPLECART_HELP_4') ? _MD_SIMPLECART_HELP_4 : $help;
-        }
-
-        return $help;
     }
 }
 ?>

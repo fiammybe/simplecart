@@ -93,3 +93,12 @@ define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Open order in administration');
 
 
 define('_MD_SIMPLECART_ITEMS_REMOVED', 'These products are no longer available and were removed from your cart:');
+
+// Questions and customer language
+define('_MD_SIMPLECART_QUESTIONS_HEADING', 'A few questions');
+define('_MD_SIMPLECART_QUESTION_REQUIRED_TAG', 'required');
+define('_MD_SIMPLECART_QUESTION_CHOOSE', 'Choose...');
+define('_MD_SIMPLECART_QUESTION_ERR_REQUIRED', '"%s" is required.');
+define('_MD_SIMPLECART_QUESTION_ERR_INVALID', 'The answer to "%s" is not valid.');
+define('_MD_SIMPLECART_ANSWER_SAVE_FAIL', 'Could not save your answers. The order was not placed.');
+define('_MD_SIMPLECART_ANSWERS_HEADING', 'Answers');

@@ -142,6 +142,7 @@ $icmsTpl->assign('simplecart_scan_order', [
     'customer_email' => (string)$order->getVar('customer_email', 'n'),
     'customer_phone' => $customerPhone,
     'customer_phone_href' => preg_replace('/[^0-9+]/', '', $customerPhone),
+    'answers' => $order->getAnswerHtmlRows(),
     'items' => $itemRows['items'],
     'item_count' => array_sum(array_column($itemRows['items'], 'quantity')),
     'grand_total_fmt' => $itemRows['grand_total_fmt'],
