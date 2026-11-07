@@ -13,7 +13,7 @@ $modversion['image'] = 'assets/images/module_logo.png';
 
 $modversion['status_version'] = "2.4.0";
 $modversion['status'] = "Final";
-$modversion['date'] = "6 Nov 2026";
+$modversion['date'] = "7 Nov 2026";
 $modversion['author_word'] = "Let customers view their orders with an access code";
 
 $modversion['hasMain'] = 1;
