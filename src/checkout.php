@@ -8,8 +8,6 @@ include ICMS_ROOT_PATH . '/header.php';
 $customer = array(
     'name' => '',
     'email' => '',
-    'phone' => '',
-    'address' => '',
 );
 $answerValues = array();
 $questionErrors = array();
@@ -31,8 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $customer = array(
         'name' => trim((string)($_POST['customer_name'] ?? '')),
         'email' => trim((string)($_POST['customer_email'] ?? '')),
-        'phone' => trim((string)($_POST['customer_phone'] ?? '')),
-        'address' => trim((string)($_POST['customer_address'] ?? '')),
         'language' => SimplecartLanguage::current(),
         'answers' => array(),
     );
@@ -107,8 +103,6 @@ if (!empty($_GET['success']) && $orderId > 0) {
             $orderDetails['customer'] = array(
                 'name' => (string)$order->getVar('customer_name', 'n'),
                 'email' => (string)$order->getVar('customer_email', 'n'),
-                'phone' => (string)$order->getVar('customer_phone', 'n'),
-                'address' => (string)$order->getVar('customer_address', 'n'),
             );
             $orderDetails['answers'] = $order->getAnswerHtmlRows();
 

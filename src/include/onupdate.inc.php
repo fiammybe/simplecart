@@ -154,6 +154,7 @@ function icms_module_update_simplecart($module, $previousVersion = null): bool
 {
     require_once dirname(__DIR__) . '/include/common.php';
     require_once dirname(__DIR__) . '/class/SimplecartLegacyHelpMigration.php';
+    require_once dirname(__DIR__) . '/class/SimplecartLegacyContactMigration.php';
 
     try {
         $migration = new SimplecartLegacyHelpMigration(
@@ -164,6 +165,19 @@ function icms_module_update_simplecart($module, $previousVersion = null): bool
         $migration->run();
     } catch (Throwable $e) {
         simplecart_debugLog('Converting "Helpende hand" failed: ' . $e->getMessage());
+
+        return false;
+    }
+
+    try {
+        $migration = new SimplecartLegacyContactMigration(
+            simplecart_getHandler('question'),
+            simplecart_getHandler('orderanswer'),
+            simplecart_getHandler('order')
+        );
+        $migration->run();
+    } catch (Throwable $e) {
+        simplecart_debugLog('Converting phone and address failed: ' . $e->getMessage());
 
         return false;
     }

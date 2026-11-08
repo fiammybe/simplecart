@@ -15,7 +15,6 @@ class PaymentReceivedEmail {
     private $orderItems;
     private $customerEmail;
     private $customerName;
-    private $customerPhone;
     private $sepaConfig;
     private $currency;
 
@@ -33,7 +32,6 @@ class PaymentReceivedEmail {
     private function extractCustomerInfo() {
         $this->customerEmail = trim((string)$this->order->getVar('customer_email', 'n'));
         $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
-        $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
     }
 
     public function getCustomerEmail() {
@@ -74,9 +72,6 @@ class PaymentReceivedEmail {
         }
         if (!empty($this->customerEmail)) {
             $text .= $this->t('EMAIL') . ": " . $this->customerEmail . "\n";
-        }
-        if (!empty($this->customerPhone)) {
-            $text .= $this->t('PHONE') . ": " . $this->customerPhone . "\n";
         }
         $text .= "\n";
 
@@ -144,7 +139,6 @@ class PaymentReceivedEmail {
         $customerFields = [
             $this->t('NAME') => $this->customerName,
             $this->t('EMAIL') => $this->customerEmail,
-            $this->t('PHONE') => $this->customerPhone,
         ];
 
         foreach ($customerFields as $label => $value) {

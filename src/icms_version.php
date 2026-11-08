@@ -3,7 +3,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
 $modversion = array();
 $modversion['name'] = _MI_SIMPLECART_NAME;
-$modversion['version'] = '2.5.0';
+$modversion['version'] = '2.5.1';
 $modversion['description'] = _MI_SIMPLECART_DESC;
 $modversion['author'] = 'David Janssens (fiammybe)';
 $modversion['credits'] = 'ImpressCMS, IPF';
@@ -11,10 +11,10 @@ $modversion['license'] = 'MIT';
 $modversion['dirname'] = 'simplecart';
 $modversion['image'] = 'assets/images/module_logo.png';
 
-$modversion['status_version'] = "2.5.0";
+$modversion['status_version'] = "2.5.1";
 $modversion['status'] = "Final";
-$modversion['date'] = "7 Nov 2026";
-$modversion['author_word'] = "Add questions per campaign and e-mails in the language of the customer";
+$modversion['date'] = "8 Nov 2026";
+$modversion['author_word'] = "Phone number and address are now ordinary questions";
 
 $modversion['hasMain'] = 1;
 $modversion['hasAdmin'] = 1;

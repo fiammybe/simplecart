@@ -130,7 +130,6 @@ foreach ($renderEvent->getResults() as $result) {
     }
 }
 $icmsTpl->assign('simplecart_extension_blocks', $scanBlocks);
-$customerPhone = (string)$order->getVar('customer_phone', 'n');
 
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_scan_order', [
@@ -140,8 +139,6 @@ $icmsTpl->assign('simplecart_scan_order', [
     'status_key' => $status,
     'customer_name' => (string)$order->getVar('customer_name', 'n'),
     'customer_email' => (string)$order->getVar('customer_email', 'n'),
-    'customer_phone' => $customerPhone,
-    'customer_phone_href' => preg_replace('/[^0-9+]/', '', $customerPhone),
     'answers' => $order->getAnswerHtmlRows(),
     'items' => $itemRows['items'],
     'item_count' => array_sum(array_column($itemRows['items'], 'quantity')),

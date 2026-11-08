@@ -14,8 +14,6 @@ class OrderConfirmationEmail {
     private $orderItems;
     private $customerEmail;
     private $customerName;
-    private $customerPhone;
-    private $customerAddress;
     private $sepaConfig;
     private $currency;
 
@@ -39,8 +37,6 @@ class OrderConfirmationEmail {
     private function extractCustomerInfo() {
         $this->customerEmail = trim((string)$this->order->getVar('customer_email', 'n'));
         $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
-        $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
-        $this->customerAddress = trim((string)$this->order->getVar('customer_address', 'n'));
     }
 
     public function getCustomerEmail() {
@@ -79,9 +75,6 @@ class OrderConfirmationEmail {
         }
         if (!empty($this->customerEmail)) {
             $text .= $this->t('EMAIL') . ": " . $this->customerEmail . "\n";
-        }
-        if (!empty($this->customerPhone)) {
-            $text .= $this->t('PHONE') . ": " . $this->customerPhone . "\n";
         }
         $text .= "\n";
 

@@ -68,3 +68,20 @@ De test `every e-mail text exists in every language` controleert dat alle catalo
 Voorheen was "Helpende hand" een vaste vraag met een eigen kolom. Bij het bijwerken naar deze versie maakt de module er een algemene, verplichte radiovraag van met dezelfde vier opties in alle aanwezige talen, en zet ze de bewaarde waarde van elke bestaande bestelling om naar een antwoord. De omzetting mag herhaald worden zonder dubbele vragen of antwoorden.
 
 De kolom `helpende_hand` blijft in deze versie bestaan maar wordt niet meer geschreven of getoond. De volgende versie verwijdert de kolom, de vaste code en de tijdelijke `LEGACY_HELP_*`-teksten uit de e-mailcatalogi. Terugkeren naar de vorige versie kan zonder gegevensverlies; nieuwe bestellingen missen dan de oude kolomwaarde.
+
+## Van telefoon en adres naar gewone vragen
+
+Vanaf versie 2.5.1 zijn *Telefoon* en *Adres* geen vaste velden meer van het afrekenformulier. Naam en e-mailadres blijven vast. Bij het bijwerken maakt de module twee algemene, niet-verplichte vragen aan, met het label in alle aanwezige talen:
+
+| Vraag | Formaat | Volgorde |
+|---|---|---|
+| Telefoon | Tekst (één regel) | -2 |
+| Adres | Tekst (meerdere regels) | -1 |
+
+De waarden van bestaande bestellingen worden omgezet naar antwoorden. De omzetting mag herhaald worden zonder dubbele vragen of antwoorden. Een bestelling zonder telefoon of adres krijgt geen antwoord.
+
+Telefoon en adres staan nu op dezelfde plaats als elk ander antwoord: in beide e-mails, in het beheer van de bestelling, op de scanpagina en op de succespagina. De scanpagina toont het telefoonnummer niet langer als belknop. De kolom met het telefoonnummer is uit de orderlijst in het beheer gehaald.
+
+Een beheerder kan de vragen aanpassen: verplicht maken, een ander formaat kiezen de tekst wijzigen of de vraag deactiveren. Nieuwe installaties krijgen deze vragen niet automatisch; maak ze dan zelf aan.
+
+De kolommen `customer_phone` en `customer_address` blijven in deze versie bestaan maar worden niet meer geschreven of getoond. De volgende versie verwijdert de kolommen, de omzetting en de tijdelijke `LEGACY_PHONE`- en `LEGACY_ADDRESS`-teksten uit de e-mailcatalogi. Terugkeren naar de vorige versie kan zonder gegevensverlies; nieuwe bestellingen missen dan wel de oude kolomwaarden.
