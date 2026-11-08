@@ -75,7 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 $orderId = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
-if (!empty($_GET['success']) && $orderId > 0) {
+simplecart_sessionStart();
+$isOwnOrder = $orderId > 0 && (int)($_SESSION['simplecart_last_order_id'] ?? 0) === $orderId;
+if (!empty($_GET['success']) && $isOwnOrder) {
     $checkoutSuccess = true;
     $checkoutMessage = _MD_SIMPLECART_ORDER_SUCCESS . ' #' . $orderId;
     $orderDetails['order_id'] = $orderId;
@@ -135,8 +137,6 @@ if (!empty($_GET['success']) && $orderId > 0) {
 }
 
 $extensionBlocks = array();
-simplecart_sessionStart();
-$isOwnOrder = $orderId > 0 && (int)($_SESSION['simplecart_last_order_id'] ?? 0) === $orderId;
 if ($checkoutSuccess && $isOwnOrder && isset($order) && $order && !$order->isNew()) {
     $renderEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
         'order' => $order,
