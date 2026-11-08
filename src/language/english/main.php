@@ -22,6 +22,9 @@ define('_MD_SIMPLECART_ORDER_SUCCESS', 'Your order has been received. After we r
 
 define('_MD_SIMPLECART_NAME', 'Name');
 define('_MD_SIMPLECART_EMAIL', 'Email');
+// Kept so that a template that was not updated yet does not crash
+define('_MD_SIMPLECART_PHONE', 'Phone Number');
+define('_MD_SIMPLECART_ADDRESS', 'Address');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Place Order');
 define('_MD_SIMPLECART_ORDER_ID', 'Order ID');
 

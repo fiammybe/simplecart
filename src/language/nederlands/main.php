@@ -22,6 +22,9 @@ define('_MD_SIMPLECART_ORDER_SUCCESS', 'De bestelling werd met succes geplaatst'
 
 define('_MD_SIMPLECART_NAME', 'Naam');
 define('_MD_SIMPLECART_EMAIL', 'Email');
+// Kept so that a template that was not updated yet does not crash
+define('_MD_SIMPLECART_PHONE', 'Telefoon');
+define('_MD_SIMPLECART_ADDRESS', 'Adres');
 define('_MD_SIMPLECART_PLACE_ORDER', 'Plaats bestelling');
 define('_MD_SIMPLECART_ORDER_ID', 'Bestelnummer');
 
