@@ -13,7 +13,7 @@ icms::$module->displayAdminMenu(4, 'SimpleCart');
 switch ($clean_op) {
     case 'mod':
         $obj = $question_id ? $icms_question_handler->get($question_id) : $icms_question_handler->create();
-        $icmsAdminTpl->assign('simplecart_question_form', $obj->getForm(_AM_SIMPLECART_QUESTION_FORM, 'addquestion', 'question.php', _SUBMIT)->render());
+        $icmsAdminTpl->assign('simplecart_question_form', $obj->getSecureForm(_AM_SIMPLECART_QUESTION_FORM, 'addquestion', 'question.php', _SUBMIT)->render());
         $icmsAdminTpl->display('db:simplecart_admin_question.html.tpl');
         break;
 

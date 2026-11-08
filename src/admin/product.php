@@ -9,7 +9,7 @@ function simplecart_admin_edit_product($product_id = 0) {
     global $icms_product_handler, $icmsAdminTpl;
     $obj = $product_id ? $icms_product_handler->get($product_id) : $icms_product_handler->create();
     icms_cp_header();
-    $icmsAdminTpl->assign('simplecart_product_form', $obj->getForm(_AM_SIMPLECART_PRODUCT_FORM, 'addproduct', 'product.php', _SUBMIT)->render());
+    $icmsAdminTpl->assign('simplecart_product_form', $obj->getSecureForm(_AM_SIMPLECART_PRODUCT_FORM, 'addproduct', 'product.php', _SUBMIT)->render());
     $icmsAdminTpl->display('db:simplecart_admin_product.html.tpl');
     icms_cp_footer();
 }

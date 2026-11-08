@@ -522,7 +522,8 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             $order->setVar('customer_language', $language);
 
             foreach (['name', 'email'] as $field) {
-                $order->setVar("customer_{$field}", trim((string)($customer[$field] ?? '')));
+                $value = (string)($customer[$field] ?? '');
+                $order->setVar("customer_{$field}", trim(preg_replace('/\s*[\r\n]+\s*/', ' ', $value)));
             }
 
             $order->setVar('total_amount', 0.0);

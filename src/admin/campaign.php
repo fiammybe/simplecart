@@ -9,7 +9,7 @@ function simplecart_admin_edit_campaign($campaign_id = 0) {
     global $icms_campaign_handler, $icmsAdminTpl;
     $obj = $campaign_id ? $icms_campaign_handler->get($campaign_id) : $icms_campaign_handler->create();
     icms_cp_header();
-    $icmsAdminTpl->assign('simplecart_campaign_form', $obj->getForm(_AM_SIMPLECART_CAMPAIGN_FORM, 'addcampaign', 'campaign.php', _SUBMIT)->render());
+    $icmsAdminTpl->assign('simplecart_campaign_form', $obj->getSecureForm(_AM_SIMPLECART_CAMPAIGN_FORM, 'addcampaign', 'campaign.php', _SUBMIT)->render());
     $icmsAdminTpl->display('db:simplecart_admin_campaign.html.tpl');
     icms_cp_footer();
 }
