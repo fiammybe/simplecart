@@ -15,6 +15,19 @@
   <{if isset($simplecart_order_table)}>
     <{$simplecart_order_table}>
   <{/if}>
+  <{if isset($simplecart_order_answers) && $simplecart_order_answers|@count > 0}>
+    <h3><{$smarty.const._AM_SIMPLECART_ORDER_ANSWERS}></h3>
+    <table class="outer" cellspacing="1">
+      <tbody>
+        <{foreach from=$simplecart_order_answers item=answer}>
+          <tr class="<{cycle values='even,odd'}>">
+            <td><strong><{$answer.label}></strong></td>
+            <td><{$answer.value}></td>
+          </tr>
+        <{/foreach}>
+      </tbody>
+    </table>
+  <{/if}>
   <{if isset($simplecart_order_items)}>
     <h3>Order Items</h3>
     <{if $simplecart_order_items|@count > 0}>

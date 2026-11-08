@@ -47,7 +47,7 @@ Waarom geen ImpressCMS-preloads? De preloads van ImpressCMS 2.0 laden alleen van
 | `order.beforePlace` | `customer`, `items`, `lines` (genormaliseerd) | niets; gooi een uitzondering om te weigeren | ja |
 | `order.afterPlace` | `order`, `lines` (met `orderitem_id`, `meta`), `customer` | niets; gooi een uitzondering om alles terug te draaien | ja |
 | `order.cancelled` | `order`, `reason`: `status` of `deleted` | niets | nee |
-| `order.render` | `order`, `context`: `mail`, `page` of `scan` | `text` (mail) of `html` (page, scan) | nee |
+| `order.render` | `order`, `context`: `mail`, `page` of `scan`; bij `mail` ook `language` | `text` (mail) of `html` (page, scan) | nee |
 | `scan.resolve` | `addon`, `params` (`$_GET`), `user` | `title`, `message`, `status` (`success`/`warning`/`error`), `html` | nee |
 
 ### Regels
@@ -86,7 +86,7 @@ Zodra er add-onregels zijn (of een luisteraar voor `order.afterPlace` bestaat) l
 
 ### Weergave
 
-- `order.render` met `context = mail`: resultaat `text` (platte tekst) komt na de bestelregels in de bevestigingsmail.
+- `order.render` met `context = mail`: resultaat `text` (platte tekst) komt na de bestelregels in de bevestigingsmail. De payload bevat `language`, de taalmap van de klant (`english`, `nederlands`); bouw de tekst in die taal, niet in de taal van de actieve aanvraag. Sinds `API_REVISION` 2.
 - `context = page`: resultaat `html` komt op de succespagina van de checkout, enkel zichtbaar voor de bezoeker die de bestelling net plaatste (sessie).
 - `context = scan`: resultaat `html` komt op de scanpagina van een bestelling.
 - `html` wordt niet gefilterd. **De add-on is verantwoordelijk voor het escapen van gebruikersdata.**
@@ -101,9 +101,10 @@ Zodra er add-onregels zijn (of een luisteraar voor `order.afterPlace` bestaat) l
 - Het wijzigen of verwijderen van events of verplichte velden verhoogt het hoofdnummer.
 - Add-ons controleren `SIMPLECART_EXTENSION_API` bij installatie en gebruik.
 
-| simplecart | extension-API |
-|---|---|
-| 2.3.x | 1 |
+| simplecart | extension-API | `API_REVISION` |
+|---|---|---|
+| 2.3.x, 2.4.x | 1 | 1 |
+| 2.5.x | 1 | 2 |
 
 ## Tests
 

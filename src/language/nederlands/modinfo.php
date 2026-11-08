@@ -57,3 +57,17 @@ define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Naam');
 define('_MI_SIMPLECART_CAMPAIGN_START', 'Begin');
 define('_MI_SIMPLECART_CAMPAIGN_END', 'Einde (leeg laten voor onbeperkt)');
 define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campagne');
+
+// Questions and customer language
+define('_MI_SIMPLECART_ORDER_CUSTOMER_LANGUAGE', 'Taal van de klant');
+define('_MI_SIMPLECART_QUESTION_CAMPAIGN', 'Campagne');
+define('_MI_SIMPLECART_QUESTION_LABEL', 'Vraag');
+define('_MI_SIMPLECART_QUESTION_LABEL_DSC', 'Gebruik [en]English[/en][nl]Nederlands[/nl] om de vraag in meer dan één taal te geven.');
+define('_MI_SIMPLECART_QUESTION_HELP', 'Uitleg');
+define('_MI_SIMPLECART_QUESTION_HELP_DSC', 'Getoond onder de vraag. Taaltags werken hier ook.');
+define('_MI_SIMPLECART_QUESTION_FORMAT', 'Formaat van het antwoord');
+define('_MI_SIMPLECART_QUESTION_OPTIONS', 'Opties');
+define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Enkel voor keuzerondjes en een keuzelijst: één optie per regel. Taaltags werken per optie.');
+define('_MI_SIMPLECART_QUESTION_REQUIRED', 'Antwoord');
+define('_MI_SIMPLECART_QUESTION_WEIGHT', 'Volgorde (laagste eerst)');
+define('_MI_SIMPLECART_QUESTION_ACTIVE', 'Actief');

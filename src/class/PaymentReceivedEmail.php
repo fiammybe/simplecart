@@ -1,18 +1,21 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+require_once __DIR__ . '/OrderEmailTrait.php';
+
 /**
  * PaymentReceivedEmail - Generates payment received notification emails
  * Reuses the order overview template from OrderConfirmationEmail
  */
 
 class PaymentReceivedEmail {
+    use OrderEmailTrait;
+
     private $order;
     private $orderItems;
     private $customerEmail;
     private $customerName;
     private $customerPhone;
-    private $customerHelpendehanden;
     private $sepaConfig;
     private $currency;
 
@@ -21,6 +24,7 @@ class PaymentReceivedEmail {
         $this->orderItems = $orderItems;
         $this->sepaConfig = $sepaConfig;
         $this->currency = $currency;
+        $this->initLanguage($order);
 
         // Extract customer info from order
         $this->extractCustomerInfo();
@@ -30,9 +34,6 @@ class PaymentReceivedEmail {
         $this->customerEmail = trim((string)$this->order->getVar('customer_email', 'n'));
         $this->customerName = trim((string)$this->order->getVar('customer_name', 'n'));
         $this->customerPhone = trim((string)$this->order->getVar('customer_phone', 'n'));
-
-        // Extract helpende_hand from order fields
-        $this->customerHelpendehanden = (string)$this->order->getVar('helpende_hand');
     }
 
     public function getCustomerEmail() {
@@ -41,60 +42,57 @@ class PaymentReceivedEmail {
 
     public function getSubject() {
         $orderId = (int)$this->order->getVar('order_id');
-        return sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_SUBJECT, $orderId);
+        return sprintf($this->t('PAYMENT_RECEIVED_SUBJECT'), $orderId);
     }
 
     public function getTextContent() {
         $orderId = (int)$this->order->getVar('order_id');
         $totalAmount = (float)$this->order->getVar('total_amount');
-        // Get the pre-formatted timestamp from ImpressCMS XOBJ_DTYPE_LTIME
-        $orderDate = (string)$this->order->getVar('timestamp');
+        $orderDate = $this->formatDate();
 
         $text = '';
         $text .= str_repeat('=', 70) . "\n";
-        $text .= _MD_SIMPLECART_PAYMENT_RECEIVED_HEADING . "\n";
+        $text .= $this->t('PAYMENT_RECEIVED_HEADING') . "\n";
         $text .= str_repeat('=', 70) . "\n\n";
 
-        $text .= _MD_SIMPLECART_EMAIL_GREETING . " " . $this->customerName . "\n\n";
-        $text .= sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE, $orderId) . "\n\n";
+        $text .= $this->t('EMAIL_GREETING') . " " . $this->customerName . "\n\n";
+        $text .= sprintf($this->t('PAYMENT_RECEIVED_MESSAGE'), $orderId) . "\n\n";
 
         // Order Details Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DETAILS . "\n";
+        $text .= $this->t('EMAIL_ORDER_DETAILS') . "\n";
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_ORDER_ID . ": #" . $orderId . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ORDER_DATE . ": " . $orderDate . "\n\n";
+        $text .= $this->t('ORDER_ID') . ": #" . $orderId . "\n";
+        $text .= $this->t('EMAIL_ORDER_DATE') . ": " . $orderDate . "\n\n";
 
         // Customer Information Section
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_CUSTOMER_INFO . "\n";
+        $text .= $this->t('EMAIL_CUSTOMER_INFO') . "\n";
         $text .= str_repeat('-', 70) . "\n";
         if (!empty($this->customerName)) {
-            $text .= _MD_SIMPLECART_NAME . ": " . $this->customerName . "\n";
+            $text .= $this->t('NAME') . ": " . $this->customerName . "\n";
         }
         if (!empty($this->customerEmail)) {
-            $text .= _MD_SIMPLECART_EMAIL . ": " . $this->customerEmail . "\n";
+            $text .= $this->t('EMAIL') . ": " . $this->customerEmail . "\n";
         }
         if (!empty($this->customerPhone)) {
-            $text .= _MD_SIMPLECART_PHONE . ": " . $this->customerPhone . "\n";
-        }
-        if (!empty($this->customerHelpendehanden)) {
-            $helpText = $this->getHelpLabel($this->customerHelpendehanden);
-            $text .= _MD_SIMPLECART_HELP_MAIL . ": " . $helpText . "\n";
+            $text .= $this->t('PHONE') . ": " . $this->customerPhone . "\n";
         }
         $text .= "\n";
 
+        $text .= $this->getAnswersText();
+
         // Items Section (reused from confirmation email)
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_EMAIL_ITEMS . "\n";
+        $text .= $this->t('EMAIL_ITEMS') . "\n";
         $text .= str_repeat('-', 70) . "\n";
 
         // Column headers
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_NAME,
-            _MD_SIMPLECART_EMAIL_UNIT_PRICE,
-            _MD_SIMPLECART_EMAIL_QUANTITY,
-            _MD_SIMPLECART_EMAIL_SUBTOTAL
+            $this->t('NAME'),
+            $this->t('EMAIL_UNIT_PRICE'),
+            $this->t('EMAIL_QUANTITY'),
+            $this->t('EMAIL_SUBTOTAL')
         );
         $text .= str_repeat('-', 70) . "\n";
 
@@ -116,20 +114,20 @@ class PaymentReceivedEmail {
         // Total
         $text .= str_repeat('-', 70) . "\n";
         $text .= sprintf("%-35s %12s %8s %12s\n",
-            _MD_SIMPLECART_TOTAL . ":",
+            $this->t('TOTAL') . ":",
             "",
             "",
             $this->formatCurrency($totalAmount)
         );
         $text .= str_repeat('=', 70) . "\n\n";
 
-        $text .= _MD_SIMPLECART_SCAN_EMAIL_HEADING . "\n";
+        $text .= $this->t('SCAN_EMAIL_HEADING') . "\n";
         $text .= str_repeat('-', 70) . "\n";
-        $text .= _MD_SIMPLECART_SCAN_EMAIL_TEXT . "\n";
+        $text .= $this->t('SCAN_EMAIL_TEXT') . "\n";
         $text .= $this->order->getScanUrl() . "\n\n";
 
         // Footer
-        $text .= _MD_SIMPLECART_EMAIL_FOOTER . "\n\n";
+        $text .= $this->t('EMAIL_FOOTER') . "\n\n";
         $text .= str_repeat('=', 70) . "\n";
 
         return $text;
@@ -139,15 +137,14 @@ class PaymentReceivedEmail {
     {
         $orderId = (int)$this->order->getVar('order_id');
         $totalAmount = (float)$this->order->getVar('total_amount');
-        $orderDate = $this->escape((string)$this->order->getVar('timestamp'));
+        $orderDate = $this->escape($this->formatDate());
         $scanUrl = $this->escape($this->order->getScanUrl());
 
         $customerRows = '';
         $customerFields = [
-            _MD_SIMPLECART_NAME => $this->customerName,
-            _MD_SIMPLECART_EMAIL => $this->customerEmail,
-            _MD_SIMPLECART_PHONE => $this->customerPhone,
-            _MD_SIMPLECART_HELP_MAIL => $this->customerHelpendehanden === '' ? '' : $this->getHelpLabel($this->customerHelpendehanden),
+            $this->t('NAME') => $this->customerName,
+            $this->t('EMAIL') => $this->customerEmail,
+            $this->t('PHONE') => $this->customerPhone,
         ];
 
         foreach ($customerFields as $label => $value) {
@@ -171,23 +168,24 @@ class PaymentReceivedEmail {
                 . '</tr>';
         }
 
-        $heading = $this->escape(_MD_SIMPLECART_PAYMENT_RECEIVED_HEADING);
-        $greeting = $this->escape(_MD_SIMPLECART_EMAIL_GREETING . ' ' . $this->customerName);
-        $message = $this->escape(sprintf(_MD_SIMPLECART_PAYMENT_RECEIVED_MESSAGE, $orderId));
-        $detailsHeading = $this->escape(_MD_SIMPLECART_EMAIL_ORDER_DETAILS);
-        $orderIdLabel = $this->escape(_MD_SIMPLECART_ORDER_ID);
-        $orderDateLabel = $this->escape(_MD_SIMPLECART_EMAIL_ORDER_DATE);
-        $customerHeading = $this->escape(_MD_SIMPLECART_EMAIL_CUSTOMER_INFO);
-        $itemsHeading = $this->escape(_MD_SIMPLECART_EMAIL_ITEMS);
-        $nameLabel = $this->escape(_MD_SIMPLECART_NAME);
-        $unitPriceLabel = $this->escape(_MD_SIMPLECART_EMAIL_UNIT_PRICE);
-        $quantityLabel = $this->escape(_MD_SIMPLECART_EMAIL_QUANTITY);
-        $subtotalLabel = $this->escape(_MD_SIMPLECART_EMAIL_SUBTOTAL);
-        $totalLabel = $this->escape(_MD_SIMPLECART_TOTAL);
+        $heading = $this->escape($this->t('PAYMENT_RECEIVED_HEADING'));
+        $greeting = $this->escape($this->t('EMAIL_GREETING') . ' ' . $this->customerName);
+        $message = $this->escape(sprintf($this->t('PAYMENT_RECEIVED_MESSAGE'), $orderId));
+        $detailsHeading = $this->escape($this->t('EMAIL_ORDER_DETAILS'));
+        $orderIdLabel = $this->escape($this->t('ORDER_ID'));
+        $orderDateLabel = $this->escape($this->t('EMAIL_ORDER_DATE'));
+        $customerHeading = $this->escape($this->t('EMAIL_CUSTOMER_INFO'));
+        $itemsHeading = $this->escape($this->t('EMAIL_ITEMS'));
+        $nameLabel = $this->escape($this->t('NAME'));
+        $unitPriceLabel = $this->escape($this->t('EMAIL_UNIT_PRICE'));
+        $quantityLabel = $this->escape($this->t('EMAIL_QUANTITY'));
+        $subtotalLabel = $this->escape($this->t('EMAIL_SUBTOTAL'));
+        $totalLabel = $this->escape($this->t('TOTAL'));
         $total = $this->formatCurrency($totalAmount);
-        $scanHeading = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_HEADING);
-        $scanText = $this->escape(_MD_SIMPLECART_SCAN_EMAIL_TEXT);
-        $footer = $this->escape(_MD_SIMPLECART_EMAIL_FOOTER);
+        $scanHeading = $this->escape($this->t('SCAN_EMAIL_HEADING'));
+        $scanText = $this->escape($this->t('SCAN_EMAIL_TEXT'));
+        $footer = $this->escape($this->t('EMAIL_FOOTER'));
+        $answers = $this->getAnswersHtml();
 
         return <<<HTML
 <!DOCTYPE html>
@@ -213,6 +211,7 @@ class PaymentReceivedEmail {
 
     <h2 style="font-size:18px;">{$customerHeading}</h2>
     <table>{$customerRows}</table>
+    {$answers}
 
     <h2 style="font-size:18px;">{$itemsHeading}</h2>
     <table style="width:100%;border-collapse:collapse;">
@@ -246,29 +245,6 @@ HTML;
 
     private function formatCurrency($amount) {
         return number_format((float)$amount, 2, '.', ',') . ' ' . $this->currency;
-    }
-
-    /**
-     * Map helpende handen value to translated label
-     *
-     * @param string $help The helpende handen value
-     * @return string The translated help label
-     */
-    private function getHelpLabel($help) {
-        $help = trim($help);
-
-        // Map help values to language constants
-        if (strpos($help, '1') !== false) {
-            return defined('_MD_SIMPLECART_HELP_1') ? _MD_SIMPLECART_HELP_1 : $help;
-        } elseif (strpos($help, '2') !== false) {
-            return defined('_MD_SIMPLECART_HELP_2') ? _MD_SIMPLECART_HELP_2 : $help;
-        } elseif (strpos($help, '3') !== false) {
-            return defined('_MD_SIMPLECART_HELP_3') ? _MD_SIMPLECART_HELP_3 : $help;
-        } elseif (strpos($help, '4') !== false) {
-            return defined('_MD_SIMPLECART_HELP_4') ? _MD_SIMPLECART_HELP_4 : $help;
-        }
-
-        return $help;
     }
 }
 ?>

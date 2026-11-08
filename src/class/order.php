@@ -1,6 +1,9 @@
 <?php
 if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
 
+require_once __DIR__ . '/SimplecartLanguage.php';
+require_once __DIR__ . '/SimplecartAnswerValidator.php';
+
 class SimplecartOrder extends icms_ipf_Object {
     public function __construct(&$handler) {
         parent::__construct($handler);
@@ -17,6 +20,7 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->initVar('scan_token', XOBJ_DTYPE_TXTBOX, '', false, 64);
         $this->initVar('scanned_at', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('scanned_by', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('customer_language', XOBJ_DTYPE_TXTBOX, '', false, 50, '', false, _MI_SIMPLECART_ORDER_CUSTOMER_LANGUAGE);
 
         $this->setControl('status', array('name' => 'select', 'itemHandler' => 'order', 'method' => 'getStatusArray', 'module' => 'simplecart'));
 
@@ -26,6 +30,9 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromForm('scan_token');
         $this->hideFieldFromForm('scanned_at');
         $this->hideFieldFromForm('scanned_by');
+        $this->hideFieldFromForm('customer_language');
+        $this->hideFieldFromForm('helpende_hand');
+        $this->hideFieldFromSingleView('helpende_hand');
         $this->hideFieldFromSingleView('scan_token');
         $this->hideFieldFromSingleView('scanned_at');
         $this->hideFieldFromSingleView('scanned_by');
@@ -93,6 +100,42 @@ class SimplecartOrder extends icms_ipf_Object {
         }
 
         return implode(', ', $summary);
+    }
+
+    /** The language of the customer when the order was placed; an order from before that was recorded follows the active language */
+    public function getLanguage(): string
+    {
+        return SimplecartLanguage::normalize((string)$this->getVar('customer_language', 'n'));
+    }
+
+    /** @return array<int, SimplecartOrderanswer> */
+    public function getAnswers(): array
+    {
+        $orderId = (int)$this->getVar('order_id');
+
+        if ($orderId <= 0) {
+            return [];
+        }
+
+        return simplecart_getHandler('orderanswer')->getByOrder($orderId);
+    }
+
+    /**
+     * @return array<int, array{label: string, value: string}>
+     */
+    public function getAnswerRows(string $language = ''): array
+    {
+        return array_map(fn (SimplecartOrderanswer $answer): array => $answer->toRow($language), $this->getAnswers());
+    }
+
+    /**
+     * The rows escaped for an HTML page
+     *
+     * @return array<int, array{label: string, value: string}>
+     */
+    public function getAnswerHtmlRows(string $language = ''): array
+    {
+        return array_map(fn (SimplecartOrderanswer $answer): array => $answer->toHtmlRow($language), $this->getAnswers());
     }
 
     /** @return array<int, SimplecartOrderitem> */
@@ -408,10 +451,11 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             SimplecartExtension::dispatch(SimplecartExtension::EVENT_CANCELLED, array('order' => $obj, 'reason' => 'deleted'));
         }
 
-        // Delete all order items associated with this order
+        // Delete all order items and answers associated with this order
         $orderId = (int)$obj->getVar('order_id');
         if ($orderId > 0) {
             simplecart_getHandler('orderitem')->deleteByOrder($orderId);
+            simplecart_getHandler('orderanswer')->deleteByOrder($orderId);
         }
         return true;
     }
@@ -448,14 +492,19 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
 
             $this->validateCustomer($customer);
 
+            $language = SimplecartLanguage::normalize((string)($customer['language'] ?? ''));
+            $answers = $this->validateAnswers($customer, $items, $language);
+
             SimplecartExtension::dispatch(SimplecartExtension::EVENT_BEFORE_PLACE, [
                 'customer' => $customer,
                 'items' => $items,
                 'lines' => $extensionLines,
             ]);
 
-            // Add-ons need the order and their own changes to succeed or fail together
-            if (! empty($extensionLines) || SimplecartExtension::hasListeners(SimplecartExtension::EVENT_AFTER_PLACE)) {
+            // Add-ons and answers need the order and their own changes to succeed or fail together
+            $answersNeedTransaction = ! empty($answers) && $this->supportsTransactions();
+
+            if (! empty($extensionLines) || $answersNeedTransaction || SimplecartExtension::hasListeners(SimplecartExtension::EVENT_AFTER_PLACE)) {
                 $this->beginTransaction();
                 $transactionStarted = true;
             }
@@ -466,16 +515,13 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             $order = $this->create();
             $order->setVar('status', 'pending');
             $order->setVar('timestamp', time());
+            $order->setVar('customer_language', $language);
 
             foreach (['name', 'email', 'phone', 'address'] as $field) {
                 $order->setVar("customer_{$field}", trim((string)($customer[$field] ?? '')));
             }
 
             $order->setVar('total_amount', 0.0);
-
-            if (! empty($customer['helpendehanden'])) {
-                $order->setVar('helpende_hand', icms_core_DataFilter::htmlSpecialChars($customer['helpendehanden']));
-            }
 
             if (! $this->insert($order, true)) {
                 $errors = $order->getErrors();
@@ -557,6 +603,8 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
 
             $order->setVar('total_amount', $total);
 
+            $this->storeAnswers($orderId, $answers, $transactionStarted);
+
             if (! $this->insert($order, true) && $transactionStarted) {
                 throw new Exception(_MD_SIMPLECART_ORDER_CREATE_FAIL);
             }
@@ -591,6 +639,67 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             }
 
             throw new RuntimeException("Failed to place order: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    /**
+     * What the customer answered to the questions that apply to the cart
+     *
+     * @param array<string, mixed> $customer
+     * @param array<int|string, array<string, mixed>> $items
+     * @return array<int, array{question_id: int, question_label: string, question_format: string, weight: int, answer_value: string}>
+     * @throws SimplecartAnswersException when an answer is missing or not valid
+     */
+    private function validateAnswers(array $customer, array $items, string $language): array
+    {
+        $questions = simplecart_getHandler('question')->getForCart($items);
+
+        if (empty($questions)) {
+            return [];
+        }
+
+        $submitted = is_array($customer['answers'] ?? null) ? $customer['answers'] : [];
+        $result = (new SimplecartAnswerValidator($language))->validate($questions, $submitted);
+
+        if (! $result->isValid()) {
+            throw new SimplecartAnswersException($result);
+        }
+
+        return array_values($result->answers);
+    }
+
+    /**
+     * Inside a transaction a failure is rolled back by the caller; without one the new order is removed again
+     *
+     * @param array<int, array{question_id: int, question_label: string, question_format: string, weight: int, answer_value: string}> $answers
+     */
+    private function storeAnswers(int $orderId, array $answers, bool $inTransaction): void
+    {
+        if (empty($answers)) {
+            return;
+        }
+
+        $answerHandler = simplecart_getHandler('orderanswer');
+
+        foreach ($answers as $answer) {
+            if ($answerHandler->store($orderId, $answer)) {
+                continue;
+            }
+
+            if (! $inTransaction) {
+                $this->discardOrder($orderId);
+            }
+
+            throw new Exception(_MD_SIMPLECART_ANSWER_SAVE_FAIL);
+        }
+    }
+
+    /** Removes an order that was just created, without telling add-ons about a cancellation */
+    private function discardOrder(int $orderId): void
+    {
+        foreach (['simplecart_orderanswer', 'simplecart_orderitem', 'simplecart_order'] as $name) {
+            $table = $this->db->prefix($name);
+            $this->db->queryF("DELETE FROM `{$table}` WHERE `order_id` = {$orderId}");
         }
     }
 
@@ -686,7 +795,6 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             'email' => 255,
             'phone' => 50,
             'address' => 500,
-            'helpendehanden' => 50,
         ];
 
         foreach ($maxLengths as $field => $maxLen) {

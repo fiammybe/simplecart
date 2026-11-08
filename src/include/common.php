@@ -14,6 +14,7 @@ if (!defined('SIMPLECART_DIRNAME')) {
 }
 
 require_once dirname(__DIR__) . '/class/Extension.php';
+require_once dirname(__DIR__) . '/class/SimplecartLanguage.php';
 
 icms_loadLanguageFile('simplecart', 'main');
 icms_loadLanguageFile('simplecart', 'admin');

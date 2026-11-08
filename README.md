@@ -5,3 +5,7 @@ This version does ONLY support SEPA direct debit payments. No other payment meth
 
 ## Technology
 The storefront and checkout use standard PHP with ImpressCMS Smarty templates and session-backed cart storage. There is no client-side AJAX or JavaScript cart layer in the current module flow.
+
+## Documentation
+- [Questions at checkout](docs/ORDER_QUESTIONS.md): questions per campaign or for every order, answer formats with validation, language tags and the language of the customer.
+- [Extension points](docs/EXTENSION_POINTS.md): hooks for add-ons.

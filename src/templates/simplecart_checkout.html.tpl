@@ -59,6 +59,15 @@
             </div>
           <{/if}>
 
+          <{if $simplecart_order_details.answers|@count}>
+            <div class="mb-4">
+              <p class="has-text-weight-semibold"><{$smarty.const._MD_SIMPLECART_ANSWERS_HEADING}></p>
+              <{foreach from=$simplecart_order_details.answers item=answer}>
+                <p><strong><{$answer.label}></strong>: <{$answer.value}></p>
+              <{/foreach}>
+            </div>
+          <{/if}>
+
           <{if $simplecart_order_details.items|@count}>
             <table class="table is-fullwidth is-striped is-hoverable">
               <thead>
@@ -156,27 +165,43 @@
           </div>
         </div>
 
-        <div class="field">
-          <label class="label"><{$smarty.const._MD_SIMPLECART_HELP}></label>
-          <div class="control">
-            <label class="radio">
-              <input type="radio" name="helpendehanden" value="help_1" <{if $simplecart_customer.helpendehanden == 'help_1'}>checked="checked"<{/if}> required>
-              <{$smarty.const._MD_SIMPLECART_HELP_1}>
+        <{if $simplecart_questions|@count}>
+          <h2 class="title is-5 mt-5"><{$smarty.const._MD_SIMPLECART_QUESTIONS_HEADING}></h2>
+        <{/if}>
+
+        <{foreach from=$simplecart_questions item=question}>
+          <div class="field">
+            <label class="label">
+              <{$question.label}>
+              <{if $question.required}><span class="tag is-info is-light"><{$smarty.const._MD_SIMPLECART_QUESTION_REQUIRED_TAG}></span><{/if}>
             </label>
-            <label class="radio">
-              <input type="radio" name="helpendehanden" value="help_2" <{if $simplecart_customer.helpendehanden == 'help_2'}>checked="checked"<{/if}> required>
-              <{$smarty.const._MD_SIMPLECART_HELP_2}>
-            </label>
-            <label class="radio">
-              <input type="radio" name="helpendehanden" value="help_3" <{if $simplecart_customer.helpendehanden == 'help_3'}>checked="checked"<{/if}> required>
-              <{$smarty.const._MD_SIMPLECART_HELP_3}>
-            </label>
-            <label class="radio">
-              <input type="radio" name="helpendehanden" value="help_4" <{if $simplecart_customer.helpendehanden == 'help_4'}>checked="checked"<{/if}> required>
-              <{$smarty.const._MD_SIMPLECART_HELP_4}>
-            </label>
+            <{if $question.help}><p class="help mb-2"><{$question.help}></p><{/if}>
+            <div class="control">
+              <{if $question.kind == 'textarea'}>
+                <textarea class="textarea" name="<{$question.field}>" <{if $question.required}>required<{/if}>><{$question.value}></textarea>
+              <{elseif $question.kind == 'radio'}>
+                <{foreach from=$question.options item=option}>
+                  <label class="radio">
+                    <input type="radio" name="<{$question.field}>" value="<{$option.value}>" <{if $option.selected}>checked="checked"<{/if}> <{if $question.required}>required<{/if}>>
+                    <{$option.label}>
+                  </label>
+                <{/foreach}>
+              <{elseif $question.kind == 'select'}>
+                <div class="select">
+                  <select name="<{$question.field}>" <{if $question.required}>required<{/if}>>
+                    <option value=""><{$smarty.const._MD_SIMPLECART_QUESTION_CHOOSE}></option>
+                    <{foreach from=$question.options item=option}>
+                      <option value="<{$option.value}>" <{if $option.selected}>selected="selected"<{/if}>><{$option.label}></option>
+                    <{/foreach}>
+                  </select>
+                </div>
+              <{else}>
+                <input class="input" type="<{$question.input_type}>" name="<{$question.field}>" value="<{$question.value}>" <{if $question.required}>required<{/if}>>
+              <{/if}>
+            </div>
+            <{if $question.error}><p class="help is-danger"><{$question.error}></p><{/if}>
           </div>
-        </div>
+        <{/foreach}>
 
         <div class="field">
           <div class="control">

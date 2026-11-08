@@ -8,6 +8,8 @@ $adminmenu[2]['title'] = 'Bestellingen';
 $adminmenu[2]['link']  = 'admin/order.php';
 $adminmenu[3]['title'] = 'Campagnes';
 $adminmenu[3]['link']  = 'admin/campaign.php';
+$adminmenu[4]['title'] = 'Vragen';
+$adminmenu[4]['link']  = 'admin/question.php';
 
 $headermenu = array();
 
