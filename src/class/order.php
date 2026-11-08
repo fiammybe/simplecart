@@ -33,6 +33,10 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromForm('customer_language');
         $this->hideFieldFromForm('helpende_hand');
         $this->hideFieldFromSingleView('helpende_hand');
+        $this->hideFieldFromForm('customer_phone');
+        $this->hideFieldFromForm('customer_address');
+        $this->hideFieldFromSingleView('customer_phone');
+        $this->hideFieldFromSingleView('customer_address');
         $this->hideFieldFromSingleView('scan_token');
         $this->hideFieldFromSingleView('scanned_at');
         $this->hideFieldFromSingleView('scanned_by');
@@ -517,7 +521,7 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             $order->setVar('timestamp', time());
             $order->setVar('customer_language', $language);
 
-            foreach (['name', 'email', 'phone', 'address'] as $field) {
+            foreach (['name', 'email'] as $field) {
                 $order->setVar("customer_{$field}", trim((string)($customer[$field] ?? '')));
             }
 
@@ -793,8 +797,6 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
         $maxLengths = [
             'name' => 100,
             'email' => 255,
-            'phone' => 50,
-            'address' => 500,
         ];
 
         foreach ($maxLengths as $field => $maxLen) {

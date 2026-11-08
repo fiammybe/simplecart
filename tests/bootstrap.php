@@ -289,6 +289,7 @@ require_once ICMS_ROOT_PATH . '/class/OrderEmailTrait.php';
 require_once ICMS_ROOT_PATH . '/class/OrderConfirmationEmail.php';
 require_once ICMS_ROOT_PATH . '/class/PaymentReceivedEmail.php';
 require_once ICMS_ROOT_PATH . '/class/SimplecartLegacyHelpMigration.php';
+require_once ICMS_ROOT_PATH . '/class/SimplecartLegacyContactMigration.php';
 
 /** Order whose mail is not sent */
 class TestOrder extends SimplecartOrder
@@ -299,7 +300,7 @@ class TestOrder extends SimplecartOrder
 function simplecart_formatMoney($amount, $currency = 'EUR') { return number_format((float)$amount, 2); }
 
 // ---- fixtures shared by the tests
-$customer = ['name' => 'Jan', 'email' => 'jan@example.com', 'phone' => '', 'address' => ''];
+$customer = ['name' => 'Jan', 'email' => 'jan@example.com'];
 $cart = [1 => ['product_id' => 1, 'quantity' => 2]];
 
 // ---- tiny test framework

@@ -46,16 +46,10 @@
         <div class="box mt-4">
           <h3 class="title is-5"><{$smarty.const._MD_SIMPLECART_ORDER_SUMMARY}></h3>
 
-          <{if $simplecart_order_details.customer.name || $simplecart_order_details.customer.email || $simplecart_order_details.customer.phone || $simplecart_order_details.customer.address}>
+          <{if $simplecart_order_details.customer.name || $simplecart_order_details.customer.email}>
             <div class="mb-4">
               <p><strong><{$smarty.const._MD_SIMPLECART_NAME}></strong>: <{$simplecart_order_details.customer.name|default:''|escape:html}></p>
               <p><strong><{$smarty.const._MD_SIMPLECART_EMAIL}></strong>: <{$simplecart_order_details.customer.email|default:''|escape:html}></p>
-              <{if $simplecart_order_details.customer.phone}>
-                <p><strong><{$smarty.const._MD_SIMPLECART_PHONE}></strong>: <{$simplecart_order_details.customer.phone|escape:html}></p>
-              <{/if}>
-              <{if $simplecart_order_details.customer.address}>
-                <p><strong><{$smarty.const._MD_SIMPLECART_ADDRESS}></strong>: <{$simplecart_order_details.customer.address|escape:html}></p>
-              <{/if}>
             </div>
           <{/if}>
 
@@ -148,20 +142,6 @@
           <label class="label"><{$smarty.const._MD_SIMPLECART_EMAIL}> <span class="tag is-info is-light">verplicht</span></label>
           <div class="control">
             <input class="input" type="email" name="customer_email" value="<{$simplecart_customer.email}>" required>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label"><{$smarty.const._MD_SIMPLECART_PHONE}></label>
-          <div class="control">
-            <input class="input" type="tel" name="customer_phone" value="<{$simplecart_customer.phone}>">
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label"><{$smarty.const._MD_SIMPLECART_ADDRESS}></label>
-          <div class="control">
-            <textarea class="textarea" name="customer_address"><{$simplecart_customer.address}></textarea>
           </div>
         </div>
 

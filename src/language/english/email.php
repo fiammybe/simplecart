@@ -14,7 +14,6 @@ return [
     'EMAIL_CUSTOMER_INFO' => 'Customer Information',
     'NAME' => 'Name',
     'EMAIL' => 'Email',
-    'PHONE' => 'Phone Number',
     'EMAIL_ITEMS' => 'Order Items',
     'EMAIL_UNIT_PRICE' => 'Unit Price',
     'EMAIL_QUANTITY' => 'Qty',
@@ -34,7 +33,9 @@ return [
     'ANSWERS_HEADING' => 'Your answers',
     'DATE_FORMAT' => 'M j, Y H:i',
 
-    // Only used to convert the former fixed question 'Helpende hand'; removed in the next release
+    // Only used to convert the former fixed fields and question; removed in the next release
+    'LEGACY_PHONE' => 'Phone Number',
+    'LEGACY_ADDRESS' => 'Address',
     'LEGACY_HELP' => 'Help Needed',
     'LEGACY_HELP_1' => 'Yes, I can help',
     'LEGACY_HELP_2' => 'I can help at a different time',

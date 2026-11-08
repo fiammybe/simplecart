@@ -14,7 +14,6 @@ return [
     'EMAIL_CUSTOMER_INFO' => 'Klantgegevens',
     'NAME' => 'Naam',
     'EMAIL' => 'Email',
-    'PHONE' => 'Telefoon',
     'EMAIL_ITEMS' => 'Bestellingsartikelen',
     'EMAIL_UNIT_PRICE' => 'Eenheidsprijs',
     'EMAIL_QUANTITY' => 'Hoeveelheid',
@@ -34,7 +33,9 @@ return [
     'ANSWERS_HEADING' => 'Uw antwoorden',
     'DATE_FORMAT' => 'd-m-Y H:i',
 
-    // Only used to convert the former fixed question 'Helpende hand'; removed in the next release
+    // Only used to convert the former fixed fields and question; removed in the next release
+    'LEGACY_PHONE' => 'Telefoon',
+    'LEGACY_ADDRESS' => 'Adres',
     'LEGACY_HELP' => 'Kan je komen helpen?',
     'LEGACY_HELP_1' => 'Ja, ik kan helpen bij de opbouw op vrijdag na school',
     'LEGACY_HELP_2' => 'Ik kan helpen tijdens de fuif',

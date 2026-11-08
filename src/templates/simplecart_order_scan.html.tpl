@@ -56,17 +56,12 @@
             </ul>
         </div>
 
-        <{if $simplecart_scan_order.customer_name || $simplecart_scan_order.customer_phone || $simplecart_scan_order.customer_email}>
+        <{if $simplecart_scan_order.customer_name || $simplecart_scan_order.customer_email}>
             <div class="box sc-scan-box">
                 <{if $simplecart_scan_order.customer_name}>
                     <p class="has-text-weight-semibold mb-2"><{$simplecart_scan_order.customer_name|escape}></p>
                 <{/if}>
                 <div class="buttons">
-                    <{if $simplecart_scan_order.customer_phone}>
-                        <a class="button is-light" href="tel:<{$simplecart_scan_order.customer_phone_href|escape}>" title="<{$smarty.const._MD_SIMPLECART_PHONE}>">
-                            <{$simplecart_scan_order.customer_phone|escape}>
-                        </a>
-                    <{/if}>
                     <{if $simplecart_scan_order.customer_email}>
                         <a class="button is-light sc-scan-email" href="mailto:<{$simplecart_scan_order.customer_email|escape}>" title="<{$smarty.const._MD_SIMPLECART_EMAIL}>">
                             <{$simplecart_scan_order.customer_email|escape}>
