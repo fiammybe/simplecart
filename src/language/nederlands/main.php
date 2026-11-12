@@ -1,7 +1,6 @@
 <?php
 // Frontend strings
 
-define('_MD_SIMPLECART_SHOP_TITLE', 'Tickets ColoMAenPA Vredestraat Fuif op 11 september 2026');
 define('_MD_SIMPLECART_SHOP_DESC', 'Kies de tickets die u wilt bestellen. Op de afrekenpagina vult u uw gegevens en eventuele hulpvoorkeur in.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Plaats in winkelmandje');
 define('_MD_SIMPLECART_YOUR_CART', 'Winkelmandje');

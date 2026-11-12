@@ -1,7 +1,6 @@
 <?php
 // Frontend strings
 
-define('_MD_SIMPLECART_SHOP_TITLE', 'Products');
 define('_MD_SIMPLECART_SHOP_DESC', 'Select the tickets you want to order. Your checkout form collects your order details and any help preference.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Add to Cart');
 define('_MD_SIMPLECART_YOUR_CART', 'Your Cart');
