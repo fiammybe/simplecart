@@ -131,6 +131,30 @@ class SimplecartCampaignHandler extends icms_ipf_Handler {
     }
 
     /**
+     * The active campaign that started first, or the first by name when they started together
+     */
+    public function getHeadlineCampaign(): ?SimplecartCampaign
+    {
+        $campaigns = array_values(array_filter(
+            $this->getObjects(null, false, true),
+            function (SimplecartCampaign $campaign): bool {
+                return $campaign->isActive();
+            }
+        ));
+
+        if (! $campaigns) {
+            return null;
+        }
+
+        usort($campaigns, function (SimplecartCampaign $a, SimplecartCampaign $b): int {
+            return [(int)$a->getVar('start_date', 'n'), mb_strtolower((string)$a->getVar('name', 'n')), (int)$a->getVar('campaign_id', 'n')]
+                <=> [(int)$b->getVar('start_date', 'n'), mb_strtolower((string)$b->getVar('name', 'n')), (int)$b->getVar('campaign_id', 'n')];
+        });
+
+        return $campaigns[0];
+    }
+
+    /**
      * @return array<int, int>
      */
     public function getActiveIds(): array
