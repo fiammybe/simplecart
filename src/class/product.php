@@ -17,6 +17,9 @@ class SimplecartProduct extends icms_ipf_Object {
 
         $this->initVar('campaign_id', XOBJ_DTYPE_INT, 0, false, null, '', false, _MI_SIMPLECART_PRODUCT_CAMPAIGN);
 
+        $this->initVar('weight', XOBJ_DTYPE_INT, 0, false, null, '', false, _MI_SIMPLECART_PRODUCT_WEIGHT);
+
+        $this->setControl('weight', 'text');
         $this->setControl('campaign_id', array('name' => 'select', 'itemHandler' => 'campaign', 'method' => 'getCampaignArray', 'module' => 'simplecart'));
         $this->setControl('description', array('name' => 'textarea'));
         $this->setControl('image', 'imagemanager');
@@ -27,6 +30,11 @@ class SimplecartProduct extends icms_ipf_Object {
 
         $this->handler->identifierName = 'name';
         $this->handler->summaryName = 'description';
+    }
+
+    public function getWeight(): int
+    {
+        return (int)$this->getVar('weight', 'n');
     }
 
     public function isAvailable(): bool
@@ -135,6 +143,7 @@ class SimplecartProductHandler extends icms_ipf_Handler {
         $obj->setVar('price', $price);
         $active = (int)$obj->getVar('active');
         $obj->setVar('active', $active ? 1 : 0);
+        $obj->setVar('weight', (int)$obj->getVar('weight', 'n'));
         return true;
     }
 

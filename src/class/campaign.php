@@ -10,9 +10,17 @@ class SimplecartCampaign extends icms_ipf_Object {
         $this->initVar('start_date', XOBJ_DTYPE_LTIME, time(), true, null, '', false, _MI_SIMPLECART_CAMPAIGN_START);
         $this->initVar('end_date', XOBJ_DTYPE_LTIME, 0, false, null, '', false, _MI_SIMPLECART_CAMPAIGN_END);
 
+        $this->initVar('weight', XOBJ_DTYPE_INT, 0, false, null, '', false, _MI_SIMPLECART_CAMPAIGN_WEIGHT);
+
+        $this->setControl('weight', 'text');
         $this->hideFieldFromForm('campaign_id');
 
         $this->handler->identifierName = 'name';
+    }
+
+    public function getWeight(): int
+    {
+        return (int)$this->getVar('weight', 'n');
     }
 
     public function hasEnd(): bool
@@ -84,6 +92,7 @@ class SimplecartCampaignHandler extends icms_ipf_Handler {
         }
 
         $obj->setVar('end_date', $end);
+        $obj->setVar('weight', (int)$obj->getVar('weight', 'n'));
 
         return true;
     }

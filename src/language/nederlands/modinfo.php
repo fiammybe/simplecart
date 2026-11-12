@@ -57,6 +57,8 @@ define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Naam');
 define('_MI_SIMPLECART_CAMPAIGN_START', 'Begin');
 define('_MI_SIMPLECART_CAMPAIGN_END', 'Einde (leeg laten voor onbeperkt)');
 define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campagne');
+define('_MI_SIMPLECART_CAMPAIGN_WEIGHT', 'Volgorde (laagste eerst)');
+define('_MI_SIMPLECART_PRODUCT_WEIGHT', 'Volgorde binnen de campagne (laagste eerst)');
 
 // Questions and customer language
 define('_MI_SIMPLECART_ORDER_CUSTOMER_LANGUAGE', 'Taal van de klant');
