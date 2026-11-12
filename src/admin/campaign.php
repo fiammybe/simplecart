@@ -48,6 +48,8 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('end_date', 'center', 160, 'getEndFormatted', false, false, false));
         $objectTable->addColumn(new icms_ipf_view_Column('campaign_id', 'center', 100, 'getStatusLabel', false, _AM_SIMPLECART_CAMPAIGN_STATUS, false));
         $objectTable->addIntroButton('addcampaign', 'campaign.php?op=mod', _AM_SIMPLECART_CAMPAIGN_CREATE);
+        $objectTable->addColumn(new icms_ipf_view_Column('weight', 'center', 80));
+        $objectTable->setDefaultSort('weight');
         $objectTable->addQuickSearch(array('name'));
         $icmsAdminTpl->assign('simplecart_campaign_table', $objectTable->fetch());
         $icmsAdminTpl->display('db:simplecart_admin_campaign.html.tpl');
