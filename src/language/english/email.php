@@ -6,6 +6,7 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
  */
 return [
     'EMAIL_SUBJECT' => 'Order Confirmation #%d',
+    'EMAIL_SUBJECT_CAMPAIGN' => 'Order Confirmation %2$s #%1$d',
     'EMAIL_GREETING' => 'Dear',
     'EMAIL_THANK_YOU' => 'Thank You for Your Order!',
     'EMAIL_ORDER_DETAILS' => 'Order Details',

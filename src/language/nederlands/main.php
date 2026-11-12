@@ -52,7 +52,6 @@ define('_MD_SIMPLECART_AMOUNT', 'Bedrag');
 define('_MD_SIMPLECART_MSG', 'Mededeling');
 
 // Email Confirmation
-define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Bestellingsbevestiging Vredestraat Fuif #%d');
 define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Dank u voor uw bestelling!');
 define('_MD_SIMPLECART_EMAIL_GREETING', 'Beste');
 define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Bestelgegevens');

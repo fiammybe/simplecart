@@ -50,3 +50,19 @@ test('an inactive campaign with an earlier start is skipped', function () {
 
     assertSame('Running', headlineName());
 });
+
+test('the confirmation subject carries the headline campaign in the language of the customer', function () {
+    $order = makeDutchOrder();
+    makeDatedCampaign('Vredestraat Fuif', time() - 100000);
+    $email = new OrderConfirmationEmail($order, $order->getItems(), [], 'EUR');
+
+    assertSame('Bestellingsbevestiging Vredestraat Fuif #' . $order->getVar('order_id'), $email->getSubject());
+});
+
+test('the confirmation subject has no campaign name when no campaign is active', function () {
+    $order = makeDutchOrder();
+    makeDatedCampaign('Future', time() + 100000);
+    $email = new OrderConfirmationEmail($order, $order->getItems(), [], 'EUR');
+
+    assertSame('Bestellingsbevestiging #' . $order->getVar('order_id'), $email->getSubject());
+});

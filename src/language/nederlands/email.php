@@ -5,7 +5,8 @@ if (!defined('ICMS_ROOT_PATH')) { die('ImpressCMS root path not defined'); }
  * Texts of the e-mails in this language, see SimplecartEmailText
  */
 return [
-    'EMAIL_SUBJECT' => 'Bestellingsbevestiging Vredestraat Fuif #%d',
+    'EMAIL_SUBJECT' => 'Bestellingsbevestiging #%d',
+    'EMAIL_SUBJECT_CAMPAIGN' => 'Bestellingsbevestiging %2$s #%1$d',
     'EMAIL_GREETING' => 'Beste',
     'EMAIL_THANK_YOU' => 'Dank u voor uw bestelling!',
     'EMAIL_ORDER_DETAILS' => 'Bestelgegevens',
