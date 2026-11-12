@@ -180,10 +180,40 @@ class SimplecartProductHandler extends icms_ipf_Handler {
             $criteria->add(simplecart_getAvailableCampaignCriteria());
         }
 
-        $criteria->setSort('name');
-        $criteria->setOrder('ASC');
+        $campaigns = simplecart_getHandler('campaign')->getObjects(null, true, true);
 
-        return $this->getObjects($criteria, false, true);
+        return $this->sortForShop($this->getObjects($criteria, false, true), $campaigns);
+    }
+
+    /**
+     * Orders products by campaign weight, then product weight. Products without a campaign form a
+     * virtual campaign that always comes last. Equal weights fall back to the name.
+     *
+     * @param array<int, SimplecartProduct> $products
+     * @param array<int, SimplecartCampaign> $campaigns indexed by campaign id
+     * @return array<int, SimplecartProduct>
+     */
+    public function sortForShop(array $products, array $campaigns): array
+    {
+        $key = function (SimplecartProduct $product) use ($campaigns): array {
+            $campaign = $campaigns[(int)$product->getVar('campaign_id', 'n')] ?? null;
+
+            return [
+                $campaign ? 0 : 1,
+                $campaign ? $campaign->getWeight() : 0,
+                $campaign ? mb_strtolower((string)$campaign->getVar('name', 'n')) : '',
+                $product->getWeight(),
+                mb_strtolower((string)$product->getVar('name', 'n')),
+                (int)$product->getVar('product_id', 'n'),
+            ];
+        };
+
+        $products = array_values($products);
+        usort($products, function (SimplecartProduct $a, SimplecartProduct $b) use ($key): int {
+            return $key($a) <=> $key($b);
+        });
+
+        return $products;
     }
 }
 ?>
