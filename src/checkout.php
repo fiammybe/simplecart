@@ -34,13 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     );
 
     foreach ($_POST as $field => $value) {
-        if (preg_match('/^q_\d+$/', (string)$field) && is_scalar($value)) {
+        if (! preg_match('/^q_\d+$/', (string)$field)) {
+            continue;
+        }
+
+        // Checkboxes post a list of option positions, every other format a single value
+        if (is_array($value)) {
+            $customer['answers'][$field] = array_values(array_filter($value, 'is_scalar'));
+        } elseif (is_scalar($value)) {
             $customer['answers'][$field] = trim((string)$value);
         }
     }
 
     foreach ($customer['answers'] as $field => $value) {
-        $answerValues[(int)substr($field, 2)] = $value;
+        $answerValues[(int)substr($field, 2)] = is_array($value) ? implode(',', array_map('trim', array_map('strval', $value))) : $value;
     }
 
     $token = isset($_POST['simplecart_token']) ? (string)$_POST['simplecart_token'] : '';

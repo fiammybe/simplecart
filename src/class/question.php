@@ -51,6 +51,11 @@ class SimplecartQuestion extends icms_ipf_Object {
         return SimplecartQuestionFormat::isChoice($this->getFormat());
     }
 
+    public function isMultiple(): bool
+    {
+        return SimplecartQuestionFormat::isMultiple($this->getFormat());
+    }
+
     public function isRequired(): bool
     {
         return (int)$this->getVar('is_required', 'n') === 1;
@@ -247,13 +252,14 @@ class SimplecartQuestionHandler extends icms_ipf_Handler {
         foreach ($this->getForCart($cart) as $question) {
             $questionId = (int)$question->getVar('question_id', 'n');
             $value = (string)($values[$questionId] ?? '');
+            $picked = explode(',', $value);
             $options = [];
 
             foreach ($question->getOptionsFor($language) as $position => $label) {
                 $options[] = [
                     'value' => $position,
                     'label' => SimplecartLanguage::escapeHtml($label),
-                    'selected' => $value === (string)$position,
+                    'selected' => in_array((string)$position, $picked, true),
                 ];
             }
 

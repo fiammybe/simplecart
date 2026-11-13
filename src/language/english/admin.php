@@ -55,5 +55,6 @@ define('_AM_SIMPLECART_FORMAT_NUMBER', 'Number');
 define('_AM_SIMPLECART_FORMAT_DATE', 'Date');
 define('_AM_SIMPLECART_FORMAT_RADIO', 'Choice (radio buttons)');
 define('_AM_SIMPLECART_FORMAT_SELECT', 'Choice (selection list)');
+define('_AM_SIMPLECART_FORMAT_CHECKBOX', 'Multiple choice (checkboxes)');
 define('_AM_SIMPLECART_ORDER_ANSWERS', 'Answers');
 define('_AM_SIMPLECART_ORDER_LANGUAGE', 'Language of the customer');

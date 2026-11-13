@@ -15,6 +15,7 @@ final class SimplecartQuestionFormat
     public const DATE = 'date';
     public const RADIO = 'radio';
     public const SELECT = 'select';
+    public const CHECKBOX = 'checkbox';
 
     public const MAX_LENGTH_LINE = 255;
     public const MAX_LENGTH_TEXT = 5000;
@@ -32,6 +33,7 @@ final class SimplecartQuestionFormat
             self::DATE => _AM_SIMPLECART_FORMAT_DATE,
             self::RADIO => _AM_SIMPLECART_FORMAT_RADIO,
             self::SELECT => _AM_SIMPLECART_FORMAT_SELECT,
+            self::CHECKBOX => _AM_SIMPLECART_FORMAT_CHECKBOX,
         ];
     }
 
@@ -42,7 +44,13 @@ final class SimplecartQuestionFormat
 
     public static function isChoice(string $format): bool
     {
-        return $format === self::RADIO || $format === self::SELECT;
+        return $format === self::RADIO || $format === self::SELECT || $format === self::CHECKBOX;
+    }
+
+    /** A choice question where the customer may tick more than one option */
+    public static function isMultiple(string $format): bool
+    {
+        return $format === self::CHECKBOX;
     }
 
     /**
@@ -67,6 +75,7 @@ final class SimplecartQuestionFormat
             self::TEXTAREA => 'textarea',
             self::RADIO => 'radio',
             self::SELECT => 'select',
+            self::CHECKBOX => 'checkbox',
             default => 'input',
         };
     }

@@ -33,6 +33,7 @@ De formaten volgen de datatypes van IPF; de controles van IPF gelden waar ze bes
 | Getal | kommagetal | komma of punt als decimaalteken, bewaard met een punt |
 | Datum | tekst | `jjjj-mm-dd`, `dd/mm/jjjj` of `dd-mm-jjjj`; bewaard als `jjjj-mm-dd` |
 | Keuze (radio of lijst) | tekst | moet een optie van de lijst zijn |
+| Meerkeuze (selectievakjes) | tekst | elke aangevinkte waarde moet een optie van de lijst zijn; nul, één of meer opties, zonder minimum of maximum; opgeslagen als één antwoord met één optie per regel in de volgorde van de lijst |
 
 Een aanvullende vraag mag leeg blijven, maar een ingevuld antwoord moet wel geldig zijn.
 
