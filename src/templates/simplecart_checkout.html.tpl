@@ -166,6 +166,13 @@
                     <{$option.label}>
                   </label>
                 <{/foreach}>
+              <{elseif $question.kind == 'checkbox'}>
+                <{foreach from=$question.options item=option}>
+                  <label class="checkbox mr-4">
+                    <input type="checkbox" name="<{$question.field}>[]" value="<{$option.value}>" <{if $option.selected}>checked="checked"<{/if}>>
+                    <{$option.label}>
+                  </label>
+                <{/foreach}>
               <{elseif $question.kind == 'select'}>
                 <div class="select">
                   <select name="<{$question.field}>" <{if $question.required}>required<{/if}>>
