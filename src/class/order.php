@@ -42,7 +42,8 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromSingleView('scanned_by');
 
         $this->handler->identifierName = 'order_id';
-        $this->handler->_page = 'admin/order.php';
+        // The IPF view link adds the admin/ folder itself
+        $this->handler->_page = 'order.php';
     }
     public function getStatusActionLinks() {
         $id = (int)$this->getVar('order_id');
@@ -82,6 +83,24 @@ class SimplecartOrder extends icms_ipf_Object {
                '<input type="hidden" name="token" value="' . htmlspecialchars($token, ENT_QUOTES) . '">' .
                '<a href="#" onclick="if(confirm(\'' . addslashes(_AM_SIMPLECART_ORDER_DELETE_CONFIRM) . '\')) { document.getElementById(\'' . $formId . '\').submit(); } return false;" class="icms_actionlink">Delete</a>' .
                '</form>';
+    }
+
+    /** What the customer puts on the bank transfer; orders from before it was stored get the same text */
+    public function getPaymentReference(): string
+    {
+        $reference = trim((string)$this->getVar('payment_ref', 'n'));
+
+        if ($reference !== '') {
+            return $reference;
+        }
+
+        $orderId = (int)$this->getVar('order_id');
+
+        if ($orderId <= 0) {
+            return '';
+        }
+
+        return "Bestelling {$orderId}";
     }
 
     public function getItemsSummary() {
@@ -205,7 +224,7 @@ class SimplecartOrder extends icms_ipf_Object {
 
             $generator = new SepaQrCodeGenerator($config);
             $amount = (float)$this->getVar('total_amount');
-            $qrData = $generator->generateQrData($orderId, $amount, "Bestelling {$orderId}");
+            $qrData = $generator->generateQrData($orderId, $amount, $this->getPaymentReference());
             $qrImage = '';
 
             if (class_exists('Endroid\\QrCode\\QrCode') && class_exists('Endroid\\QrCode\\Writer\\PngWriter')) {
@@ -607,6 +626,7 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
             }
 
             $order->setVar('total_amount', $total);
+            $order->setVar('payment_ref', "Bestelling {$orderId}");
 
             $this->storeAnswers($orderId, $answers, $transactionStarted);
 

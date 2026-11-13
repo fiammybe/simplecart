@@ -104,7 +104,7 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('status', 'center', 120));
         $objectTable->addColumn(new icms_ipf_view_Column('customer_name', 'left'));
         $objectTable->addColumn(new icms_ipf_view_Column('customer_email', 'left'));
-        $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120));
+        $objectTable->addColumn(new icms_ipf_view_Column('payment_ref', 'center', 120, 'getPaymentReference'));
         $objectTable->addColumn(new icms_ipf_view_Column('total_amount', 'center', 120));
         $objectTable->addCustomAction('getViewItemLink');
         $objectTable->addCustomAction('getStatusActionLinks');

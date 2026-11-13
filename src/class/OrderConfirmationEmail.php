@@ -140,7 +140,8 @@ class OrderConfirmationEmail {
             if (!empty($this->sepaConfig['beneficiary_bic'])) {
                 $text .= "BIC: " . $this->sepaConfig['beneficiary_bic'] . "\n";
             }
-            $text .= $this->t('AMOUNT') . ": " . $this->formatCurrency($totalAmount) . "\n\n";
+            $text .= $this->t('AMOUNT') . ": " . $this->formatCurrency($totalAmount) . "\n";
+            $text .= $this->t('PAYMENT_REFERENCE') . ": " . $this->order->getPaymentReference() . "\n\n";
             $text .= $this->t('MAIL_PAYMENTINFO') . "\n\n";
             $text .= str_repeat('-', 70) . "\n\n";
         }
