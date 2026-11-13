@@ -411,3 +411,81 @@ test('a text area answer is cleaned as plain text, because the IPF text area typ
 
     assertSame($text, answerValue(answersFor([$question], [field($question) => $text]), $question));
 });
+
+test('a multiple-choice question keeps the ticked options once each, in the order of the option list', function () {
+    makeShop();
+    $question = makeQuestion(['format' => 'checkbox', 'options' => "A
+B
+[en]Cee[/en][nl]Cee-nl[/nl]
+D"]);
+
+    $result = answersFor([$question], [field($question) => ['3', '1', '3']]);
+
+    assertTrue($result->isValid(), 'ticking options is accepted');
+    assertSame("A
+[en]Cee[/en][nl]Cee-nl[/nl]", answerValue($result, $question));
+    assertSame('3,1,3', $result->values[(int)$question->getVar('question_id')]);
+});
+
+test('a multiple-choice question refuses an option outside the list even between valid ones', function () {
+    makeShop();
+    $question = makeQuestion(['format' => 'checkbox', 'options' => "A
+B"]);
+
+    assertSame(false, answersFor([$question], [field($question) => ['1', '9']])->isValid());
+    assertSame(false, answersFor([$question], [field($question) => ['1', 'x']])->isValid());
+});
+
+test('a multiple-choice question is required or optional like any other', function () {
+    makeShop();
+    $required = makeQuestion(['format' => 'checkbox', 'options' => "A
+B", 'is_required' => 1]);
+    $optional = makeQuestion(['format' => 'checkbox', 'options' => "A
+B"]);
+
+    assertSame(false, answersFor([$required], [])->isValid());
+    assertSame(false, answersFor([$required], [field($required) => ['', ' ']])->isValid());
+
+    $result = answersFor([$optional], [field($optional) => []]);
+    assertTrue($result->isValid(), 'nothing ticked is fine for an optional question');
+    assertSame(null, answerValue($result, $optional));
+});
+
+test('only a multiple-choice question accepts more than one value', function () {
+    makeShop();
+    $radio = makeQuestion(['format' => 'radio', 'options' => "A
+B"]);
+    $select = makeQuestion(['format' => 'select', 'options' => "A
+B"]);
+
+    assertSame(false, answersFor([$radio], [field($radio) => ['1', '2']])->isValid());
+    assertSame(false, answersFor([$select], [field($select) => ['1', '2']])->isValid());
+    assertSame('B', answerValue(answersFor([$radio], [field($radio) => ['2']]), $radio));
+});
+
+test('a multiple-choice answer shows one option per line in the language of the viewer', function () {
+    $db = new FakeDb();
+    $handler = new SimplecartOrderanswerHandler($db);
+    $answer = $handler->create();
+    $answer->setVar('question_label', 'Extras');
+    $answer->setVar('question_format', 'checkbox');
+    $answer->setVar('answer_value', "[en]Tea[/en][nl]Thee[/nl]
+[en]Milk <b>[/en][nl]Melk <b>[/nl]");
+
+    assertSame("Thee
+Melk <b>", $answer->toRow('nederlands')['value']);
+    assertSame('Thee<br />' . "
+" . 'Melk &lt;b&gt;', $answer->toHtmlRow('nederlands')['value']);
+});
+
+test('the checkout form ticks again what was ticked before', function () {
+    makeShop();
+    $question = makeQuestion(['format' => 'checkbox', 'options' => "A
+B
+C"]);
+
+    $rows = $GLOBALS['__handlers']['question']->getFormRows([1 => ['product_id' => 1, 'quantity' => 1]], [(int)$question->getVar('question_id') => '1,3']);
+
+    assertSame('checkbox', $rows[0]['kind']);
+    assertSame([true, false, true], array_map(fn ($option) => $option['selected'], $rows[0]['options']));
+});
