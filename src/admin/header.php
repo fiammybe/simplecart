@@ -15,6 +15,17 @@ if (!is_object(icms::$module) || icms::$module->getVar('dirname') !== 'simplecar
 icms_loadLanguageFile('simplecart', 'admin');
 
 /*
+ * Saving and confirmed deletion change data, so they need the security token that the secure form and the
+ * confirmation page carry. Without it a foreign page could submit them on behalf of a logged in admin.
+ */
+$simplecartOp = isset($_REQUEST['op']) ? preg_replace('/[^a-z_]/', '', (string)$_REQUEST['op']) : '';
+$simplecartChangesData = strpos($simplecartOp, 'add') === 0 || ($simplecartOp === 'del' && !empty($_POST['confirm']));
+if ($simplecartChangesData && ($_SERVER['REQUEST_METHOD'] !== 'POST' || !icms::$security->check())) {
+    redirect_header(basename((string)$_SERVER['SCRIPT_NAME']), 3, _AM_SIMPLECART_CSRF_FAIL);
+    exit;
+}
+
+/*
  * A confirmed deletion goes back to the page the confirmation was opened from, which is the Referer of the
  * confirmation. Without a Referer the redirect has no target and the browser shows a half built page.
  */
