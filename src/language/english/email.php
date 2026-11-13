@@ -24,6 +24,7 @@ return [
     'BENEFICIARY' => 'Beneficiary',
     'IBAN' => 'IBAN',
     'AMOUNT' => 'Amount',
+    'PAYMENT_REFERENCE' => 'Payment reference',
     'MAIL_PAYMENTINFO' => 'Please use the above information to pay by bank transfer. If you have any questions about your order, please contact us at colomaenpa@gmail.com with your order number as reference.',
     'EMAIL_FOOTER' => 'Thank you for your business. If you have any questions about your order, please contact us.',
     'PAYMENT_RECEIVED_SUBJECT' => 'Payment Received - Order #%d',

@@ -24,6 +24,7 @@ return [
     'BENEFICIARY' => 'Begunstigde',
     'IBAN' => 'IBAN',
     'AMOUNT' => 'Bedrag',
+    'PAYMENT_REFERENCE' => 'Betalingsreferentie',
     'MAIL_PAYMENTINFO' => 'Indien de betaling via QR code niet gelukt is, kan u de bovenstaande informatie gebruiken om te betalen via overschrijving. In geval van vragen kan u ons altijd contacteren op colomaenpa@gmail.com met uw bestelnummer als referentie.',
     'EMAIL_FOOTER' => 'Dank u voor uw aankoop. Heeft u vragen over uw bestelling, neem dan contact met ons op via colomaenpa@gmail.com.',
     'PAYMENT_RECEIVED_SUBJECT' => 'Betaling ontvangen - Bestelling #%d',
