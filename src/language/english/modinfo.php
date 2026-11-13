@@ -57,6 +57,8 @@ define('_MI_SIMPLECART_CAMPAIGN_NAME', 'Name');
 define('_MI_SIMPLECART_CAMPAIGN_START', 'Start');
 define('_MI_SIMPLECART_CAMPAIGN_END', 'End (leave empty for no end)');
 define('_MI_SIMPLECART_PRODUCT_CAMPAIGN', 'Campaign');
+define('_MI_SIMPLECART_CAMPAIGN_WEIGHT', 'Order (lowest first)');
+define('_MI_SIMPLECART_PRODUCT_WEIGHT', 'Order within the campaign (lowest first)');
 
 // Questions and customer language
 define('_MI_SIMPLECART_ORDER_CUSTOMER_LANGUAGE', 'Language of the customer');

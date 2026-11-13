@@ -1,7 +1,6 @@
 <?php
 // Frontend strings
 
-define('_MD_SIMPLECART_SHOP_TITLE', 'Products');
 define('_MD_SIMPLECART_SHOP_DESC', 'Select the tickets you want to order. Your checkout form collects your order details and any help preference.');
 define('_MD_SIMPLECART_ADD_TO_CART', 'Add to Cart');
 define('_MD_SIMPLECART_YOUR_CART', 'Your Cart');
@@ -54,7 +53,6 @@ define('_MD_SIMPLECART_AMOUNT', 'Amount');
 define('_MD_SIMPLECART_MSG', 'Payment reference');
 
 // Email Confirmation
-define('_MD_SIMPLECART_EMAIL_SUBJECT', 'Order Confirmation #%d');
 define('_MD_SIMPLECART_EMAIL_THANK_YOU', 'Thank You for Your Order!');
 define('_MD_SIMPLECART_EMAIL_GREETING', 'Dear');
 define('_MD_SIMPLECART_EMAIL_ORDER_DETAILS', 'Order Details');

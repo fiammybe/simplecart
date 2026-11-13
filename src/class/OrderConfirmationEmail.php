@@ -45,7 +45,13 @@ class OrderConfirmationEmail {
 
     public function getSubject() {
         $orderId = (int)$this->order->getVar('order_id');
-        return sprintf($this->t('EMAIL_SUBJECT'), $orderId);
+        $campaign = simplecart_getHandler('campaign')->getHeadlineCampaign();
+
+        if (! $campaign) {
+            return sprintf($this->t('EMAIL_SUBJECT'), $orderId);
+        }
+
+        return sprintf($this->t('EMAIL_SUBJECT_CAMPAIGN'), $orderId, (string)$campaign->getVar('name', 'n'));
     }
 
     public function getTextContent() {

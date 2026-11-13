@@ -3,7 +3,9 @@
 
 <section class="section">
   <div class="container">
-    <h1 class="title is-4"><{$smarty.const._MD_SIMPLECART_SHOP_TITLE}></h1>
+    <{if $simplecart_shop_title}>
+      <h1 class="title is-4"><{$simplecart_shop_title|escape:html}></h1>
+    <{/if}>
 
     <{if $simplecart_removed_items}>
       <div class="notification is-warning">

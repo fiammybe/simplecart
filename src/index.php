@@ -39,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $products = simplecart_getProductList(true);
 $cartSummary = simplecart_getCartSummary();
+$headlineCampaign = simplecart_getHandler('campaign')->getHeadlineCampaign();
+$icmsTpl->assign('simplecart_shop_title', $headlineCampaign ? (string)$headlineCampaign->getVar('name', 'n') : '');
 $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
 $icmsTpl->assign('simplecart_message', $cartMessage);
 $icmsTpl->assign('simplecart_removed_items', $removedItems);

@@ -46,7 +46,9 @@ switch ($clean_op) {
         $objectTable->addColumn(new icms_ipf_view_Column('name', _GLOBAL_LEFT, 200));
         $objectTable->addColumn(new icms_ipf_view_Column('price', 'center', 100));
         $objectTable->addColumn(new icms_ipf_view_Column('campaign_id', 'center', 150, 'getCampaignName', false, false, false));
+        $objectTable->addColumn(new icms_ipf_view_Column('weight', 'center', 80));
         $objectTable->addColumn(new icms_ipf_view_Column('active', 'center', 60));
+        $objectTable->setDefaultSort('weight');
         $objectTable->addIntroButton('addproduct', 'product.php?op=mod', _AM_SIMPLECART_PRODUCT_CREATE);
         $objectTable->addQuickSearch(array('name', 'description'));
         $icmsAdminTpl->assign('simplecart_product_table', $objectTable->fetch());
