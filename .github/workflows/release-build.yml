@@ -19,7 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, intl, json
+          extensions: mbstring, intl, json, zip
           coverage: none
 
       - name: Determine module name from repository
@@ -44,18 +44,15 @@ jobs:
         working-directory: src
         run: composer install --no-dev --no-interaction --optimize-autoloader
 
-      - name: Prepare build directory
-        run: |
-          rm -rf build
-          mkdir -p build/$MODULE_NAME
-          # "src/." (not "src/*") so that hidden files such as .htaccess are included, together with src/vendor
-          cp -R src/. build/$MODULE_NAME/
-          echo "${VERSION}" > build/$MODULE_NAME/VERSION
+      - name: Build the module package
+        run: php bin/build-release.php "${VERSION}"
 
-      - name: Create ZIP package
-        run: |
-          cd build
-          zip -r "${MODULE_NAME}-${VERSION}.zip" "${MODULE_NAME}"
+      - name: Upload package as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.MODULE_NAME }}-${{ env.VERSION }}
+          path: build/${{ env.MODULE_NAME }}-${{ env.VERSION }}.zip
+          if-no-files-found: error
 
       - name: Upload ZIP to GitHub Release (GH CLI)
         env:
