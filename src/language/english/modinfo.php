@@ -67,7 +67,7 @@ define('_MI_SIMPLECART_QUESTION_HELP', 'Explanation');
 define('_MI_SIMPLECART_QUESTION_HELP_DSC', 'Shown below the question. Language tags work here too.');
 define('_MI_SIMPLECART_QUESTION_FORMAT', 'Format of the answer');
 define('_MI_SIMPLECART_QUESTION_OPTIONS', 'Options');
-define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Only for radio buttons and a selection list: one option per line. Language tags work per option.');
+define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Only for radio buttons, a selection list and checkboxes: one option per line. Language tags work per option.');
 define('_MI_SIMPLECART_QUESTION_REQUIRED', 'Answer');
 define('_MI_SIMPLECART_QUESTION_WEIGHT', 'Order (lowest first)');
 define('_MI_SIMPLECART_QUESTION_ACTIVE', 'Active');

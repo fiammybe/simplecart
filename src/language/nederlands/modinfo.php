@@ -67,7 +67,7 @@ define('_MI_SIMPLECART_QUESTION_HELP', 'Uitleg');
 define('_MI_SIMPLECART_QUESTION_HELP_DSC', 'Getoond onder de vraag. Taaltags werken hier ook.');
 define('_MI_SIMPLECART_QUESTION_FORMAT', 'Formaat van het antwoord');
 define('_MI_SIMPLECART_QUESTION_OPTIONS', 'Opties');
-define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Enkel voor keuzerondjes en een keuzelijst: één optie per regel. Taaltags werken per optie.');
+define('_MI_SIMPLECART_QUESTION_OPTIONS_DSC', 'Enkel voor keuzerondjes, een keuzelijst en selectievakjes: één optie per regel. Taaltags werken per optie.');
 define('_MI_SIMPLECART_QUESTION_REQUIRED', 'Antwoord');
 define('_MI_SIMPLECART_QUESTION_WEIGHT', 'Volgorde (laagste eerst)');
 define('_MI_SIMPLECART_QUESTION_ACTIVE', 'Actief');

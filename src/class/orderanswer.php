@@ -37,7 +37,18 @@ class SimplecartOrderanswer extends icms_ipf_Object {
     {
         $value = (string)$this->getVar('answer_value', 'n');
 
-        return $this->isChoice() ? SimplecartLanguage::resolve($value, $language) : $value;
+        if (! $this->isChoice()) {
+            return $value;
+        }
+
+        // A multiple-choice answer holds one option per line
+        $lines = array_map(
+            static fn (string $line): string => SimplecartLanguage::resolve($line, $language),
+            preg_split('/\R/', $value) ?: []
+        );
+
+        return implode("
+", $lines);
     }
 
     /**

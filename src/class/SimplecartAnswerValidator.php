@@ -86,8 +86,15 @@ final class SimplecartAnswerValidator
             $position++;
             $questionId = (int)$question->getVar('question_id', 'n');
             $raw = $submitted[self::fieldName($questionId)] ?? '';
-            $value = is_scalar($raw) ? trim((string)$raw) : '';
+            $picked = $this->pickedValues($raw);
+            $value = implode(',', $picked);
             $result->values[$questionId] = $value;
+
+            if ($question->isChoice() && count($picked) > 1 && ! $question->isMultiple()) {
+                $result->errors[$questionId] = sprintf(_MD_SIMPLECART_QUESTION_ERR_INVALID, $this->label($question));
+
+                continue;
+            }
 
             if ($value === '') {
                 if ($question->isRequired()) {
@@ -98,7 +105,7 @@ final class SimplecartAnswerValidator
             }
 
             $answerValue = $question->isChoice() ?
-                $this->checkChoice($question, $value) :
+                $this->checkChoices($question, $picked) :
                 $this->checkValue($question, $value);
 
             if ($answerValue === null) {
@@ -124,16 +131,55 @@ final class SimplecartAnswerValidator
         return $question->getLabelFor($this->language);
     }
 
-    /** The posted value is the position of the option; the answer keeps the option's own text with its language tags */
-    private function checkChoice(SimplecartQuestion $question, string $value): ?string
+    /**
+     * What was posted for one question as a list of trimmed, non-empty strings: a single value or the ticked checkboxes
+     *
+     * @param mixed $raw
+     * @return array<int, string>
+     */
+    private function pickedValues($raw): array
     {
-        if (! ctype_digit($value)) {
-            return null;
+        $values = is_array($raw) ? $raw : [$raw];
+        $picked = [];
+
+        foreach ($values as $value) {
+            if (! is_scalar($value)) {
+                continue;
+            }
+
+            $value = trim((string)$value);
+
+            if ($value !== '') {
+                $picked[] = $value;
+            }
         }
 
-        $options = $question->getOptions();
+        return $picked;
+    }
 
-        return $options[(int)$value - 1] ?? null;
+    /**
+     * The posted values are positions of options; the answer keeps the options' own text with their language tags,
+     * once each and in the order of the option list, one per line
+     *
+     * @param array<int, string> $picked
+     */
+    private function checkChoices(SimplecartQuestion $question, array $picked): ?string
+    {
+        $options = $question->getOptions();
+        $positions = [];
+
+        foreach ($picked as $value) {
+            if (! ctype_digit($value) || ! isset($options[(int)$value - 1])) {
+                return null;
+            }
+
+            $positions[(int)$value] = true;
+        }
+
+        ksort($positions);
+
+        return implode("
+", array_map(static fn (int $position): string => $options[$position - 1], array_keys($positions)));
     }
 
     private function checkValue(SimplecartQuestion $question, string $value): ?string

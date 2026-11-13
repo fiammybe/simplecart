@@ -56,5 +56,6 @@ define('_AM_SIMPLECART_FORMAT_NUMBER', 'Getal');
 define('_AM_SIMPLECART_FORMAT_DATE', 'Datum');
 define('_AM_SIMPLECART_FORMAT_RADIO', 'Keuze (keuzerondjes)');
 define('_AM_SIMPLECART_FORMAT_SELECT', 'Keuze (keuzelijst)');
+define('_AM_SIMPLECART_FORMAT_CHECKBOX', 'Meerkeuze (selectievakjes)');
 define('_AM_SIMPLECART_ORDER_ANSWERS', 'Antwoorden');
 define('_AM_SIMPLECART_ORDER_LANGUAGE', 'Taal van de klant');
