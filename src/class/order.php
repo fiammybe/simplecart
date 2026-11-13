@@ -42,7 +42,8 @@ class SimplecartOrder extends icms_ipf_Object {
         $this->hideFieldFromSingleView('scanned_by');
 
         $this->handler->identifierName = 'order_id';
-        $this->handler->_page = 'admin/order.php';
+        // The IPF view link adds the admin/ folder itself
+        $this->handler->_page = 'order.php';
     }
     public function getStatusActionLinks() {
         $id = (int)$this->getVar('order_id');
