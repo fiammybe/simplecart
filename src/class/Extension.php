@@ -73,8 +73,12 @@ class SimplecartExtension
 {
     public const API_VERSION = 1;
 
-    /** Rises with every additive change, so an add-on can check what the core offers: 2 adds `language` to the mail payload of order.render */
-    public const API_REVISION = 2;
+    /**
+     * Rises with every additive change, so an add-on can check what the core offers:
+     * 2 adds `language` to the mail payload of order.render;
+     * 3 adds `method`/`action` to scan.resolve, scan actions with a CSRF token, and `allow_close` in order.render (context scan)
+     */
+    public const API_REVISION = 3;
 
     public const EVENT_CART_SUMMARY = 'cart.summary';
     public const EVENT_CART_EMPTIED = 'cart.emptied';
@@ -104,6 +108,11 @@ class SimplecartExtension
 
     private const MAX_QUANTITY = 1000;
     private const MAX_NAME_LENGTH = 255;
+
+    /** Action names an add-on may use on the scan page */
+    private const SCAN_ACTION_PATTERN = '/^[a-z_]{1,32}$/';
+    private const SCAN_ACTION_STYLES = ['primary', 'warning'];
+    private const SCAN_STATUSES = ['success', 'warning', 'error'];
 
     /** @var array<string, array<int, callable>> */
     private static $listeners = [];
@@ -252,6 +261,127 @@ class SimplecartExtension
             'source' => (string)($line['source'] ?? ''),
             'html' => (string)($line['html'] ?? ''),
         ];
+    }
+
+    /**
+     * Decides an add-on scan (scan.php with ?addon=...). The checks run before the add-on is called:
+     * without admin rights, or on a POST without a valid token or a valid action name, scan.resolve is not dispatched.
+     *
+     * @param array{params?: array, method?: string, action?: mixed, user?: mixed, is_admin?: bool, token_valid?: bool} $request
+     * @return array{error: string|null, scan: array|null}
+     *   error: null, 'no_access', 'token_invalid', 'action_invalid' or 'invalid' (no add-on answered)
+     *   scan: title, message, status, html and the validated actions of the first result
+     */
+    public static function resolveScan(array $request): array
+    {
+        if (empty($request['is_admin'])) {
+            return ['error' => 'no_access', 'scan' => null];
+        }
+
+        $params = (array)($request['params'] ?? []);
+        $method = strtoupper((string)($request['method'] ?? 'GET')) === 'POST' ? 'POST' : 'GET';
+        $payload = [
+            'addon' => (string)($params['addon'] ?? ''),
+            'params' => $params,
+            'user' => $request['user'] ?? null,
+            'method' => $method,
+        ];
+
+        if ($method === 'POST') {
+            if (empty($request['token_valid'])) {
+                return ['error' => 'token_invalid', 'scan' => null];
+            }
+
+            $action = $request['action'] ?? null;
+            if (! is_string($action) || ! preg_match(self::SCAN_ACTION_PATTERN, $action)) {
+                return ['error' => 'action_invalid', 'scan' => null];
+            }
+            $payload['action'] = $action;
+        }
+
+        $results = self::dispatch(self::EVENT_SCAN_RESOLVE, $payload)->getResults();
+        if (empty($results) || ! is_array($results[0])) {
+            return ['error' => 'invalid', 'scan' => null];
+        }
+
+        $result = $results[0];
+        $status = $result['status'] ?? '';
+
+        return [
+            'error' => null,
+            'scan' => [
+                'title' => (string)($result['title'] ?? ''),
+                'message' => (string)($result['message'] ?? ''),
+                'status' => in_array($status, self::SCAN_STATUSES, true) ? $status : 'warning',
+                'html' => (string)($result['html'] ?? ''),
+                'actions' => self::normalizeScanActions($result['actions'] ?? []),
+            ],
+        ];
+    }
+
+    /**
+     * Keeps the usable actions of a scan.resolve result: a name of [a-z_] up to 32 characters, a label,
+     * an optional confirm text and a style (primary or warning). Later actions with a name already used are dropped.
+     * Label and confirm are returned raw; the template escapes them.
+     *
+     * @param mixed $actions
+     * @return array<int, array{name: string, label: string, confirm: string, style: string}>
+     */
+    public static function normalizeScanActions($actions): array
+    {
+        if (! is_array($actions)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($actions as $action) {
+            if (! is_array($action)) {
+                continue;
+            }
+
+            $name = $action['name'] ?? null;
+            $label = trim((string)(is_scalar($action['label'] ?? null) ? $action['label'] : ''));
+            if (! is_string($name) || ! preg_match(self::SCAN_ACTION_PATTERN, $name) || $label === '' || isset($normalized[$name])) {
+                continue;
+            }
+
+            $confirm = $action['confirm'] ?? '';
+            $style = $action['style'] ?? 'primary';
+
+            $normalized[$name] = [
+                'name' => $name,
+                'label' => $label,
+                'confirm' => is_scalar($confirm) ? trim((string)$confirm) : '',
+                'style' => in_array($style, self::SCAN_ACTION_STYLES, true) ? $style : 'primary',
+            ];
+        }
+
+        return array_values($normalized);
+    }
+
+    /**
+     * Name of the CSRF token of the scan actions of an add-on
+     */
+    public static function scanTokenName(string $addon): string
+    {
+        return 'simplecart_scan_' . substr((string)preg_replace('/[^a-z0-9_]/', '', strtolower($addon)), 0, 32);
+    }
+
+    /**
+     * False when a result of order.render (context scan) returns allow_close = false: the scan page then
+     * hides the close button and refuses a POST that closes the order
+     *
+     * @param array<int, mixed> $renderResults
+     */
+    public static function scanAllowsClose(array $renderResults): bool
+    {
+        foreach ($renderResults as $result) {
+            if (is_array($result) && array_key_exists('allow_close', $result) && $result['allow_close'] !== null && ! $result['allow_close']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

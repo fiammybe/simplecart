@@ -47,8 +47,8 @@ Waarom geen ImpressCMS-preloads? De preloads van ImpressCMS 2.0 laden alleen van
 | `order.beforePlace` | `customer`, `items`, `lines` (genormaliseerd) | niets; gooi een uitzondering om te weigeren | ja |
 | `order.afterPlace` | `order`, `lines` (met `orderitem_id`, `meta`), `customer` | niets; gooi een uitzondering om alles terug te draaien | ja |
 | `order.cancelled` | `order`, `reason`: `status` of `deleted` | niets | nee |
-| `order.render` | `order`, `context`: `mail`, `page` of `scan`; bij `mail` ook `language` | `text` (mail) of `html` (page, scan) | nee |
-| `scan.resolve` | `addon`, `params` (`$_GET`), `user` | `title`, `message`, `status` (`success`/`warning`/`error`), `html` | nee |
+| `order.render` | `order`, `context`: `mail`, `page` of `scan`; bij `mail` ook `language` | `text` (mail) of `html` (page, scan); bij `scan` ook `allow_close` | nee |
+| `scan.resolve` | `addon`, `params` (`$_GET`), `user`, `method` (`GET`/`POST`), bij POST ook `action` | `title`, `message`, `status` (`success`/`warning`/`error`), `html`, `actions` | nee |
 
 ### Regels
 
@@ -88,12 +88,57 @@ Zodra er add-onregels zijn (of een luisteraar voor `order.afterPlace` bestaat) l
 
 - `order.render` met `context = mail`: resultaat `text` (platte tekst) komt na de bestelregels in de bevestigingsmail. De payload bevat `language`, de taalmap van de klant (`english`, `nederlands`); bouw de tekst in die taal, niet in de taal van de actieve aanvraag. Sinds `API_REVISION` 2.
 - `context = page`: resultaat `html` komt op de succespagina van de checkout, enkel zichtbaar voor de bezoeker die de bestelling net plaatste (sessie).
-- `context = scan`: resultaat `html` komt op de scanpagina van een bestelling.
+- `context = scan`: resultaat `html` komt op de scanpagina van een bestelling. Geeft een add-on `allow_close = false` terug, dan verbergt simplecart de knop "Bestelling afsluiten" en weigert het ook een rechtstreekse POST om af te sluiten (bijvoorbeeld voor een bestelling met plaatsen, waar afhalen niet van toepassing is). Sinds `API_REVISION` 3.
 - `html` wordt niet gefilterd. **De add-on is verantwoordelijk voor het escapen van gebruikersdata.**
 
 ### Scannen
 
 `scan.php` blijft de bestaande bestelscan (`order_id` en `token`) afhandelen. Bevat de URL een parameter `addon`, dan stuurt simplecart na de login- en beheerderscontrole het event `scan.resolve` en toont het eerste resultaat. De volledige query (`$_GET`) wordt meegegeven en moet door de add-on gevalideerd worden. Zonder resultaat toont simplecart "ongeldige link".
+
+#### Acties (sinds `API_REVISION` 3)
+
+Het openen van een scanlink mag niets veranderen: een linkvoorbeeld in een chat-app of een QR-app die de URL eerst opent, zou anders een ticket "gebruiken" voordat iemand binnen is. Daarom:
+
+- Bij het openen (GET) krijgt de add-on `method = GET` en geen `action`. **Registreer bij een GET niets**; toon enkel de gegevens.
+- Het resultaat mag `actions` bevatten: een lijst knoppen.
+
+  | Sleutel | Verplicht | Betekenis |
+  |---|---|---|
+  | `name` | ja | alleen `[a-z_]`, maximaal 32 tekens; andere namen worden niet getoond |
+  | `label` | ja | tekst op de knop (wordt geëscaped) |
+  | `confirm` | nee | bevestigingstekst die de browser eerst toont (wordt geëscaped) |
+  | `style` | nee | `primary` (standaard) of `warning` |
+
+  Een tweede actie met dezelfde naam wordt genegeerd.
+- Simplecart toont elke actie als knop in een formulier met een CSRF-token (naam `simplecart_scan_<addon>`). Bij de POST controleert simplecart eerst de beheerderrechten, het token en de actienaam, en stuurt pas daarna `scan.resolve` met `method = POST` en `action`. Is één van die controles fout, dan krijgt de add-on niets te zien.
+- Voer een mutatie **uitsluitend** uit bij `method = POST` en een `action` die je zelf kent. Controleer daarbij opnieuw de toestand (bv. al ingenomen, niet betaald): de bevestigingsdialoog is een gemak, geen beveiliging.
+- Na de POST volgt een redirect naar de GET-URL met `message` (of `title`) van het resultaat als melding. Herladen voert de actie dus niet opnieuw uit.
+
+Voorbeeld:
+
+```php
+SimplecartExtension::listen(SimplecartExtension::EVENT_SCAN_RESOLVE, function ($event) {
+    if ($event->get('addon') !== 'seats') {
+        return;
+    }
+    $ticket = seats_findTicket($event->get('params'));
+    if ($event->get('method') === 'POST' && $event->get('action') === 'accept') {
+        seats_acceptTicket($ticket);
+        $event->addResult(['message' => 'Ticket ingenomen', 'status' => 'success']);
+        return;
+    }
+    $event->addResult([
+        'title' => $ticket->label(),
+        'message' => $ticket->isPaid() ? 'Geldig ticket' : 'Niet betaald',
+        'status' => $ticket->isPaid() ? 'success' : 'warning',
+        'actions' => [$ticket->isPaid()
+            ? ['name' => 'accept', 'label' => 'Ticket innemen']
+            : ['name' => 'accept', 'label' => 'Toch innemen', 'confirm' => 'Dit ticket is niet betaald. Toch innemen?', 'style' => 'warning']],
+    ]);
+});
+```
+
+Een add-on die acties nodig heeft controleert `SimplecartExtension::API_REVISION >= 3`. Op een oudere kern toont hij alleen de gegevens en voert hij geen scan door. Oudere add-ons die bij een GET registreren blijven werken zoals voorheen, met hetzelfde risico.
 
 ## Compatibiliteit en versiebeheer
 
@@ -104,7 +149,8 @@ Zodra er add-onregels zijn (of een luisteraar voor `order.afterPlace` bestaat) l
 | simplecart | extension-API | `API_REVISION` |
 |---|---|---|
 | 2.3.x, 2.4.x | 1 | 1 |
-| 2.5.x | 1 | 2 |
+| 2.5.x, 2.6.x | 1 | 2 |
+| 2.7.x | 1 | 3 |
 
 ## Tests
 
