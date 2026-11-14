@@ -86,6 +86,9 @@ define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'You do not have access to this order.')
 define('_MD_SIMPLECART_SCAN_INVALID', 'This order link is invalid or the order no longer exists.');
 define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
 define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Open order in administration');
+define('_MD_SIMPLECART_SCAN_ACTION_INVALID', 'This action is not available.');
+define('_MD_SIMPLECART_SCAN_ACTION_DONE', 'Done.');
+define('_MD_SIMPLECART_SCAN_CLOSE_NOT_ALLOWED', 'This order cannot be closed from the scan page.');
 
 
 define('_MD_SIMPLECART_ITEMS_REMOVED', 'These products are no longer available and were removed from your cart:');

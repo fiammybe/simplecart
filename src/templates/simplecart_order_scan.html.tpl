@@ -12,6 +12,18 @@
             <strong><{$simplecart_scan_extension.message|escape}></strong>
         </div>
         <{if $simplecart_scan_extension.html}><div class="box sc-scan-box"><{$simplecart_scan_extension.html}></div><{/if}>
+        <{if $simplecart_scan_extension.actions|@count}>
+            <div class="sc-scan-actions">
+                <{foreach from=$simplecart_scan_extension.actions item=action}>
+                    <{* One form per action: the button can be disabled on submit without losing the action name *}>
+                    <form method="post" action="<{$simplecart_scan_extension.form_action|escape}>" class="mb-2"<{if $action.confirm}> data-confirm="<{$action.confirm|escape}>"<{/if}> onsubmit="if (this.dataset.confirm &amp;&amp; !window.confirm(this.dataset.confirm)) { return false; } this.querySelector('button').classList.add('is-loading'); this.querySelector('button').disabled = true;">
+                        <input type="hidden" name="scan_token" value="<{$simplecart_scan_extension.token|escape}>">
+                        <input type="hidden" name="scan_action" value="<{$action.name|escape}>">
+                        <button type="submit" class="button <{if $action.style == 'warning'}>is-warning<{else}>is-success<{/if}> is-medium is-fullwidth"><{$action.label|escape}></button>
+                    </form>
+                <{/foreach}>
+            </div>
+        <{/if}>
     <{else}>
         <header class="sc-scan-header">
             <div>

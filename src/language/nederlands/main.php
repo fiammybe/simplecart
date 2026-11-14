@@ -84,6 +84,9 @@ define('_MD_SIMPLECART_SCAN_NO_ACCESS', 'U heeft geen toegang tot deze bestellin
 define('_MD_SIMPLECART_SCAN_INVALID', 'Deze link is ongeldig of de bestelling bestaat niet meer.');
 define('_MD_SIMPLECART_SCAN_STATUS', 'Status');
 define('_MD_SIMPLECART_SCAN_ADMIN_LINK', 'Bestelling openen in het beheer');
+define('_MD_SIMPLECART_SCAN_ACTION_INVALID', 'Deze actie is niet beschikbaar.');
+define('_MD_SIMPLECART_SCAN_ACTION_DONE', 'Uitgevoerd.');
+define('_MD_SIMPLECART_SCAN_CLOSE_NOT_ALLOWED', 'Deze bestelling kan niet worden afgesloten vanaf de scanpagina.');
 
 
 define('_MD_SIMPLECART_ITEMS_REMOVED', 'Deze producten zijn niet meer beschikbaar en werden uit uw winkelmandje verwijderd:');
