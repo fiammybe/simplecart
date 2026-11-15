@@ -155,6 +155,7 @@ function icms_module_update_simplecart($module, $previousVersion = null): bool
     require_once dirname(__DIR__) . '/include/common.php';
     require_once dirname(__DIR__) . '/class/SimplecartLegacyHelpMigration.php';
     require_once dirname(__DIR__) . '/class/SimplecartLegacyContactMigration.php';
+    require_once dirname(__DIR__) . '/class/SimplecartOrderitemOriginMigration.php';
 
     try {
         $migration = new SimplecartLegacyHelpMigration(
@@ -178,6 +179,18 @@ function icms_module_update_simplecart($module, $previousVersion = null): bool
         $migration->run();
     } catch (Throwable $e) {
         simplecart_debugLog('Converting phone and address failed: ' . $e->getMessage());
+
+        return false;
+    }
+
+    try {
+        $migration = new SimplecartOrderitemOriginMigration(
+            simplecart_getHandler('orderitem'),
+            simplecart_getHandler('product')
+        );
+        $migration->run();
+    } catch (Throwable $e) {
+        simplecart_debugLog('Linking order items to their product failed: ' . $e->getMessage());
 
         return false;
     }

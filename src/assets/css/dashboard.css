@@ -1,0 +1,44 @@
+/* SimpleCart admin dashboard */
+.simplecart-admin-dashboard { max-width: 70rem; }
+
+.sc-dash-filters,
+.sc-dash-view,
+.sc-dash-summary,
+.sc-dash-charts,
+.sc-dash-products { margin-bottom: 1.5rem; }
+
+.sc-dash-facets { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: .75rem; }
+.sc-dash-facet,
+.sc-dash-choice { margin: 0; padding: .5rem .75rem .75rem; border: 1px solid #d0d0d0; border-radius: 4px; min-width: 12rem; max-height: 14rem; overflow-y: auto; }
+.sc-dash-choice { max-height: none; min-width: 0; }
+.sc-dash-facet legend,
+.sc-dash-choice legend { font-weight: 700; padding: 0 .25rem; }
+.sc-dash-option { display: block; padding: .15rem 0; cursor: pointer; }
+.sc-dash-questions { margin-bottom: .75rem; }
+.sc-dash-questions summary { cursor: pointer; font-weight: 700; margin-bottom: .5rem; }
+.sc-dash-clear { padding: .35rem .9rem; cursor: pointer; }
+
+.sc-dash-view { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1rem; }
+.sc-dash-note { margin: 0; align-self: center; color: #555; }
+
+.sc-dash-stats { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0; }
+.sc-dash-stat { flex: 1 1 12rem; padding: .75rem 1rem; border: 1px solid #d0d0d0; border-radius: 4px; }
+.sc-dash-stat dt { color: #555; margin: 0; }
+.sc-dash-stat dd { margin: 0; font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sc-dash-stat dd.sc-dash-stat-sub { font-size: 1rem; font-weight: 400; color: #555; }
+
+.sc-dash-empty { padding: 1rem; border: 1px dashed #999; border-radius: 4px; }
+
+.sc-dash-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 1.5rem; }
+.sc-dash-charts[hidden] { display: none; }
+.sc-dash-chart h3 { margin: 0 0 .5rem; }
+.sc-dash-canvas { position: relative; height: 18rem; }
+.sc-dash-table { margin-top: .5rem; }
+.sc-dash-table summary { cursor: pointer; }
+
+.sc-dash-products .table { width: 100%; }
+.sc-dash-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 600px) {
+    .sc-dash-charts { grid-template-columns: 1fr; }
+}

@@ -579,6 +579,8 @@ class SimplecartOrderHandler extends icms_ipf_Handler {
 
                 $orderItem = $orderItemHandler->create();
                 $orderItem->setVar('order_id', $orderId);
+                $orderItem->setVar('product_id', $productId);
+                $orderItem->setVar('campaign_id', (int)$product->getVar('campaign_id', 'n'));
                 $orderItem->setVar('product_name', (string)$product->getVar('name'));
                 $orderItem->setVar('product_price', $price);
                 $orderItem->setVar('quantity', $quantity);
