@@ -290,6 +290,7 @@ require_once ICMS_ROOT_PATH . '/class/OrderConfirmationEmail.php';
 require_once ICMS_ROOT_PATH . '/class/PaymentReceivedEmail.php';
 require_once ICMS_ROOT_PATH . '/class/SimplecartLegacyHelpMigration.php';
 require_once ICMS_ROOT_PATH . '/class/SimplecartLegacyContactMigration.php';
+require_once ICMS_ROOT_PATH . '/class/SimplecartOrderitemOriginMigration.php';
 
 /** Order whose mail is not sent */
 class TestOrder extends SimplecartOrder

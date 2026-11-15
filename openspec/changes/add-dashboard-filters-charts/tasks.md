@@ -1,11 +1,11 @@
 ## 1. Herkomst op orderitem
 
-- [ ] 1.1 `SimplecartOrderitem`: `product_id` en `campaign_id` (INT, standaard 0), verborgen in formulieren
-- [ ] 1.2 `placeOrder()`: productregels bewaren `product_id` en de `campaign_id` van het product op dat moment; extensieregels laten beide op 0
-- [ ] 1.3 `SimplecartOrderitemOriginMigration`: items met `product_id = 0` koppelen aan het product met exact dezelfde naam, enkel bij precies één treffer; idempotent
-- [ ] 1.4 `icms_module_update_simplecart()` roept de migratie aan na de twee bestaande migraties, met dezelfde foutafhandeling (log en `false`)
-- [ ] 1.5 `tests/`: herkomst bij een productregel, een productregel zonder campagne, een extensieregel, en de migratie (eenduidig, geen treffer, dubbele naam, tweede uitvoering doet niets)
-- [ ] 1.6 Controleren dat order-detail, e-mails en scanpagina ongewijzigd werken (ze gebruiken enkel naam, prijs en aantal)
+- [x] 1.1 `SimplecartOrderitem`: `product_id` en `campaign_id` (INT, standaard 0), verborgen in formulieren
+- [x] 1.2 `placeOrder()`: productregels bewaren `product_id` en de `campaign_id` van het product op dat moment; extensieregels laten beide op 0
+- [x] 1.3 `SimplecartOrderitemOriginMigration`: items met `product_id = 0` koppelen aan het product met exact dezelfde naam, enkel bij precies één treffer; idempotent
+- [x] 1.4 `icms_module_update_simplecart()` roept de migratie aan na de twee bestaande migraties, met dezelfde foutafhandeling (log en `false`)
+- [x] 1.5 `tests/`: herkomst bij een productregel, een productregel zonder campagne, een extensieregel, en de migratie (eenduidig, geen treffer, dubbele naam, tweede uitvoering doet niets)
+- [x] 1.6 Controleren dat order-detail, e-mails en scanpagina ongewijzigd werken (ze gebruiken enkel naam, prijs en aantal)
 
 ## 2. Gegevens voor het dashboard
 

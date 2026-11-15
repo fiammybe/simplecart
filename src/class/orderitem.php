@@ -10,8 +10,13 @@ class SimplecartOrderitem extends icms_ipf_Object {
         $this->initVar('product_price', XOBJ_DTYPE_FLOAT, 0.00, true, null, '', false, _MI_SIMPLECART_ORDERITEM_PRODUCT_PRICE);
         $this->initVar('quantity', XOBJ_DTYPE_INT, 1, true, null, '', false, _MI_SIMPLECART_ORDERITEM_QUANTITY);
         $this->initVar('subtotal', XOBJ_DTYPE_FLOAT, 0.00, false, null, '', false, _MI_SIMPLECART_ORDERITEM_SUBTOTAL);
+        // Where the item came from when it was ordered; 0 for a line that is not a product
+        $this->initVar('product_id', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('campaign_id', XOBJ_DTYPE_INT, 0, false);
 
         $this->hideFieldFromForm('orderitem_id');
+        $this->hideFieldFromForm('product_id');
+        $this->hideFieldFromForm('campaign_id');
         $this->setControl('quantity', 'text');
     }
 }
