@@ -9,11 +9,11 @@
 
 ## 2. Gegevens voor het dashboard
 
-- [ ] 2.1 `SimplecartDashboardData`: drie queries (orders, items, keuzeantwoorden), samengevoegd op `order_id`, zonder persoonsgegevens en zonder vrije-tekstantwoorden
-- [ ] 2.2 Datum per order als `Y-m-d` in de tijdzone van de site; namen, labels en opties opgelost naar de beheerderstaal
-- [ ] 2.3 Lookup-lijsten voor campagnes, producten, keuzevragen en de opties uit de bestaande antwoorden, plus "Overig/onbekend"
-- [ ] 2.4 JSON schrijven met `JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT`
-- [ ] 2.5 `tests/`: dataset bevat geen naam, e-mail, telefoon of adres; meerkeuze geeft meerdere opties; verwijderd product en add-onregel komen onder onbekend; lege dataset
+- [x] 2.1 `SimplecartDashboardData`: drie queries (orders, items, keuzeantwoorden), samengevoegd op `order_id`, zonder persoonsgegevens en zonder vrije-tekstantwoorden
+- [x] 2.2 Datum per order als `Y-m-d` in de tijdzone van de site; namen, labels en opties opgelost naar de beheerderstaal
+- [x] 2.3 Lookup-lijsten voor campagnes, producten, keuzevragen en de opties uit de bestaande antwoorden, plus "Overig/onbekend"
+- [x] 2.4 JSON schrijven met `JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT`
+- [x] 2.5 `tests/`: dataset bevat geen naam, e-mail, telefoon of adres; meerkeuze geeft meerdere opties; verwijderd product en add-onregel komen onder onbekend; lege dataset
 
 ## 3. Filterlogica en berekening (JavaScript)
 
