@@ -33,6 +33,6 @@
 
 ## 5. Afronding
 
-- [ ] 5.1 `icms_version.php`: `version` en `status_version` naar 2.8.0
-- [ ] 5.2 `docs/DASHBOARD.md`: filters, bedragen bij itemfilters, "Overig/onbekend" en de aanvulling van oude items als benadering
+- [x] 5.1 `icms_version.php`: `version` en `status_version` naar 2.8.0
+- [x] 5.2 `docs/DASHBOARD.md`: filters, bedragen bij itemfilters, "Overig/onbekend" en de aanvulling van oude items als benadering
 - [ ] 5.3 `php -l` op alle gewijzigde PHP-bestanden (7.4), `composer test`, en handmatig testen op een testsite: update van 2.7.0, nieuwe bestelling, filtercombinaties, grafiek per dag, week en maand, gewiste filters, URL met filters, leeg resultaat
