@@ -17,19 +17,19 @@
 
 ## 3. Filterlogica en berekening (JavaScript)
 
-- [ ] 3.1 `assets/js/dashboard.js`: toestand, `of` binnen en `en` tussen filters, voorwaarde per order en per item (design D4)
-- [ ] 3.2 Eén functie die per order zijn bijdrage berekent; samenvatting, producttabel en grafieken gebruiken die
-- [ ] 3.3 Periodes dag, week (maandag) en maand op datumstrings, UTC-rekenen, lege perioden met 0, cumulatief
-- [ ] 3.4 Filterstatus in `location.hash`: schrijven, lezen, `hashchange`, onbekende waarden negeren
-- [ ] 3.5 Alles in de DOM via `textContent`, nooit `innerHTML`
+- [x] 3.1 `assets/js/dashboard.js`: toestand, `of` binnen en `en` tussen filters, voorwaarde per order en per item (design D4)
+- [x] 3.2 Eén functie die per order zijn bijdrage berekent; samenvatting, producttabel en grafieken gebruiken die
+- [x] 3.3 Periodes dag, week (maandag) en maand op datumstrings, UTC-rekenen, lege perioden met 0, cumulatief
+- [x] 3.4 Filterstatus in `location.hash`: schrijven, lezen, `hashchange`, onbekende waarden negeren
+- [x] 3.5 Alles in de DOM via `textContent`, nooit `innerHTML`
 
 ## 4. Pagina en grafieken
 
-- [ ] 4.1 Chart.js vendoren in `assets/js/vendor/` met licentiebestand; vaste versie noteren
-- [ ] 4.2 `admin/index.php` herschrijven: dataset bouwen en de template laden; geen N+1 meer
-- [ ] 4.3 `simplecart_admin_dashboard.html.tpl`: filterbalk (fieldsets met selectievakjes, geen tabellen), samenvatting, producttabel, twee diagrammen met keuzes voor periode en cumulatief, `<details>` met tabel, "Filters wissen", `<noscript>`
-- [ ] 4.4 Scripts en CSS laden uit `assets/` met een versieparameter; eigen CSS onder een eigen klasse
-- [ ] 4.5 Taalstrings in `language/english` en `language/nederlands` (`admin.php`, `modinfo.php` waar nodig)
+- [x] 4.1 Chart.js vendoren in `assets/js/vendor/` met licentiebestand; vaste versie noteren
+- [x] 4.2 `admin/index.php` herschrijven: dataset bouwen en de template laden; geen N+1 meer
+- [x] 4.3 `simplecart_admin_dashboard.html.tpl`: filterbalk (fieldsets met selectievakjes, geen tabellen), samenvatting, producttabel, twee diagrammen met keuzes voor periode en cumulatief, `<details>` met tabel, "Filters wissen", `<noscript>`
+- [x] 4.4 Scripts en CSS laden uit `assets/` met een versieparameter; eigen CSS onder een eigen klasse
+- [x] 4.5 Taalstrings in `language/english` en `language/nederlands` (`admin.php`, `modinfo.php` waar nodig)
 
 ## 5. Afronding
 
