@@ -1,12 +1,20 @@
-# simplecart 2.0.0
-A simple shopping cart for ImpressCMS. Define products, add to cart, follow orders.
+# Simplecart 2.8.0
 
-This version does ONLY support SEPA direct debit payments. No other payment methods are supported. The module is designed to be simple and easy to use, with a focus on SEPA payments.
+A simple shopping cart module for ImpressCMS. Define products and campaigns, control product availability, collect orders, and track payments.
 
-## Technology
-The storefront and checkout use standard PHP with ImpressCMS Smarty templates and session-backed cart storage. There is no client-side AJAX or JavaScript cart layer in the current module flow.
+## Features
+
+- Organize products into campaigns, add product images, and control availability and display order.
+- Collect checkout answers with configurable questions for every order or specific campaigns. Supported formats include text, email, URL, numbers, dates, single choice, and multiple choice; answers are kept with the order and can be shown in the customer's language.
+- Provide SEPA bank-transfer payment details, including an EPC-standard QR code, after checkout. Configure the beneficiary name, IBAN, optional BIC, and currency. The payment reference is included in the admin order list and confirmation email.
+- Manage and scan orders, close orders from the scan page, and review dashboard charts and filters for campaign, product, status, and choice-question answers.
+- Extend cart lines, order handling, order rendering, and scan workflows through the add-on extension API.
+
+The storefront and checkout use PHP, ImpressCMS Smarty templates, and session-backed cart storage. Dashboard filtering and charts run in the browser.
 
 ## Documentation
-- [Questions at checkout](docs/ORDER_QUESTIONS.md): questions per campaign or for every order, answer formats with validation, language tags and the language of the customer.
-- Order in the shop: campaigns and products have a weight (lowest first). The shop lists campaigns by weight and, inside a campaign, products by weight. Products without a campaign form a virtual campaign that always comes last. Equal weights are sorted by name.
-- [Extension points](docs/EXTENSION_POINTS.md): hooks for add-ons.
+
+- [Dashboard](docs/DASHBOARD.md): order filters, charts, and how metrics are calculated.
+- [Questions at checkout](docs/ORDER_QUESTIONS.md): campaign-specific questions, answer formats, validation, and languages.
+- [Extension points](docs/EXTENSION_POINTS.md): API and hooks for add-ons.
+- [SEPA QR code setup](docs/SEPA_QR_CODE_SETUP.md): payment configuration and QR code behavior.
