@@ -28,7 +28,7 @@ Na een POST stuurt de kern de melding van het resultaat mee in `redirect_header`
 `order.render` (context `scan`) mag `allow_close = false` teruggeven. De kern controleert dat bij het tonen en opnieuw bij de POST van "Bestelling afsluiten". Voor bestellingen met plaatsen is afhalen niet van toepassing.
 
 ### D6. Feature-detectie
-`SimplecartExtension::API_REVISION` is een geheel getal dat bij additieve uitbreidingen stijgt (2 bij deze wijziging, 1 voor 2.3.0). Een add-on die acties nodig heeft controleert `API_REVISION >= 2`. Zo niet, dan toont hij alleen de gegevens en voert hij geen scan door (faalt veilig).
+`SimplecartExtension::API_REVISION` is een geheel getal dat bij additieve uitbreidingen stijgt (1 voor 2.3.0, 2 voor de taal in `order.render` sinds 2.5.0, 3 bij deze wijziging in 2.7.0). Een add-on die acties nodig heeft controleert `API_REVISION >= 3`. Zo niet, dan toont hij alleen de gegevens en voert hij geen scan door (faalt veilig).
 
 ### D7. Testbaarheid
 `scan.php` is een paginascript. De beslislogica (payload bouwen, acties valideren, `allow_close` bepalen) komt in `SimplecartExtension::resolveScan()` en `SimplecartExtension::scanAllowsClose()`, die de tests rechtstreeks aanroepen.

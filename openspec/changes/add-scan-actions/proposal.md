@@ -9,7 +9,7 @@ Sinds PR 38 verandert het scannen van een bestelling niets meer bij het openen v
 - De kern toont elke actie als knop in een formulier met CSRF-token. Bij een POST controleert de kern het token en de beheerderrechten en stuurt daarna `scan.resolve` met `method = POST` en de gekozen actie. Daarna volgt een redirect naar de GET-URL met de melding van de add-on.
 - Een add-on kan het afsluiten van een bestelling onderdrukken: een resultaat van `order.render` (context `scan`) met `allow_close = false` verbergt de knop "Bestelling afsluiten" en weigert het afsluiten ook bij een POST.
 - De logica verhuist uit `scan.php` naar `SimplecartExtension::resolveScan()`, zodat ze testbaar is.
-- `SimplecartExtension::API_REVISION` (nu 2) laat een add-on controleren of de kern acties ondersteunt. `SIMPLECART_EXTENSION_API` blijft 1: de wijziging is additief.
+- `SimplecartExtension::API_REVISION` (wordt 3; revisie 2 werd al gebruikt door `add-order-questions`) laat een add-on controleren of de kern acties ondersteunt. `SIMPLECART_EXTENSION_API` blijft 1: de wijziging is additief.
 
 ## Capabilities
 
