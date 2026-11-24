@@ -17,32 +17,51 @@ $moduleId = (int)icms::handler('icms_module')->getByDirname(SIMPLECART_DIRNAME)-
 $isModuleAdmin = icms::$user->isAdmin($moduleId);
 
 if ($isAddonScan) {
-    $xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
-    include ICMS_ROOT_PATH . '/header.php';
+    $addon = (string)$_GET['addon'];
+    $tokenName = SimplecartExtension::scanTokenName($addon);
+    $isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
 
-    if (!$isModuleAdmin) {
-        $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_NO_ACCESS);
-        include ICMS_ROOT_PATH . '/footer.php';
+    $scan = SimplecartExtension::resolveScan(array(
+        'params' => $_GET,
+        'method' => $isPost ? 'POST' : 'GET',
+        'action' => $isPost && isset($_POST['scan_action']) ? (string)$_POST['scan_action'] : null,
+        'user' => icms::$user,
+        'is_admin' => $isModuleAdmin,
+        // Only checked on a POST: check() consumes the token
+        'token_valid' => $isPost && $isModuleAdmin && icms::$security->check(true, isset($_POST['scan_token']) ? (string)$_POST['scan_token'] : '', $tokenName),
+    ));
+
+    $errorMessages = array(
+        'no_access' => _MD_SIMPLECART_SCAN_NO_ACCESS,
+        'token_invalid' => _MD_SIMPLECART_SCAN_TOKEN_INVALID,
+        'action_invalid' => _MD_SIMPLECART_SCAN_ACTION_INVALID,
+        'invalid' => _MD_SIMPLECART_SCAN_INVALID,
+    );
+
+    if ($isPost) {
+        // Post/redirect/get: reloading the page cannot repeat the action
+        if ($scan['error'] !== null) {
+            redirect_header($scanUrl, 3, $errorMessages[$scan['error']]);
+        } else {
+            $message = $scan['scan']['message'] !== '' ? $scan['scan']['message'] : $scan['scan']['title'];
+            // ImpressCMS prints the redirect message as HTML; the add-on's text is plain text
+            redirect_header($scanUrl, 2, $message !== '' ? htmlspecialchars($message, ENT_QUOTES, 'UTF-8') : _MD_SIMPLECART_SCAN_ACTION_DONE);
+        }
         exit;
     }
 
-    $scanEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_SCAN_RESOLVE, array(
-        'addon' => (string)$_GET['addon'],
-        'params' => $_GET,
-        'user' => icms::$user,
-    ));
+    $xoopsOption['template_main'] = 'simplecart_order_scan.html.tpl';
+    include ICMS_ROOT_PATH . '/header.php';
 
-    $scanResults = $scanEvent->getResults();
-    if (empty($scanResults)) {
-        $icmsTpl->assign('simplecart_scan_error', _MD_SIMPLECART_SCAN_INVALID);
+    if ($scan['error'] !== null) {
+        $icmsTpl->assign('simplecart_scan_error', $errorMessages[$scan['error']]);
     } else {
-        $scanResult = $scanResults[0];
-        $icmsTpl->assign('simplecart_scan_extension', array(
-            'title' => (string)($scanResult['title'] ?? ''),
-            'message' => (string)($scanResult['message'] ?? ''),
-            'status' => in_array(($scanResult['status'] ?? ''), array('success', 'warning', 'error'), true) ? $scanResult['status'] : 'warning',
-            'html' => (string)($scanResult['html'] ?? ''),
-        ));
+        $scanExtension = $scan['scan'];
+        if (!empty($scanExtension['actions'])) {
+            $scanExtension['form_action'] = $scanUrl;
+            $scanExtension['token'] = icms::$security->createToken(3600, $tokenName);
+        }
+        $icmsTpl->assign('simplecart_scan_extension', $scanExtension);
     }
 
     $icmsTpl->assign('simplecart_module_url', SIMPLECART_URL);
@@ -53,6 +72,16 @@ if ($isAddonScan) {
 $orderHandler = simplecart_getHandler('order');
 $order = $orderId > 0 ? $orderHandler->get($orderId) : null;
 $isValidOrder = $order && !$order->isNew() && $order->hasValidScanToken($token);
+
+// Add-ons render their part of the scan page and may forbid closing (allow_close = false), e.g. for an order with seats
+$renderResults = array();
+if ($isValidOrder && $isModuleAdmin) {
+    $renderResults = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
+        'order' => $order,
+        'context' => 'scan',
+    ))->getResults();
+}
+$allowsClose = SimplecartExtension::scanAllowsClose($renderResults);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$isModuleAdmin) {
@@ -69,6 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!icms::$security->check(true, $closeToken, 'simplecart_order_scan')) {
         redirect_header($scanUrl, 3, _MD_SIMPLECART_SCAN_TOKEN_INVALID);
+        exit;
+    }
+
+    if (!$allowsClose) {
+        redirect_header($scanUrl, 3, _MD_SIMPLECART_SCAN_CLOSE_NOT_ALLOWED);
         exit;
     }
 
@@ -109,7 +143,7 @@ if (!in_array($status, ['paid', 'closed'], true)) {
     $icmsTpl->assign('simplecart_scan_status_warning', _MD_SIMPLECART_SCAN_NOT_PAID);
 }
 
-if ($status === 'paid') {
+if ($status === 'paid' && $allowsClose) {
     $icmsTpl->assign('simplecart_scan_close_form', [
         'action' => $scanUrl,
         'close_token' => icms::$security->createToken(3600, 'simplecart_order_scan'),
@@ -119,11 +153,7 @@ if ($status === 'paid') {
 $itemRows = $order->getItemRows();
 
 $scanBlocks = array();
-$renderEvent = SimplecartExtension::dispatch(SimplecartExtension::EVENT_RENDER, array(
-    'order' => $order,
-    'context' => 'scan',
-));
-foreach ($renderEvent->getResults() as $result) {
+foreach ($renderResults as $result) {
     $html = trim((string)($result['html'] ?? ''));
     if ($html !== '') {
         $scanBlocks[] = $html;

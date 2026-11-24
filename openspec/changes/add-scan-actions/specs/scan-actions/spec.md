@@ -50,5 +50,5 @@ Het systeem SHALL de knop "Bestelling afsluiten" verbergen en het afsluiten weig
 Het systeem SHALL een geheel getal `API_REVISION` publiceren dat bij elke additieve uitbreiding van de extension-API stijgt, zodat add-ons kunnen controleren welke mogelijkheden de kern heeft.
 
 #### Scenario: Add-on op een oudere kern
-- **WHEN** een add-on acties nodig heeft en `API_REVISION` lager is dan 2
+- **WHEN** een add-on acties nodig heeft en `API_REVISION` lager is dan 3
 - **THEN** voert de add-on geen scan door en toont hij alleen de gegevens
